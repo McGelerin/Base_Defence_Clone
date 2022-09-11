@@ -32,7 +32,7 @@ MonoBehaviour:
           AmmoDamage: 0
         Rooms:
         - PayType: 0
-          Cost: 0
+          Cost: 100
           PayedAmount: 0
           RoomName: 0
           TurretData:
@@ -44,7 +44,7 @@ MonoBehaviour:
             AmmoCapacity: 0
             AmmoDamage: 0
         - PayType: 0
-          Cost: 0
+          Cost: 100
           PayedAmount: 0
           RoomName: 1
           TurretData:
@@ -56,9 +56,9 @@ MonoBehaviour:
             AmmoCapacity: 0
             AmmoDamage: 0
         - PayType: 0
-          Cost: 0
+          Cost: 100
           PayedAmount: 0
-          RoomName: 0
+          RoomName: 2
           TurretData:
             PayType: 0
             Cost: 0
@@ -68,9 +68,9 @@ MonoBehaviour:
             AmmoCapacity: 0
             AmmoDamage: 0
         - PayType: 0
-          Cost: 0
+          Cost: 100
           PayedAmount: 0
-          RoomName: 0
+          RoomName: 3
           TurretData:
             PayType: 0
             Cost: 0
