@@ -35,12 +35,7 @@ namespace Managers
         #endregion
         
         #region Event Subscriptions
-
-        private void Start()
-        {
-            JoystickInput();
-        }
-
+        
         private void OnEnable()
         {
             SubscribeEvents();
@@ -73,7 +68,12 @@ namespace Managers
 
         #endregion
         
-                private void Update()
+        private void Start()
+        {
+            JoystickInput();
+        }
+        
+        private void Update()
         {
             if (!isReadyForTouch) return;
             
@@ -86,7 +86,7 @@ namespace Managers
                     throw new ArgumentOutOfRangeException();
             }
         }
-
+        #endregion
         #region Event Methods
         
         private void OnEnableInput()
@@ -135,7 +135,5 @@ namespace Managers
                 ValueZ = _moveVector.z
             });
         }
-
-        #endregion
     }
 }

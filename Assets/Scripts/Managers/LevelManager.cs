@@ -74,7 +74,6 @@ namespace Managers
         {
             _levelID = SaveSignals.Instance.onLoadCurrentLevel();
             OnInitializeLevel();
-            //SetLevelText();
         }
 
         private void OnNextLevel()
@@ -83,7 +82,6 @@ namespace Managers
             LevelSignals.Instance.onClearActiveLevel?.Invoke();
             CoreGameSignals.Instance.onReset?.Invoke();
             LevelSignals.Instance.onLevelInitialize?.Invoke();
-            //SetLevelText();
         }
 
         private void OnRestartLevel()
@@ -98,11 +96,6 @@ namespace Managers
             return _levelID;
         }
 
-        // private void SetLevelText()
-        // {
-        //     UISignals.Instance.onSetLevelText?.Invoke(_levelID);
-        // }
-        
         private void OnInitializeLevel()
         {
             int newLevelData = GetLevelCount();

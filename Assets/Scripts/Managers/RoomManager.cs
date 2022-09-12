@@ -1,9 +1,12 @@
-﻿using Data.ValueObject;
+﻿using System;
+using System.Collections;
+using Data.ValueObject;
 using Enums;
+using Keys;
+using Signals;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Managers
 {
@@ -19,16 +22,17 @@ namespace Managers
             set
             {
                 _payedAmound = value;
-                if (_roomData.Cost - _payedAmound >=0)
+                _remainingAmound = _roomData.Cost - _payedAmound;
+                if (_remainingAmound ==0)
                 {
+                    _textParentGameObject.SetActive(false);
                     area.SetActive(true);
                     fencles.SetActive(false);
-                    invisibleWall.SetActive(false);
-                    tmp.transform.parent.gameObject.SetActive(false);
+//                    invisibleWall.SetActive(false);
                 }
                 else
                 {
-                    SetText();
+                    SetText(_remainingAmound);
                 }
             }
         }
@@ -47,24 +51,79 @@ namespace Managers
         #region Private Variables
 
         [ShowInInspector]private RoomData _roomData;
+        private bool _isBase;
         private int _payedAmound;
         private int _remainingAmound;
+        private ScoreDataParams _scoreCache;
+        private GameObject _textParentGameObject;
 
         #endregion
 
         #endregion
+
+        private void Awake()
+        {
+            _textParentGameObject = tmp.transform.parent.gameObject;
+        }
 
         public void SetRoomData(RoomData roomData,int payedAmound)
         {
-            _payedAmound = payedAmound;
             _roomData = roomData;
-            SetText();
+            _isBase = roomData.Isbase;
+            if (!_isBase)
+            {
+                PayedAmound = payedAmound;
+                BuyAreaImageChange();
+            }
         }
 
-        private void SetText()
+        public void BuyAreaEnter()
         {
-            _remainingAmound = _roomData.Cost - _payedAmound;
-            tmp.text = _remainingAmound.ToString();
+            _scoreCache = ScoreSignals.Instance.onScoreData();
+            switch (_roomData.PayType)
+            {
+                case PayTypeEnum.Money:
+                    if (_scoreCache.MoneyScore > _remainingAmound)
+                    {
+                        StartCoroutine(Buy());
+                    }
+                    break;
+                case PayTypeEnum.Gem :
+                    if (_scoreCache.GemScore > _remainingAmound)
+                    {
+                        StartCoroutine(Buy());
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public void BuyAreaExit()
+        {
+            StopAllCoroutines();
+        }
+
+        private IEnumerator Buy()
+        {
+            var waitForSecond = new WaitForSeconds(0.05f);
+            while (_remainingAmound > 0)
+            {
+                PayedAmound++;
+                ScoreSignals.Instance.onSetScore?.Invoke(_roomData.PayType, -1);
+                yield return waitForSecond;
+            }
+            IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke();
+        }
+
+        private void SetText(int remainingAmound)
+        {
+            tmp.text = remainingAmound.ToString();
+        }
+
+        private void BuyAreaImageChange()
+        {
+            _textParentGameObject.transform.GetChild(((int)_roomData.PayType) + 1).gameObject.SetActive(false);
         }
     }
 }

@@ -9,6 +9,7 @@ using Keys;
 using Signals;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using TMPro;
 using UnityEngine;
 
 namespace Managers
@@ -18,14 +19,6 @@ namespace Managers
         #region Self Variables
 
         #region Public Variables
-        public BaseStage BaseStageStatus
-        {
-            get => baseStage; 
-            set
-            {
-                baseStage = value;
-            }
-        }
         
         [Header("Data")] public BaseData Data;
 
@@ -35,8 +28,10 @@ namespace Managers
 
         [SerializeField] private GameObject backDoor;
         [SerializeField] private BaseStage baseStage;
+        [SerializeField] private TextMeshPro tmp;
         [SerializeField] private List<BaseObjects> level = new List<BaseObjects>();
         [SerializeField] private List<RoomManager> Rooms = new List<RoomManager>();
+        [SerializeField] private List<TurretManager> Turrets = new List<TurretManager>();
 
 
         #endregion
@@ -52,7 +47,6 @@ namespace Managers
 
         private void Awake()
         {
-            BaseStageStatus = baseStage;
             ColoseGameObjects();
         }
 
@@ -65,10 +59,14 @@ namespace Managers
 
         private void SubscribeEvents()
         {
+            IdleSignals.Instance.onBaseAreaBuyedItem += OnSetAreaDatas;
+            SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
         }
 
         private void UnsubscribeEvents()
         {
+            IdleSignals.Instance.onBaseAreaBuyedItem -= OnSetAreaDatas;
+            SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
         }
 
         private void OnDisable()
@@ -80,7 +78,7 @@ namespace Managers
         
         private void ColoseGameObjects()
         {
-            foreach (var VARIABLE in level[(int)BaseStageStatus].GameObjects)
+            foreach (var VARIABLE in level[(int)baseStage].GameObjects)
             {
                 VARIABLE.SetActive(false);
             }
@@ -91,6 +89,7 @@ namespace Managers
             _baseLevel = LevelSignals.Instance.onGetLevelID();
             _areaDatas = SaveSignals.Instance.onLoadAreaData();
             Data = Resources.Load<CD_Level>("Data/CD_Level").LevelDatas[_baseLevel].BaseData;
+            SetBaseLevelText();
             EmptyListChack();
             SetRoomData();
         }
@@ -99,6 +98,7 @@ namespace Managers
         {
             if (!_areaDatas.RoomPayedAmound.IsNullOrEmpty()) return;
             _areaDatas.RoomPayedAmound = new List<int>(new int[Data.BaseRoomDatas.Rooms.Count]);
+            _areaDatas.RoomTurretPayedAmound = new List<int>(new int[Data.BaseRoomDatas.Rooms.Count]);
         }
 
         private void SetRoomData()
@@ -106,7 +106,30 @@ namespace Managers
             for (int i = 0; i < Rooms.Count; i++)
             {
                 Rooms[i].SetRoomData(Data.BaseRoomDatas.Rooms[i],_areaDatas.RoomPayedAmound[i]);
+                //Turrets[i].SetTurretData(Data.BaseRoomDatas.Rooms[i].TurretData,_areaDatas.RoomTurretPayedAmound[i]);
             }
+        }
+
+        private void OnSetAreaDatas()
+        {
+            for (int i = 0; i < Rooms.Count; i++)
+            {
+                _areaDatas.RoomPayedAmound[i] = Rooms[i].PayedAmound;
+                Debug.Log(Rooms[i].PayedAmound);
+                //_areaDatas.RoomTurretPayedAmound[i] = Turrets[i].PayedAmound;
+            }
+            SaveSignals.Instance.onAreaDataSave?.Invoke();
+            SaveSignals.Instance.onScoreSave?.Invoke();
+        }
+        
+        private AreaDataParams OnGetAreaDatas()
+        {
+            return _areaDatas;
+        }
+
+        private void SetBaseLevelText()
+        {
+            tmp.text = "Base " + (SaveSignals.Instance.onLoadCurrentLevel() + 1).ToString();
         }
     }
 }

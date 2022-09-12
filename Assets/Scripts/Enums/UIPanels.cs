@@ -3,7 +3,7 @@
     public enum UIPanels
     {
         StartPanel,
-        //LevelPanel,
+        ScorePanel,
         IdlePanel,
         // WinPanel,
         // FailPanel,

@@ -75,12 +75,9 @@ namespace Managers
         {
             _areaDataCache = new AreaDataParams()
             {
-                Level1TurretPayedamound = SaveSignals.Instance.onSaveAreaData().Level1TurretPayedamound,
                 RoomPayedAmound = SaveSignals.Instance.onSaveAreaData().RoomPayedAmound,
                 RoomTurretPayedAmound = SaveSignals.Instance.onSaveAreaData().RoomTurretPayedAmound
             };
-            if (_areaDataCache.Level1TurretPayedamound != null) ES3.Save("Level1TurretPayedamound", 
-                _areaDataCache.Level1TurretPayedamound,"AreaData.es3");
             if (_areaDataCache.RoomPayedAmound != null) ES3.Save("RoomPayedAmound",
                 _areaDataCache.RoomPayedAmound,"AreaData.es3");
             if (_areaDataCache.RoomTurretPayedAmound != null) ES3.Save("RoomTurretPayedAmound",
@@ -96,24 +93,21 @@ namespace Managers
 
         private ScoreDataParams OnLoadScoreData()
         {
-            return new ScoreDataParams()
+            return new ScoreDataParams
             {
                 MoneyScore = ES3.KeyExists("MoneyScore", "ScoreData.es3")
                     ? ES3.Load<int>("MoneyScore", "ScoreData.es3")
-                    : 0,
-                GemScore = ES3.KeyExists("GemScore", "Level.es3")
+                    : 1000,
+                GemScore = ES3.KeyExists("GemScore", "ScoreData.es3")
                     ? ES3.Load<int>("GemScore", "ScoreData.es3")
-                    : 0
+                    : 1000
             };
         }
 
         private AreaDataParams OnLoadAreaData()
         {
-            return new AreaDataParams()
+            return new AreaDataParams
             {
-                Level1TurretPayedamound = ES3.KeyExists("Level1TurretPayedamound", "AreaData.es3")
-                    ? ES3.Load<List<int>>("Level1TurretPayedamound", "AreaData.es3")
-                    : new List<int>(new int[2]),
                 RoomPayedAmound = ES3.KeyExists("RoomPayedAmound", "AreaData.es3")
                     ? ES3.Load<List<int>>("RoomPayedAmound", "AreaData.es3")
                     : new List<int>(),

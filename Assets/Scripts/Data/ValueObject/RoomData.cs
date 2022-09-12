@@ -9,6 +9,7 @@ namespace Data.ValueObject
     public class RoomData : Buyable
     {
         public RoomNameEnum RoomName;
+        public bool Isbase;
         
         public RoomData(PayTypeEnum payType, int cost, int payedAmount) : base(payType, cost, payedAmount)
         {
