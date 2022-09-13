@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enums;
 using Keys;
 using Signals;
 using UnityEngine;
@@ -109,11 +110,11 @@ namespace Managers
             return new AreaDataParams
             {
                 RoomPayedAmound = ES3.KeyExists("RoomPayedAmound", "AreaData.es3")
-                    ? ES3.Load<List<int>>("RoomPayedAmound", "AreaData.es3")
-                    : new List<int>(),
+                    ? ES3.Load < Dictionary<RoomNameEnum, int>>("RoomPayedAmound", "AreaData.es3")
+                    : new Dictionary<RoomNameEnum, int>(),
                 RoomTurretPayedAmound = ES3.KeyExists("RoomTurretPayedAmound", "AreaData.es3")
-                    ? ES3.Load<List<int>>("RoomTurretPayedAmound", "AreaData.es3")
-                    : new List<int>()
+                    ? ES3.Load < Dictionary<RoomNameEnum, int>>("RoomTurretPayedAmound", "AreaData.es3")
+                    : new Dictionary<RoomNameEnum, int>()
             };
         }
     }

@@ -15,29 +15,15 @@ MonoBehaviour:
   LevelDatas:
   - BaseData:
       BaseRoomDatas:
-        TurretDatas:
-        - PayType: 0
-          Cost: 0
-          PayedAmount: 0
-          IsActive: 0
-          HasTurretSoldier: 0
-          AmmoCapacity: 0
-          AmmoDamage: 0
-        - PayType: 0
-          Cost: 0
-          PayedAmount: 0
-          IsActive: 0
-          HasTurretSoldier: 0
-          AmmoCapacity: 0
-          AmmoDamage: 0
         Rooms:
         - PayType: 0
           Cost: 100
           PayedAmount: 0
           RoomName: 0
+          Isbase: 0
           TurretData:
             PayType: 0
-            Cost: 0
+            Cost: 150
             PayedAmount: 0
             IsActive: 0
             HasTurretSoldier: 0
@@ -47,6 +33,7 @@ MonoBehaviour:
           Cost: 100
           PayedAmount: 0
           RoomName: 1
+          Isbase: 0
           TurretData:
             PayType: 0
             Cost: 0
@@ -55,10 +42,11 @@ MonoBehaviour:
             HasTurretSoldier: 0
             AmmoCapacity: 0
             AmmoDamage: 0
-        - PayType: 0
-          Cost: 100
+        - PayType: 1
+          Cost: 150
           PayedAmount: 0
           RoomName: 2
+          Isbase: 0
           TurretData:
             PayType: 0
             Cost: 0
@@ -67,10 +55,11 @@ MonoBehaviour:
             HasTurretSoldier: 0
             AmmoCapacity: 0
             AmmoDamage: 0
-        - PayType: 0
-          Cost: 100
+        - PayType: 1
+          Cost: 150
           PayedAmount: 0
           RoomName: 3
+          Isbase: 0
           TurretData:
             PayType: 0
             Cost: 0

@@ -30,18 +30,16 @@ namespace Managers
         [SerializeField] private BaseStage baseStage;
         [SerializeField] private TextMeshPro tmp;
         [SerializeField] private List<BaseObjects> level = new List<BaseObjects>();
-        [SerializeField] private List<RoomManager> Rooms = new List<RoomManager>();
-        [SerializeField] private List<TurretManager> Turrets = new List<TurretManager>();
 
 
         #endregion
 
         #region Private Variables
 
-        [ShowInInspector]private AreaDataParams _areaDatas;
+        private AreaDataParams _areaData;
+        [ShowInInspector]private Dictionary<RoomNameEnum,int> _payedRoomDatas;
+        [ShowInInspector]private Dictionary<RoomNameEnum,int> _payedTurretDatas;
         private int _baseLevel;
-        
-        
         #endregion
         #endregion
 
@@ -60,12 +58,16 @@ namespace Managers
         private void SubscribeEvents()
         {
             IdleSignals.Instance.onBaseAreaBuyedItem += OnSetAreaDatas;
+            IdleSignals.Instance.onRoomData += OnGetRoomData;
+            IdleSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
         }
 
         private void UnsubscribeEvents()
         {
             IdleSignals.Instance.onBaseAreaBuyedItem -= OnSetAreaDatas;
+            IdleSignals.Instance.onRoomData -= OnGetRoomData;
+            IdleSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
         }
 
@@ -73,7 +75,6 @@ namespace Managers
         {
             UnsubscribeEvents();
         }
-        
         #endregion
         
         private void ColoseGameObjects()
@@ -86,45 +87,44 @@ namespace Managers
         
         private void Start()
         {
+            GetReferances();
+        }
+
+        private void GetReferances()
+        {
             _baseLevel = LevelSignals.Instance.onGetLevelID();
-            _areaDatas = SaveSignals.Instance.onLoadAreaData();
             Data = Resources.Load<CD_Level>("Data/CD_Level").LevelDatas[_baseLevel].BaseData;
+            _payedRoomDatas = SaveSignals.Instance.onLoadAreaData().RoomPayedAmound;
+            _payedTurretDatas = SaveSignals.Instance.onLoadAreaData().RoomTurretPayedAmound;
+            IdleSignals.Instance.onGettedBaseData?.Invoke();
             SetBaseLevelText();
-            EmptyListChack();
-            SetRoomData();
         }
 
-        private void EmptyListChack()
+        private RoomData OnGetRoomData(RoomNameEnum roomName)
         {
-            if (!_areaDatas.RoomPayedAmound.IsNullOrEmpty()) return;
-            _areaDatas.RoomPayedAmound = new List<int>(new int[Data.BaseRoomDatas.Rooms.Count]);
-            _areaDatas.RoomTurretPayedAmound = new List<int>(new int[Data.BaseRoomDatas.Rooms.Count]);
+            return Data.BaseRoomDatas.Rooms[(int)roomName];
         }
 
-        private void SetRoomData()
+        private int OnGetRoomPayedAmound(RoomNameEnum room)
         {
-            for (int i = 0; i < Rooms.Count; i++)
+            if (!_payedRoomDatas.ContainsKey(room)) _payedRoomDatas.Add(room, 0);
+            return _payedRoomDatas[room];
+        }
+
+        private void OnSetAreaDatas(RoomNameEnum room,int payedAmound)
+        {
+            _payedRoomDatas[room] = payedAmound;
+            _areaData = new AreaDataParams
             {
-                Rooms[i].SetRoomData(Data.BaseRoomDatas.Rooms[i],_areaDatas.RoomPayedAmound[i]);
-                //Turrets[i].SetTurretData(Data.BaseRoomDatas.Rooms[i].TurretData,_areaDatas.RoomTurretPayedAmound[i]);
-            }
-        }
-
-        private void OnSetAreaDatas()
-        {
-            for (int i = 0; i < Rooms.Count; i++)
-            {
-                _areaDatas.RoomPayedAmound[i] = Rooms[i].PayedAmound;
-                Debug.Log(Rooms[i].PayedAmound);
-                //_areaDatas.RoomTurretPayedAmound[i] = Turrets[i].PayedAmound;
-            }
+                RoomPayedAmound = _payedRoomDatas
+            };
             SaveSignals.Instance.onAreaDataSave?.Invoke();
             SaveSignals.Instance.onScoreSave?.Invoke();
         }
         
         private AreaDataParams OnGetAreaDatas()
         {
-            return _areaDatas;
+            return _areaData;
         }
 
         private void SetBaseLevelText()

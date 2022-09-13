@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Enums;
 using Extentions;
 using Keys;
 using UnityEngine.Events;
@@ -21,5 +23,6 @@ namespace Signals
         public Func<int> onLoadCurrentLevel = delegate { return 0;};
         public Func<ScoreDataParams> onLoadScoreData = delegate { return default;};
         public Func<AreaDataParams> onLoadAreaData = delegate { return default;};
+        //public Func<Dictionary<RoomNameEnum,AreaDataParams>> onLoadAreaData = delegate { return default;};
     }
 }

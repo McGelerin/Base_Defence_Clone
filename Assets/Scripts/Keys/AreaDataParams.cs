@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Enums;
 
 namespace Keys
 {
     public struct AreaDataParams
     {
-        public List<int> RoomPayedAmound;
-        public List<int> RoomTurretPayedAmound;
+        public Dictionary<RoomNameEnum,int> RoomPayedAmound;
+        public Dictionary<RoomNameEnum,int> RoomTurretPayedAmound;
     }
 }

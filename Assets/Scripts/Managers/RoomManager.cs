@@ -41,6 +41,7 @@ namespace Managers
 
         #region SerializeField Variables
 
+        [SerializeField] private RoomNameEnum roomName;
         [SerializeField] private GameObject area;
         [SerializeField] private GameObject fencles;
         [SerializeField] private GameObject invisibleWall;
@@ -65,18 +66,36 @@ namespace Managers
         {
             _textParentGameObject = tmp.transform.parent.gameObject;
         }
+        #region Event Subscription
 
-        public void SetRoomData(RoomData roomData,int payedAmound)
+        private void OnEnable()
         {
-            _roomData = roomData;
-            _isBase = roomData.Isbase;
-            if (!_isBase)
-            {
-                PayedAmound = payedAmound;
-                BuyAreaImageChange();
-            }
+            SubscribeEvents();
         }
 
+        private void SubscribeEvents()
+        {
+            IdleSignals.Instance.onGettedBaseData += OnSetData;
+        }
+
+        private void UnsubscribeEvents()
+        {
+            IdleSignals.Instance.onGettedBaseData -= OnSetData;
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeEvents();
+        }
+        
+        #endregion
+        private void OnSetData()
+        {
+            _roomData = IdleSignals.Instance.onRoomData(roomName);
+            PayedAmound = IdleSignals.Instance.onPayedRoomData(roomName);
+            BuyAreaImageChange();
+        }
+        
         public void BuyAreaEnter()
         {
             _scoreCache = ScoreSignals.Instance.onScoreData();
@@ -102,6 +121,7 @@ namespace Managers
         public void BuyAreaExit()
         {
             StopAllCoroutines();
+            IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
         }
 
         private IEnumerator Buy()
@@ -113,7 +133,7 @@ namespace Managers
                 ScoreSignals.Instance.onSetScore?.Invoke(_roomData.PayType, -1);
                 yield return waitForSecond;
             }
-            IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke();
+            IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
         }
 
         private void SetText(int remainingAmound)
