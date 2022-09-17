@@ -116,7 +116,7 @@ namespace Controller
         {
             
             var direct = Quaternion.LookRotation(_directCache);
-            rigidbody.transform.rotation = direct;
+            transform.GetChild(0).transform.rotation = direct;
         }
 
         // private void StopSideways()

@@ -68,3 +68,13 @@ MonoBehaviour:
             HasTurretSoldier: 0
             AmmoCapacity: 0
             AmmoDamage: 0
+      MineAreaData:
+        MaxWorkerAmound: 0
+        CurrentWorkerAmound: 0
+        MaxWorkerFromMine: 5
+        GemHolderData:
+          MaxGemFromHolder: 0
+          GemInitPoint: {x: -1, y: 0, z: 1}
+          GemCoundX: 5
+          GemCoundZ: 5
+          OffsetFactor: 2

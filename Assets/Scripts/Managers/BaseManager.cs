@@ -60,6 +60,7 @@ namespace Managers
             IdleSignals.Instance.onBaseAreaBuyedItem += OnSetAreaDatas;
             IdleSignals.Instance.onRoomData += OnGetRoomData;
             IdleSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
+            IdleSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
         }
 
@@ -68,6 +69,7 @@ namespace Managers
             IdleSignals.Instance.onBaseAreaBuyedItem -= OnSetAreaDatas;
             IdleSignals.Instance.onRoomData -= OnGetRoomData;
             IdleSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
+            IdleSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
         }
 
@@ -103,6 +105,11 @@ namespace Managers
         private RoomData OnGetRoomData(RoomNameEnum roomName)
         {
             return Data.BaseRoomDatas.Rooms[(int)roomName];
+        }
+
+        private MineAreaData OnGetMineAreaData()
+        {
+            return Data.MineAreaData;
         }
 
         private int OnGetRoomPayedAmound(RoomNameEnum room)
