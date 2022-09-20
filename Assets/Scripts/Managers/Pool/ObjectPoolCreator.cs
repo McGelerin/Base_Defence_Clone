@@ -82,7 +82,6 @@ namespace Managers
 
         private void OnReleasePoolObject(PoolType poolType, GameObject obj)
         {
-            Debug.Log("PoolGeriDondu");
             _listCache = (int)poolType;
             ObjectPoolManager.Instance.ReturnObject(obj,poolType.ToString());
         }
@@ -108,7 +107,6 @@ namespace Managers
         private void TurnOffGameObject(GameObject gameObject)
         {
             gameObject.transform.localPosition = Vector3.zero;
-            gameObject.transform.rotation = quaternion.identity;
             gameObject.transform.SetParent(_poolGroup[_listCache].transform);
             gameObject.SetActive(false);
         }
@@ -116,7 +114,7 @@ namespace Managers
         private GameObject FabricateGameObject()
         {
             return Instantiate(_poolData.PoolValueDatas[_listCache].PooledObject,Vector3.zero,
-                Quaternion.identity,_poolGroup[_listCache].transform);
+                _poolData.PoolValueDatas[_listCache].PooledObject.transform.rotation,_poolGroup[_listCache].transform);
         }
         
         #endregion

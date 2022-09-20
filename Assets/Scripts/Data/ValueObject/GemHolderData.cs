@@ -9,9 +9,9 @@ namespace Data.ValueObject
         public int MaxGemFromHolder;
         public Vector3 GemInitPoint;
         [Range(1,20)]
-        public int GemCoundX;
+        public int GemCountX;
         [Range(1,20)]
-        public int GemCoundZ;
+        public int GemCountZ;
         [Range(1,5)]
         public float OffsetFactor;
     }

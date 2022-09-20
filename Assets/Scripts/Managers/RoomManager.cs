@@ -129,8 +129,8 @@ namespace Managers
             var waitForSecond = new WaitForSeconds(0.05f);
             while (_remainingAmound > 0)
             {
-                PayedAmound++;
-                ScoreSignals.Instance.onSetScore?.Invoke(_roomData.PayType, -1);
+                PayedAmound += 10;
+                ScoreSignals.Instance.onSetScore?.Invoke(_roomData.PayType, -10);
                 yield return waitForSecond;
             }
             IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);

@@ -17,53 +17,45 @@ MonoBehaviour:
       BaseRoomDatas:
         Rooms:
         - PayType: 0
-          Cost: 100
-          PayedAmount: 0
+          Cost: 0
           RoomName: 0
           Isbase: 0
           TurretData:
             PayType: 0
-            Cost: 150
-            PayedAmount: 0
+            Cost: 500
             IsActive: 0
             HasTurretSoldier: 0
             AmmoCapacity: 0
             AmmoDamage: 0
         - PayType: 0
-          Cost: 100
-          PayedAmount: 0
+          Cost: 0
           RoomName: 1
           Isbase: 0
           TurretData:
             PayType: 0
-            Cost: 0
-            PayedAmount: 0
+            Cost: 500
             IsActive: 0
             HasTurretSoldier: 0
             AmmoCapacity: 0
             AmmoDamage: 0
-        - PayType: 1
-          Cost: 150
-          PayedAmount: 0
+        - PayType: 0
+          Cost: 400
           RoomName: 2
           Isbase: 0
           TurretData:
             PayType: 0
-            Cost: 0
-            PayedAmount: 0
+            Cost: 200
             IsActive: 0
             HasTurretSoldier: 0
             AmmoCapacity: 0
             AmmoDamage: 0
-        - PayType: 1
-          Cost: 150
-          PayedAmount: 0
+        - PayType: 0
+          Cost: 300
           RoomName: 3
           Isbase: 0
           TurretData:
             PayType: 0
-            Cost: 0
-            PayedAmount: 0
+            Cost: 300
             IsActive: 0
             HasTurretSoldier: 0
             AmmoCapacity: 0
@@ -74,7 +66,7 @@ MonoBehaviour:
         MaxWorkerFromMine: 5
         GemHolderData:
           MaxGemFromHolder: 0
-          GemInitPoint: {x: -1, y: 0, z: 1}
-          GemCoundX: 5
-          GemCoundZ: 5
+          GemInitPoint: {x: -1, y: 0.3, z: 1}
+          GemCountX: 5
+          GemCountZ: 5
           OffsetFactor: 2

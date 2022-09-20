@@ -21,7 +21,6 @@ namespace Controllers
             if (other.CompareTag("Player"))
             {
                 manager.PlayerTriggerEnter(other.transform.parent);
-                Debug.Log("triggerlandı");
             }
         }
     }

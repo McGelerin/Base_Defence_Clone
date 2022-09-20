@@ -113,8 +113,8 @@ namespace Managers
                     ? ES3.Load < Dictionary<RoomNameEnum, int>>("RoomPayedAmound", "AreaData.es3")
                     : new Dictionary<RoomNameEnum, int>(),
                 RoomTurretPayedAmound = ES3.KeyExists("RoomTurretPayedAmound", "AreaData.es3")
-                    ? ES3.Load < Dictionary<RoomNameEnum, int>>("RoomTurretPayedAmound", "AreaData.es3")
-                    : new Dictionary<RoomNameEnum, int>()
+                    ? ES3.Load < Dictionary<TurretNameEnum, int>>("RoomTurretPayedAmound", "AreaData.es3")
+                    : new Dictionary<TurretNameEnum, int>()
             };
         }
     }

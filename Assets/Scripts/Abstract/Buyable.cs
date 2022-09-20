@@ -7,14 +7,11 @@ namespace Abstract
         public PayTypeEnum PayType;
         
         public int Cost;
-
-        public int PayedAmount;
-
-        protected Buyable(PayTypeEnum payType, int cost, int payedAmount)
+        
+        protected Buyable(PayTypeEnum payType, int cost)
         {
             PayType = payType;
             Cost = cost;
-            PayedAmount = payedAmount;
         }
     }
 }

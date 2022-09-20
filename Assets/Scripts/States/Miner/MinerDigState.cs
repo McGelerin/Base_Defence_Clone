@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abstract;
 using AIBrain;
+using Enums;
 using UnityEngine;
 
 namespace States.Miner
@@ -18,7 +19,9 @@ namespace States.Miner
         
         private async void Waiter(MinerAIBrain miner)
         {
-            await Task.Delay(2000);
+            miner.AnimState(MinerAnimState.Dig);
+            await Task.Delay(5000);
+            miner.PickaxeController(false);
             miner.SwichState(miner.MoveToGemHolder);
         }
     }

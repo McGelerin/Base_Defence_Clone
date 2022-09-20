@@ -5,6 +5,7 @@
         Gem,
         Enemy,
         Miner,
+        Hostage,
         Ammo
     }
 }

@@ -6,6 +6,6 @@ namespace Keys
     public struct AreaDataParams
     {
         public Dictionary<RoomNameEnum,int> RoomPayedAmound;
-        public Dictionary<RoomNameEnum,int> RoomTurretPayedAmound;
+        public Dictionary<TurretNameEnum,int> RoomTurretPayedAmound;
     }
 }

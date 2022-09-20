@@ -38,7 +38,7 @@ namespace Managers
 
         private AreaDataParams _areaData;
         [ShowInInspector]private Dictionary<RoomNameEnum,int> _payedRoomDatas;
-        [ShowInInspector]private Dictionary<RoomNameEnum,int> _payedTurretDatas;
+        [ShowInInspector]private Dictionary<TurretNameEnum,int> _payedTurretDatas;
         private int _baseLevel;
         #endregion
         #endregion
@@ -53,22 +53,29 @@ namespace Managers
         private void OnEnable()
         {
             SubscribeEvents();
+            GetReferances();
         }
 
         private void SubscribeEvents()
         {
-            IdleSignals.Instance.onBaseAreaBuyedItem += OnSetAreaDatas;
+            IdleSignals.Instance.onBaseAreaBuyedItem += OnSetPayedRoomData;
+            IdleSignals.Instance.onTurretAreaBuyedItem += OnSetPayedTurretData;
             IdleSignals.Instance.onRoomData += OnGetRoomData;
+            IdleSignals.Instance.onTurretData += OnGetTurretData;
             IdleSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
+            IdleSignals.Instance.onPayedTurretData += OnGetTurretPayedAmound;
             IdleSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
         }
 
         private void UnsubscribeEvents()
         {
-            IdleSignals.Instance.onBaseAreaBuyedItem -= OnSetAreaDatas;
+            IdleSignals.Instance.onBaseAreaBuyedItem -= OnSetPayedRoomData;
+            IdleSignals.Instance.onTurretAreaBuyedItem -= OnSetPayedTurretData;
             IdleSignals.Instance.onRoomData -= OnGetRoomData;
+            IdleSignals.Instance.onTurretData -= OnGetTurretData;
             IdleSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
+            IdleSignals.Instance.onPayedTurretData -= OnGetTurretPayedAmound;
             IdleSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
         }
@@ -78,18 +85,18 @@ namespace Managers
             UnsubscribeEvents();
         }
         #endregion
-        
+
+        private void Start()
+        {
+            IdleSignals.Instance.onGettedBaseData?.Invoke();
+        }
+
         private void ColoseGameObjects()
         {
             foreach (var VARIABLE in level[(int)baseStage].GameObjects)
             {
                 VARIABLE.SetActive(false);
             }
-        }
-        
-        private void Start()
-        {
-            GetReferances();
         }
 
         private void GetReferances()
@@ -102,37 +109,49 @@ namespace Managers
             SetBaseLevelText();
         }
 
-        private RoomData OnGetRoomData(RoomNameEnum roomName)
-        {
-            return Data.BaseRoomDatas.Rooms[(int)roomName];
-        }
+        private RoomData OnGetRoomData(RoomNameEnum roomName) =>  Data.BaseRoomDatas.Rooms[(int)roomName];
 
-        private MineAreaData OnGetMineAreaData()
-        {
-            return Data.MineAreaData;
-        }
+        
+        private TurretData OnGetTurretData(TurretNameEnum turret) => Data.BaseRoomDatas.Rooms[(int)turret].TurretData;
+
+        private MineAreaData OnGetMineAreaData() => Data.MineAreaData;
 
         private int OnGetRoomPayedAmound(RoomNameEnum room)
         {
             if (!_payedRoomDatas.ContainsKey(room)) _payedRoomDatas.Add(room, 0);
             return _payedRoomDatas[room];
         }
+        
+        private int OnGetTurretPayedAmound(TurretNameEnum turret)
+        {
+            if (!_payedTurretDatas.ContainsKey(turret)) _payedTurretDatas.Add(turret, 0);
+            return _payedTurretDatas[turret];
+        }
 
-        private void OnSetAreaDatas(RoomNameEnum room,int payedAmound)
+        private void OnSetPayedRoomData(RoomNameEnum room,int payedAmound)
         {
             _payedRoomDatas[room] = payedAmound;
+            AreaDataSave();
+        }
+
+        private void OnSetPayedTurretData(TurretNameEnum turret,int payedAmound)
+        {
+            _payedTurretDatas[turret] = payedAmound;
+            AreaDataSave();
+        }
+
+        private void AreaDataSave()
+        {
             _areaData = new AreaDataParams
             {
-                RoomPayedAmound = _payedRoomDatas
+                RoomPayedAmound = _payedRoomDatas,
+                RoomTurretPayedAmound = _payedTurretDatas
             };
             SaveSignals.Instance.onAreaDataSave?.Invoke();
             SaveSignals.Instance.onScoreSave?.Invoke();
         }
         
-        private AreaDataParams OnGetAreaDatas()
-        {
-            return _areaData;
-        }
+        private AreaDataParams OnGetAreaDatas() => _areaData;
 
         private void SetBaseLevelText()
         {

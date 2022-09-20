@@ -9,11 +9,18 @@ namespace Signals
 {
     public class IdleSignals : MonoSingleton<IdleSignals>
     {
+        #region Base Area
+
         public UnityAction<RoomNameEnum,int> onBaseAreaBuyedItem = delegate {  };
+        public UnityAction<TurretNameEnum,int> onTurretAreaBuyedItem = delegate {  };
         
         public UnityAction onGettedBaseData = delegate {  };
         public Func<RoomNameEnum,RoomData> onRoomData = delegate{return  default;};
         public Func<RoomNameEnum,int> onPayedRoomData = delegate{return  default;};
+        public Func<TurretNameEnum,TurretData> onTurretData = delegate{return  default;};
+        public Func<TurretNameEnum,int> onPayedTurretData = delegate{return  default;};
+
+        #endregion
 
 
         #region Mine Area

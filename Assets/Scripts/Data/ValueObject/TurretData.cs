@@ -12,7 +12,7 @@ namespace Data.ValueObject
         public int AmmoCapacity;
         public int AmmoDamage;
 
-        public TurretData(PayTypeEnum payType, int cost, int payedAmount) : base(payType, cost, payedAmount)
+        public TurretData(PayTypeEnum payType, int cost) : base(payType, cost)
         {
         }
     }

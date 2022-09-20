@@ -11,10 +11,10 @@ namespace Data.ValueObject
         public RoomNameEnum RoomName;
         public bool Isbase;
         
-        public RoomData(PayTypeEnum payType, int cost, int payedAmount) : base(payType, cost, payedAmount)
+        public RoomData(PayTypeEnum payType, int cost) : base(payType, cost)
         {
         }
-
+        
         public TurretData TurretData;
     }
 }

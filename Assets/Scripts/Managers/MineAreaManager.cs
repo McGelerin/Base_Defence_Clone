@@ -68,7 +68,7 @@ namespace Managers
         {
             _capacity = new List<int>(new int [mines.Count]);
             _data = IdleSignals.Instance.onGetMineAreaData();
-            _squareMeters =_data.GemHolderData.GemCoundX * _data.GemHolderData.GemCoundZ;
+            _squareMeters =_data.GemHolderData.GemCountX * _data.GemHolderData.GemCountZ;
         }
 
         public void PlayerTriggerEnter(Transform other)
@@ -105,9 +105,9 @@ namespace Managers
         private void SetGemPosition(GameObject gem)
         {
             _direct = _data.GemHolderData.GemInitPoint + gemAreaHolder.transform.position;
-            _direct.x = _direct.x + (int)(_gemHolderGameObjects.Count % _data.GemHolderData.GemCoundX) / _data.GemHolderData.OffsetFactor;
+            _direct.x = _direct.x + (int)(_gemHolderGameObjects.Count % _data.GemHolderData.GemCountX) / _data.GemHolderData.OffsetFactor;
             _direct.y = _direct.y + (int)(_gemHolderGameObjects.Count / _squareMeters) / _data.GemHolderData.OffsetFactor;;
-            _direct.z = _direct.z - (int)((_gemHolderGameObjects.Count % _squareMeters) / _data.GemHolderData.GemCoundZ) / _data.GemHolderData.OffsetFactor;
+            _direct.z = _direct.z - (int)((_gemHolderGameObjects.Count % _squareMeters) / _data.GemHolderData.GemCountZ) / _data.GemHolderData.OffsetFactor;
             gem.transform.DOLocalMove(_direct,0.5f);
         }
         

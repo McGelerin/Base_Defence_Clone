@@ -1,6 +1,7 @@
 ﻿using Abstract;
 using AIBrain;
 using Cinemachine;
+using Enums;
 using UnityEngine;
 
 namespace States.Miner
@@ -9,6 +10,8 @@ namespace States.Miner
     {
         public override void EnterState(MinerAIBrain miner)
         {
+            miner.PickaxeController(true);
+            miner.AnimState(MinerAnimState.Run);
             miner.Agent.SetDestination(miner.Target.transform.position);
         }
 
