@@ -7,6 +7,6 @@ namespace Abstract
     {
         public abstract void EnterState(MinerAIBrain miner);
 
-        public abstract void OnTriggerEnter(MinerAIBrain miner, Collider other);
+        public abstract void OnTriggerEnterState(MinerAIBrain miner, Collider other);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Enums;
 using Signals;
 using UnityEngine;
 
@@ -26,12 +28,17 @@ namespace Managers
         private void Subscribe()
         {
             StackSignals.Instance.onGetHostageTarget += OnGetHostageTarget;
+            StackSignals.Instance.onLastGameObjectRemone += OnLastHostageRemove;
+            StackSignals.Instance.onGetHostageList += onGetHostageList;
         }
 
 
         private void Unsubscribe()
         {
             StackSignals.Instance.onGetHostageTarget -= OnGetHostageTarget;
+            StackSignals.Instance.onLastGameObjectRemone -= OnLastHostageRemove;
+            StackSignals.Instance.onGetHostageList -= onGetHostageList;
+            
         }
         
         private void OnDisable()
@@ -52,5 +59,14 @@ namespace Managers
             _hostageList.Add(hostage);
             return _hostageList[_hostageList.Count - 2];
         }
+
+        private void OnLastHostageRemove ()
+        {
+            PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Hostage,_hostageList.Last());
+            _hostageList.Remove(_hostageList.Last());
+            _hostageList.TrimExcess();
+        }
+        
+        private List<GameObject> onGetHostageList() => _hostageList;
     }
 }

@@ -5,6 +5,7 @@ using DG.Tweening;
 using Enums;
 using Signals;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,6 +17,7 @@ namespace Managers
 
         #region SerializeField Variables
 
+        [SerializeField] private TextMeshPro tmp;
         [SerializeField] private GameObject gemAreaHolder;
         [SerializeField] private List<GameObject> mines = new List<GameObject>();
 
@@ -26,10 +28,12 @@ namespace Managers
         private MineAreaData _data;
         private List<int> _capacity;
         [ShowInInspector]private List<GameObject>_gemHolderGameObjects = new List<GameObject>();
-        [ShowInInspector]private List<GameObject>_gemHolderGameObjectsCache;
+        private List<GameObject>_gemHolderGameObjectsCache;
         private int _random;
         private int _squareMeters;
         private Vector3 _direct = Vector3.zero;
+        [ShowInInspector]private List<GameObject> _hostageGameObjects = new List<GameObject>();
+        private int _currentMiner;
 
 
         #endregion
@@ -66,9 +70,12 @@ namespace Managers
 
         private void Start()
         {
+            _currentMiner = 0;
             _capacity = new List<int>(new int [mines.Count]);
             _data = IdleSignals.Instance.onGetMineAreaData();
             _squareMeters =_data.GemHolderData.GemCountX * _data.GemHolderData.GemCountZ;
+            SetText();
+
         }
 
         public void PlayerTriggerEnter(Transform other)
@@ -127,5 +134,27 @@ namespace Managers
             return mines[_random];
         }
         private GameObject OnGetGemAreaHolder() => gemAreaHolder;
+
+        public void PlayerEntryGemArea()
+        {
+            _hostageGameObjects = StackSignals.Instance.onGetHostageList();
+            if (_hostageGameObjects.Count <= 0) return;
+            while (_hostageGameObjects.Count<_data.MaxWorkerAmound)
+            {
+                if(_currentMiner == _data.MaxWorkerAmound) break;
+                if (_hostageGameObjects.Count <= 0) break;
+                GameObject miner = PoolSignals.Instance.onGetPoolObject(PoolType.Miner, _hostageGameObjects.Last().transform);
+                miner.transform.rotation = _hostageGameObjects.Last().transform.rotation;
+                StackSignals.Instance.onLastGameObjectRemone?.Invoke();
+                _hostageGameObjects = StackSignals.Instance.onGetHostageList();
+                _currentMiner++;
+                SetText();
+            }
+        }
+
+        private void SetText()
+        {
+            tmp.SetText(_currentMiner.ToString() + " / " + _data.MaxWorkerAmound);
+        }
     }
 }

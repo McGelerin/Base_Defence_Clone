@@ -1,7 +1,10 @@
-﻿using Abstract;
+﻿using System;
+using System.Threading;
+using Abstract;
 using Enums;
 using Signals;
 using States.Miner;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,10 +17,11 @@ namespace AIBrain
         #region Public Variables
 
         public NavMeshAgent Agent;
+        public NavMeshObstacle Obstacle;
 
-        public MoveToMineState MoveToMine = new MoveToMineState();
-        public MinerDigState MinerDigState = new MinerDigState();
-        public MoveToGemHolder MoveToGemHolder = new MoveToGemHolder();
+        public MoveToMineState MoveToMine;
+        public MinerDigState MinerDigState;
+        public MoveToGemHolder MoveToGemHolder;
         public GameObject GemAreaHolder;
         public GameObject Target;
 
@@ -34,25 +38,32 @@ namespace AIBrain
         #region Private Variables
 
         private MinerBaseState _currentState;
-        
+
         #endregion
         #endregion
+
+        private void Awake()
+        {
+            Agent = GetComponent<NavMeshAgent>();
+            MoveToMine = new MoveToMineState();
+            MinerDigState = new MinerDigState();
+            MoveToGemHolder = new MoveToGemHolder();
+        }
 
         private void OnEnable()
         {
             Target = IdleSignals.Instance.onGetMineGameObject();
             GemAreaHolder = IdleSignals.Instance.onGemAreaHolder();
-            Agent = GetComponent<NavMeshAgent>();
             _currentState = MoveToMine;
             _currentState.EnterState(this);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            _currentState.OnTriggerEnter(this,other);
+            _currentState.OnTriggerEnterState(this,other);
         }
 
-        public void SwichState(MinerBaseState state)//get set ile yapılabilir
+        public void SwichState(MinerBaseState state)
         {
             _currentState = state;
             _currentState.EnterState(this);

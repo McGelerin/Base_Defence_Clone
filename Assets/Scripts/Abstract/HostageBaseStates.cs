@@ -9,6 +9,6 @@ namespace Abstract
         
         public abstract void UpdateState(HostageAIBrain hostage);
         
-        public abstract void OnTriggerEnter(HostageAIBrain hostage, Collider other);
+        public abstract void OnTriggerEnterState(HostageAIBrain hostage, Collider other);
     }
 }

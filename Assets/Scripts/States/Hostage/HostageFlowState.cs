@@ -18,26 +18,21 @@ namespace States.Hostage
         public override void UpdateState(HostageAIBrain hostage)
         {
             FlowPlayer(hostage);
-            AnimStateChack(hostage);
         }
 
-        public override void OnTriggerEnter(HostageAIBrain hostage, Collider other)
+        public override void OnTriggerEnterState(HostageAIBrain hostage, Collider other)
         {
         }
 
         private void FlowPlayer(HostageAIBrain hostage)
         {
             hostage.Agent.SetDestination(hostage.Target.transform.position);
+            AnimStateChack(hostage);
         }
 
         private void AnimStateChack(HostageAIBrain hostage)
         {
-            if (hostage.Agent.remainingDistance <= hostage.Agent.stoppingDistance)
-            {
-                hostage.AnimBoolState(HostageAnimState.Follow,false);
-                return;
-            }
-            hostage.AnimBoolState(HostageAnimState.Follow,true);
+            hostage.AnimBoolState(HostageAnimState.Follow, hostage.Agent.velocity.magnitude > 0.1f);
         }
     }
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3718666012275325135}
   - component: {fileID: 3292952987773810057}
-  - component: {fileID: 1114872277014765357}
   - component: {fileID: 6280750075139940359}
   m_Layer: 0
   m_Name: Physics
@@ -46,22 +45,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.9937372, y: 0.5004022, z: 3.0072756}
   m_Center: {x: -0.009451389, y: 0.24979888, z: 0.0006804466}
---- !u!54 &1114872277014765357
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1419407270745106251}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &6280750075139940359
 MonoBehaviour:
   m_ObjectHideFlags: 0

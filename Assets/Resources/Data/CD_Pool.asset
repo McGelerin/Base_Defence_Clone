@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolValueDatas:
   - ObjectType: 0
-    ObjectLimit: 30
+    ObjectLimit: 80
     PooledObject: {fileID: 379725593890370474, guid: 5af2ad45c65c392438653a29acef5c06, type: 3}
   - ObjectType: 1
     ObjectLimit: 20
     PooledObject: {fileID: 3620818392626601495, guid: 717c6d6e9d08dc64a9b2f849d9b6d507, type: 3}
   - ObjectType: 2
-    ObjectLimit: 20
-    PooledObject: {fileID: 3354024504293003903, guid: 4b1401c47d79819449d5c65e6ba22a08, type: 3}
+    ObjectLimit: 10
+    PooledObject: {fileID: 2118468669246769685, guid: ef9f5ffdb39ae2a4db3102b598f7f91f, type: 3}
   - ObjectType: 3
-    ObjectLimit: 20
-    PooledObject: {fileID: 919132149155446097, guid: 97ae875e2a6643c43af8f932b426f5e1, type: 3}
+    ObjectLimit: 10
+    PooledObject: {fileID: 2118468669246769685, guid: a418b1e40b668f54890faff7f5e34ea1, type: 3}

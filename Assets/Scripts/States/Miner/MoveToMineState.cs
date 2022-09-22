@@ -15,10 +15,12 @@ namespace States.Miner
             miner.Agent.SetDestination(miner.Target.transform.position);
         }
 
-        public override void OnTriggerEnter(MinerAIBrain miner, Collider other)
+        public override void OnTriggerEnterState(MinerAIBrain miner, Collider other)
         {
             if (other.CompareTag("Mine"))
             {
+                miner.Agent.enabled = false;
+                miner.Obstacle.enabled = true;
                 miner.SwichState(miner.MinerDigState);
             }
         }

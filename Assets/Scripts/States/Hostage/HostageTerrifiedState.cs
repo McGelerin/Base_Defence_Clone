@@ -17,7 +17,7 @@ namespace States.Hostage
         {
         }
 
-        public override void OnTriggerEnter(HostageAIBrain hostage, Collider other)
+        public override void OnTriggerEnterState(HostageAIBrain hostage, Collider other)
         {
             if (other.CompareTag("Player"))
             {

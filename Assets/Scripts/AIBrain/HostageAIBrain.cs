@@ -1,4 +1,5 @@
-﻿using Abstract;
+﻿using System;
+using Abstract;
 using Enums;
 using States.Hostage;
 using UnityEngine;
@@ -13,8 +14,8 @@ namespace AIBrain
         #region Public Variables
 
         public NavMeshAgent Agent;
-        public HostageTerrifiedState HostageTerrifiedState = new HostageTerrifiedState();
-        public HostageFlowState HostageFlowState = new HostageFlowState();
+        public HostageTerrifiedState HostageTerrifiedState;
+        public HostageFlowState HostageFlowState;
         public GameObject Target;
 
         #endregion
@@ -33,25 +34,31 @@ namespace AIBrain
         
         #endregion
         #endregion
-        
+
+        private void Awake()
+        {
+            HostageTerrifiedState = new HostageTerrifiedState();
+            HostageFlowState = new HostageFlowState();
+            Agent = GetComponent<NavMeshAgent>();
+        }
+
         private void OnEnable()
         {
-            Agent = GetComponent<NavMeshAgent>();
             _currentState = HostageTerrifiedState;
             _currentState.EnterState(this);
         }
         
         private void Update()
         {
-            timer += Time.deltaTime;
-            if (!(timer >= chackTimer)) return;
+            //timer += Time.deltaTime;
+            //if (!(timer >= chackTimer)) return;
             _currentState.UpdateState(this);
-            timer = 0;
+            //timer = 0;
         }
         
         private void OnTriggerEnter(Collider other)
         {
-            _currentState.OnTriggerEnter(this,other);
+            _currentState.OnTriggerEnterState(this,other);
         }
         
         public void SwichState(HostageBaseStates state)//get set ile yapılabilir
