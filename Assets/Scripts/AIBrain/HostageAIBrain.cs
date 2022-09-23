@@ -15,7 +15,7 @@ namespace AIBrain
 
         public NavMeshAgent Agent;
         public HostageTerrifiedState HostageTerrifiedState;
-        public HostageFlowState HostageFlowState;
+        public HostageFollowState HostageFollowState;
         public GameObject Target;
 
         #endregion
@@ -38,7 +38,7 @@ namespace AIBrain
         private void Awake()
         {
             HostageTerrifiedState = new HostageTerrifiedState();
-            HostageFlowState = new HostageFlowState();
+            HostageFollowState = new HostageFollowState();
             Agent = GetComponent<NavMeshAgent>();
         }
 

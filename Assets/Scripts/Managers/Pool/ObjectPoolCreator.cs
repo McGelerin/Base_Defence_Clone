@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using Data.UnityObject;
 using Enums;
 using ObjectPool;
 using Signals;
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Managers
@@ -18,8 +16,8 @@ namespace Managers
 
         private Transform _objTransformCache;
         [ShowInInspector]private CD_Pool _poolData;
-        private int _listCache;
-        private List<GameObject> _poolGroup = new List<GameObject>();
+        private PoolType _listCache;
+        private Dictionary<PoolType,GameObject> _poolGroup =new Dictionary<PoolType, GameObject>();
 
         #endregion
 
@@ -34,16 +32,17 @@ namespace Managers
 
         private void CreatGameObjectGroup()
         {
-            foreach (var gameObjectCache in _poolData.PoolValueDatas.Select(VARIABLE => new GameObject
-                     {
-                         name = VARIABLE.ObjectType.ToString(),
-                         transform =
-                         {
-                             parent = transform
-                         }
-                     }))
+            foreach (var VARIABLE in _poolData.PoolValueDatas)
             {
-                _poolGroup.Add(gameObjectCache);
+                var gameObjectCache = new GameObject
+                {
+                    name = VARIABLE.Key.ToString(),
+                    transform =
+                    {
+                        parent = transform
+                    }
+                };
+                _poolGroup.Add(VARIABLE.Key,gameObjectCache);
             }
         }
         #region Event Subscription
@@ -74,7 +73,7 @@ namespace Managers
 
         private GameObject OnGetPoolObject(PoolType poolType,Transform objTransform)
         {
-            _listCache = (int)poolType;
+            _listCache = poolType;
             _objTransformCache = objTransform;
             var obj = ObjectPoolManager.Instance.GetObject<GameObject>(poolType.ToString());
             return obj;
@@ -82,7 +81,7 @@ namespace Managers
 
         private void OnReleasePoolObject(PoolType poolType, GameObject obj)
         {
-            _listCache = (int)poolType;
+            _listCache = poolType;
             ObjectPoolManager.Instance.ReturnObject(obj,poolType.ToString());
         }
         
@@ -90,11 +89,11 @@ namespace Managers
         
         private void InitPool()
         {
-            for (int i = 0; i < _poolData.PoolValueDatas.Count; i++)
+            foreach (var VARIABLE in _poolData.PoolValueDatas)
             {
-                _listCache = i;
+                _listCache = VARIABLE.Key;
                 ObjectPoolManager.Instance.AddObjectPool<GameObject>(FabricateGameObject, TurnOnGameObject, TurnOffGameObject,
-                    _poolData.PoolValueDatas[i].ObjectType.ToString(), _poolData.PoolValueDatas[i].ObjectLimit, true);
+                    VARIABLE.Key.ToString(), VARIABLE.Value.ObjectLimit, true);
             }
         }
         

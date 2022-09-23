@@ -21,7 +21,7 @@ namespace States.Hostage
         {
             if (other.CompareTag("Player"))
             {
-                hostage.SwichState(hostage.HostageFlowState);
+                hostage.SwichState(hostage.HostageFollowState);
             }
         }
     }

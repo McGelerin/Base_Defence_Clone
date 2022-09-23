@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace States.Hostage
 {
-    public class HostageFlowState : HostageBaseStates
+    public class HostageFollowState : HostageBaseStates
     {
         public override void EnterState(HostageAIBrain hostage)
         {
