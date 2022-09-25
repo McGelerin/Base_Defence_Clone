@@ -70,3 +70,8 @@ MonoBehaviour:
           GemCountX: 5
           GemCountZ: 5
           OffsetFactor: 2
+    FrontYardData:
+      SpawnDatas:
+      - EnemyType: 0
+        EnemyCount: 10
+        CurrentCount: 0

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Abstract;
 using Data.UnityObject;
 using Data.ValueObject;
 using Enums;
+using Signals;
 using States.Enemy;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,7 +16,8 @@ namespace AIBrain
 
         #region Public Variables
 
-        public GameObject Target;
+        public GameObject TurretTarget;
+        public GameObject PlayerTarget;
 
         #endregion
 
@@ -25,13 +26,13 @@ namespace AIBrain
         [SerializeField] private EnemyType enemyType;
         [SerializeField]private NavMeshAgent agent;
         [SerializeField] private Animator animator;
-        [SerializeField] private float chackTimer;
+        [SerializeField] private float checkTimer;
 
         #endregion
 
         #region Private Variables
 
-        private MoveToTaret _moveToTaret;
+        private MoveToTurret _moveToTurret;
         private ChaseToPlayer _chaseToPlayer;
         private AttackToPlayer _attackToPlayer;
         private EnemyDeath _enemyDeath;
@@ -47,7 +48,7 @@ namespace AIBrain
         {
             var brain = this;
             _data = Resources.Load<Cd_AI>("Data/Cd_AI").EnemyAIData.EnemyTypeDatas[enemyType];
-            _moveToTaret = new MoveToTaret(ref brain, ref agent,ref _data);
+            _moveToTurret = new MoveToTurret(ref brain, ref agent,ref _data);
             _chaseToPlayer = new ChaseToPlayer(ref brain, ref agent, ref _data);
             _attackToPlayer = new AttackToPlayer(ref brain, ref agent, ref _data);
             _enemyDeath = new EnemyDeath(ref brain, ref agent, ref _data);
@@ -59,13 +60,14 @@ namespace AIBrain
         {
             SubscribeEvents();
             _health = _data.Health;
-            //SpawnManagerdan sinyalle target al
-            _currentState = _moveToTaret;
+            TurretTarget = IdleSignals.Instance.onEnemyTarget();
+            _currentState = _moveToTurret;
             _currentState.EnterState();
         }
 
         private void SubscribeEvents()
         {
+            //hasar alınca
         }
 
         private void UnsubscribeEvents()
@@ -82,7 +84,7 @@ namespace AIBrain
         private void Update()
         {
             timer += Time.deltaTime;
-            if (!(timer >= chackTimer)) return;
+            if (!(timer >= checkTimer)) return;
             _currentState.UpdateState();
             timer = 0;
         }
@@ -101,7 +103,7 @@ namespace AIBrain
         {
             _currentState = state switch
             {
-                EnemyStates.Walk => _moveToTaret,
+                EnemyStates.Walk => _moveToTurret,
                 EnemyStates.Chase => _chaseToPlayer,
                 EnemyStates.Attack => _attackToPlayer,
                 EnemyStates.Death => _enemyDeath,
@@ -122,7 +124,7 @@ namespace AIBrain
             }
         }
 
-        public bool HealthChack()
+        public bool HealthCheck()
         {
             return _health == 0;
         }
@@ -142,7 +144,7 @@ namespace AIBrain
         private IEnumerator Death()
         {
             WaitForSeconds wait = new WaitForSeconds(1f);
-            AnimTriggerState(EnemyStates.Death);
+            AnimBoolState(EnemyStates.Death , true);
             //yer altına gir
             //death invoku at
             yield return wait;
@@ -156,9 +158,9 @@ namespace AIBrain
             animator.SetTrigger(states.ToString());
         }
         
-        // public void AnimBoolState(EnemyAnimState animState,bool isFollow)
-        // {
-        //     animator.SetBool(animState.ToString(),isFollow);
-        // }
+        public void AnimBoolState(EnemyStates animState,bool isAttack)
+        {
+            animator.SetBool(animState.ToString(),isAttack);
+        }
     }
 }

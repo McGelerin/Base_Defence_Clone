@@ -6,6 +6,7 @@
         Enemy,
         Miner,
         Hostage,
-        Ammo
+        Ammo,
+        Common
     }
 }

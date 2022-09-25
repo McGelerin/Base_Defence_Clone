@@ -32,5 +32,11 @@ namespace Signals
 
         #endregion
 
+        #region OutSideSignals
+
+        public Func<GameObject> onEnemyTarget = delegate { return default;};
+
+        #endregion
+
     }
 }

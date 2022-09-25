@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7189065722013717685
 Transform:
   m_ObjectHideFlags: 0
@@ -54,8 +54,8 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 25
-  m_ObstacleAvoidanceType: 0
+  m_WalkableMask: 1
+  m_ObstacleAvoidanceType: 1
 --- !u!136 &2596390943049184696
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82,11 +82,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 317c2d3496cf41c49167ec76349807b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
+  TurretTarget: {fileID: 0}
+  PlayerTarget: {fileID: 0}
   enemyType: 0
   agent: {fileID: 8960211248748188180}
   animator: {fileID: 1182678768719840508}
-  chackTimer: 0.3
+  checkTimer: 1
 --- !u!1 &2144250802277432400
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +174,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6387427901919179093, guid: 1d53fa78bf18cf0488e1ed2d8eb85e78, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 586f865b534601a4b9d8154a9fde31f1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d53fa78bf18cf0488e1ed2d8eb85e78, type: 3}
 --- !u!4 &5082757234493791878 stripped

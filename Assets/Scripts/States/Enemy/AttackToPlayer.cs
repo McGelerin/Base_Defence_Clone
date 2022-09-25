@@ -36,7 +36,7 @@ namespace States.Enemy
 
         public override void UpdateState()
         {
-            if (_manager.HealthChack())
+            if (_manager.HealthCheck())
             {
                 _manager.SwichState(EnemyStates.Death);
             }
@@ -50,6 +50,7 @@ namespace States.Enemy
         {
             if (other.CompareTag("Player"))
             {
+                _manager.AttackStatus(false);
                 _manager.SwichState(EnemyStates.Chase);
             }
         }

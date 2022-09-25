@@ -23,7 +23,7 @@ namespace AIBrain
         #region SerializField Variables
 
         [SerializeField] private Animator animator;
-        [SerializeField] private float chackTimer;
+        [SerializeField] private float checkTimer;
 
         #endregion
 

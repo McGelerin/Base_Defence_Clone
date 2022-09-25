@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.Rendering;
 
 namespace Data.ValueObject
 {
@@ -6,5 +7,6 @@ namespace Data.ValueObject
     public class LevelData
     {
         public BaseData BaseData;
+        public FrontYardData FrontYardData;
     }
 }

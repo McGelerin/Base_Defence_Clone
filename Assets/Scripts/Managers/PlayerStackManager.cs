@@ -62,7 +62,7 @@ namespace Managers
 
         private void OnLastHostageRemove ()
         {
-            PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Hostage,_hostageList.Last());
+            PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Hostage.ToString(),_hostageList.Last());
             _hostageList.Remove(_hostageList.Last());
             _hostageList.TrimExcess();
         }

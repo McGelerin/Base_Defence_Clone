@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Data.UnityObject;
 using Enums;
 using ObjectPool;
 using Signals;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Managers
@@ -15,7 +15,7 @@ namespace Managers
         #region Private Variables
 
         private Transform _objTransformCache;
-        [ShowInInspector]private CD_Pool _poolData;
+        private CD_Pool _poolData;
         private PoolType _listCache;
         private Dictionary<PoolType,GameObject> _poolGroup =new Dictionary<PoolType, GameObject>();
 
@@ -71,17 +71,17 @@ namespace Managers
 
         #endregion
 
-        private GameObject OnGetPoolObject(PoolType poolType,Transform objTransform)
+        private GameObject OnGetPoolObject(string poolType,Transform objTransform)
         {
-            _listCache = poolType;
+            _listCache = (PoolType)Enum.Parse(typeof(PoolType), poolType);
             _objTransformCache = objTransform;
             var obj = ObjectPoolManager.Instance.GetObject<GameObject>(poolType.ToString());
             return obj;
         }
 
-        private void OnReleasePoolObject(PoolType poolType, GameObject obj)
+        private void OnReleasePoolObject(string poolType, GameObject obj)
         {
-            _listCache = poolType;
+            _listCache = (PoolType)Enum.Parse(typeof(PoolType), poolType);
             ObjectPoolManager.Instance.ReturnObject(obj,poolType.ToString());
         }
         

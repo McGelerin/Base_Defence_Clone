@@ -84,14 +84,14 @@ namespace Managers
             _gemHolderGameObjects.Clear();
             for (int i = 0; i < _gemHolderGameObjectsCache.Count; i++)
             {
-                var random = new Vector3(Random.Range(0f,3f),Random.Range(0f,3f),Random.Range(0f,3f));
+                var random = new Vector3(Random.Range(-3f,3f),Random.Range(0f,3f),Random.Range(-3f,3f));
                 var obj =_gemHolderGameObjectsCache[i];
                 obj.transform.SetParent(other);
                 obj.transform
                     .DOLocalMove(obj.transform.localPosition + random, 0.5f);
                 obj.transform.DOLocalMove(Vector3.zero, 0.5f).SetDelay(0.5f).OnComplete(()=>
                 {
-                    PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Gem,obj);
+                    PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Gem.ToString(),obj);
                 });
             }
             ScoreSignals.Instance.onSetScore?.Invoke(PayTypeEnum.Gem,_gemHolderGameObjectsCache.Count);
@@ -104,7 +104,7 @@ namespace Managers
             var position = miner.position;
             position = new Vector3(position.x, position.y + 1, position.z);
             miner.position = position;
-            GameObject gem = PoolSignals.Instance.onGetPoolObject(PoolType.Gem, miner);
+            GameObject gem = PoolSignals.Instance.onGetPoolObject(PoolType.Gem.ToString(), miner);
             SetGemPosition(gem);
             _gemHolderGameObjects.Add(gem);
         }
@@ -143,7 +143,7 @@ namespace Managers
             {
                 if(_currentMiner == _data.MaxWorkerAmound) break;
                 if (_hostageGameObjects.Count <= 0) break;
-                GameObject miner = PoolSignals.Instance.onGetPoolObject(PoolType.Miner, _hostageGameObjects.Last().transform);
+                GameObject miner = PoolSignals.Instance.onGetPoolObject(PoolType.Miner.ToString(), _hostageGameObjects.Last().transform);
                 miner.transform.rotation = _hostageGameObjects.Last().transform.rotation;
                 StackSignals.Instance.onLastGameObjectRemone?.Invoke();
                 _hostageGameObjects = StackSignals.Instance.onGetHostageList();

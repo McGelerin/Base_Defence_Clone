@@ -32,17 +32,17 @@ namespace States.Enemy
         {
             _agent.speed = _data.ChaseSpeed;
             _manager.AnimTriggerState(EnemyStates.Chase);
-            _agent.SetDestination(_manager.Target.transform.position);
+            _agent.SetDestination(_manager.PlayerTarget.transform.position);
         }
 
         public override void UpdateState()
         {
-            _agent.SetDestination(_manager.Target.transform.position);
+            _agent.SetDestination(_manager.TurretTarget.transform.position);
             if (_data.AttackRange <= _agent.remainingDistance)
             {
                 _manager.SwichState(EnemyStates.Attack);
             }
-            if (_manager.HealthChack())
+            if (_manager.HealthCheck())
             {
                 _manager.SwichState(EnemyStates.Death);
             }

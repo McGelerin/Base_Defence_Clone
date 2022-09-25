@@ -27,10 +27,10 @@ namespace States.Hostage
         private void FlowPlayer(HostageAIBrain hostage)
         {
             hostage.Agent.SetDestination(hostage.Target.transform.position);
-            AnimStateChack(hostage);
+            AnimStateCheck(hostage);
         }
 
-        private void AnimStateChack(HostageAIBrain hostage)
+        private void AnimStateCheck(HostageAIBrain hostage)
         {
             hostage.AnimBoolState(HostageAnimState.Follow, hostage.Agent.velocity.magnitude > 0.1f);
         }
