@@ -21,8 +21,7 @@ namespace Signals
         public Func<TurretNameEnum,int> onPayedTurretData = delegate{return  default;};
 
         #endregion
-
-
+        
         #region Mine Area
 
         public Func<MineAreaData> onGetMineAreaData = delegate { return default;};
@@ -35,6 +34,8 @@ namespace Signals
         #region OutSideSignals
 
         public Func<GameObject> onEnemyTarget = delegate { return default;};
+        public UnityAction<GameObject> onHostageCollected = delegate {  };
+        //public Func<int> onMineAreaCurrentScore = delegate { return 0;};
 
         #endregion
 

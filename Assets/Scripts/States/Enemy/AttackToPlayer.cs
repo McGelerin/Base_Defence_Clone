@@ -31,11 +31,20 @@ namespace States.Enemy
         
         public override void EnterState()
         {
+            Debug.Log("Attack");
+            //_agent.ResetPath();
             _manager.AttackStatus(true);
+            //_agent.SetDestination(_manager.PlayerTarget.transform.position);
         }
 
         public override void UpdateState()
         {
+            //_agent.SetDestination(_manager.PlayerTarget.transform.position);
+            _agent.destination = _manager.PlayerTarget.transform.position;
+            if (_data.AttackRange < _agent.remainingDistance)
+            {
+                _manager.SwichState(EnemyStates.Chase);
+            }
             if (_manager.HealthCheck())
             {
                 _manager.SwichState(EnemyStates.Death);
@@ -50,8 +59,9 @@ namespace States.Enemy
         {
             if (other.CompareTag("Player"))
             {
+                Debug.Log("Trigger cıktı");
                 _manager.AttackStatus(false);
-                _manager.SwichState(EnemyStates.Chase);
+                _manager.SwichState(EnemyStates.Walk);
             }
         }
     }

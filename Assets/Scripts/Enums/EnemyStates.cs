@@ -2,6 +2,7 @@
 {
     public enum EnemyStates
     {
+        Idle,
         Walk,
         Chase,
         Attack,

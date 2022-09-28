@@ -12,39 +12,33 @@ namespace Controller.Barrier
         #region SerializeField Variables
 
         [SerializeField] private BarrierManager manager;
-        [SerializeField] private bool isInside;
-        
 
         #endregion
 
         #endregion
-        private void OnTriggerEnter(Collider other)
+        // private void OnTriggerEnter(Collider other)
+        // {
+        //     if (other.CompareTag("Player")/*Buraya boşatma ve yoldurma yapmak için bir değer gelmesi gerekmektedir*/)
+        //     {
+        //         manager.BarrierState = BarrierEnum.Open;
+        //     }
+        // }
+        //
+        //
+
+        private void OnTriggerStay(Collider other)
         {
             if (other.CompareTag("Player")/*Buraya boşatma ve yoldurma yapmak için bir değer gelmesi gerekmektedir*/)
             {
-                if (isInside)
-                {
-                    //manager.BarrierState = BarrierEnum.Open;
-                }
-                else
-                {
-                    manager.BarrierState = BarrierEnum.Open;
-                }
+                manager.BarrierState = BarrierEnum.Open;
             }
         }
-
+        
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                if (isInside)
-                {
-                    //manager.BarrierState = BarrierEnum.Close;
-                }
-                else
-                {
-                    manager.BarrierState = BarrierEnum.Close;
-                }
+                manager.BarrierState = BarrierEnum.Close;
             }
         }
     }

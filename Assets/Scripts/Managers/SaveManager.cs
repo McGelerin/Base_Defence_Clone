@@ -98,7 +98,7 @@ namespace Managers
             {
                 MoneyScore = ES3.KeyExists("MoneyScore", "ScoreData.es3")
                     ? ES3.Load<int>("MoneyScore", "ScoreData.es3")
-                    : 1000,
+                    : 5000,
                 GemScore = ES3.KeyExists("GemScore", "ScoreData.es3")
                     ? ES3.Load<int>("GemScore", "ScoreData.es3")
                     : 1000

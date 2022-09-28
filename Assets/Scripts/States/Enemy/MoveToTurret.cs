@@ -31,6 +31,7 @@ namespace States.Enemy
         
         public override void EnterState()
         {
+            Debug.Log("turret");
             _agent.speed = _data.MoveSpeed;
             _manager.AnimTriggerState(EnemyStates.Walk);
             _agent.SetDestination(_manager.TurretTarget.transform.position);
@@ -42,6 +43,8 @@ namespace States.Enemy
             {
                 _manager.SwichState(EnemyStates.Death);
             }
+
+            _manager.AnimBoolState(EnemyStates.Idle, _data.AttackRange > _agent.remainingDistance);
         }
 
         public override void OnTriggerEnterState(Collider other)

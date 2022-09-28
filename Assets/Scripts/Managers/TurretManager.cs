@@ -96,13 +96,13 @@ namespace Managers
             switch (_turretData.PayType)
             {
                 case PayTypeEnum.Money:
-                    if (_scoreCache.MoneyScore > _remainingAmound)
+                    if (_scoreCache.MoneyScore >= _remainingAmound)
                     {
                         StartCoroutine(Buy());
                     }
                     break;
                 case PayTypeEnum.Gem :
-                    if (_scoreCache.GemScore > _remainingAmound)
+                    if (_scoreCache.GemScore >= _remainingAmound)
                     {
                         StartCoroutine(Buy());
                     }

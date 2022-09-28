@@ -131,7 +131,7 @@ namespace AIBrain
 
         private IEnumerator Attack()
         {
-            WaitForSeconds wait = new WaitForSeconds(1f);
+            WaitForSeconds wait = new WaitForSeconds(1.1f);
             while (true)
             {
                 AnimTriggerState(EnemyStates.Attack);

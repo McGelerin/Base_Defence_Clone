@@ -7,6 +7,10 @@ TagManager:
   - BuyArea
   - GemHolder
   - Mine
+  - BarrierInSide
+  - BarrierOutSide
+  - Money
+  - AmmoReloadArea
   layers:
   - Default
   - TransparentFX
@@ -14,9 +18,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - BarrierLayer
+  - EnemyDetect
+  - PlayerOutSideLayer
   - 
   - 
   - 

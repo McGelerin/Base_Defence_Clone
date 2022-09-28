@@ -7,6 +7,8 @@
         Miner,
         Hostage,
         Ammo,
-        Common
+        Common,
+        Tank,
+        Money
     }
 }

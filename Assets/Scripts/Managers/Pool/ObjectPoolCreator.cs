@@ -4,6 +4,7 @@ using Data.UnityObject;
 using Enums;
 using ObjectPool;
 using Signals;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Managers
@@ -16,8 +17,9 @@ namespace Managers
 
         private Transform _objTransformCache;
         private CD_Pool _poolData;
+        private string _objTypeCache;
         private PoolType _listCache;
-        private Dictionary<PoolType,GameObject> _poolGroup =new Dictionary<PoolType, GameObject>();
+        [ShowInInspector]private Dictionary<PoolType,GameObject> _poolGroup =new Dictionary<PoolType, GameObject>();
 
         #endregion
 
@@ -25,6 +27,7 @@ namespace Managers
 
         private void Awake()
         {
+            _objTypeCache = null;
             _poolData = Resources.Load<CD_Pool>("Data/CD_Pool");
             CreatGameObjectGroup();
             InitPool();
@@ -73,16 +76,16 @@ namespace Managers
 
         private GameObject OnGetPoolObject(string poolType,Transform objTransform)
         {
-            _listCache = (PoolType)Enum.Parse(typeof(PoolType), poolType);
             _objTransformCache = objTransform;
-            var obj = ObjectPoolManager.Instance.GetObject<GameObject>(poolType.ToString());
+            _objTypeCache = poolType;
+            var obj = ObjectPoolManager.Instance.GetObject<GameObject>(poolType);
             return obj;
         }
 
         private void OnReleasePoolObject(string poolType, GameObject obj)
         {
-            _listCache = (PoolType)Enum.Parse(typeof(PoolType), poolType);
-            ObjectPoolManager.Instance.ReturnObject(obj,poolType.ToString());
+            _objTypeCache = poolType;
+            ObjectPoolManager.Instance.ReturnObject(obj,poolType);
         }
         
         #region Pool Initialization
@@ -112,6 +115,7 @@ namespace Managers
         
         private GameObject FabricateGameObject()
         {
+            if (_objTypeCache != null){_listCache = (PoolType)Enum.Parse(typeof(PoolType), _objTypeCache);}
             return Instantiate(_poolData.PoolValueDatas[_listCache].PooledObject,Vector3.zero,
                 _poolData.PoolValueDatas[_listCache].PooledObject.transform.rotation,_poolGroup[_listCache].transform);
         }

@@ -18,11 +18,11 @@ MonoBehaviour:
       m_Values:
       - Health: 20
         Damage: 5
-        AttackRange: 10
-        MoveSpeed: 3
-        ChaseSpeed: 5
-      - Health: 10
-        Damage: 52
-        AttackRange: 540
-        MoveSpeed: 50
-        ChaseSpeed: 50
+        AttackRange: 1.5
+        MoveSpeed: 2
+        ChaseSpeed: 3
+      - Health: 50
+        Damage: 2
+        AttackRange: 1.5
+        MoveSpeed: 1.8
+        ChaseSpeed: 2.8
