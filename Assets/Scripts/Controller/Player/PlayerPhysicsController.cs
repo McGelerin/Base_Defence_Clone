@@ -1,4 +1,5 @@
 ﻿using System;
+using Enums;
 using Managers;
 using UnityEngine;
 
@@ -10,7 +11,9 @@ namespace Controllers
 
         #region SerializeField Variables
 
+        [SerializeField] private PlayerManager manager;
         [SerializeField] private PlayerStackManager stackManager;
+        [SerializeField] private RangedAttackManager rangedAttackManager;
 
         #endregion
 
@@ -20,13 +23,17 @@ namespace Controllers
             if (other.CompareTag("BarrierInSide"))
             {
                 gameObject.layer = LayerMask.NameToLayer("Default");
+                manager.SetPlayerState(PlayerStateEnum.INSIDE);
                 stackManager.IncreaseBarrierArea();
+                rangedAttackManager.PlayerIncreaseBase();
                 return;
             }
 
             if (other.CompareTag("BarrierOutSide"))
             {
                 gameObject.layer = LayerMask.NameToLayer("PlayerOutSideLayer");
+                manager.SetPlayerState(PlayerStateEnum.OUTSIDE);
+                rangedAttackManager.PlayerIncreaseOutSide();
                 return;
             }
 

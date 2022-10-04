@@ -31,7 +31,6 @@ namespace States.Enemy
         
         public override void EnterState()
         {
-            Debug.Log("turret");
             _agent.speed = _data.MoveSpeed;
             _manager.AnimTriggerState(EnemyStates.Walk);
             _agent.SetDestination(_manager.TurretTarget.transform.position);

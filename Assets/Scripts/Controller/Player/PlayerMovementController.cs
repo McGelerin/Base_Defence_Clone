@@ -36,25 +36,10 @@ namespace Controller
             _movementData = dataMovementData;
         }
 
-        public void EnableMovement()
-        {
-            _isReadyToMove = true;
-        }
-
-        public void DeactiveMovement()
-        {
-            _isReadyToMove = false;
-        }
-
         public void UpdateIdleInputValue(IdleInputParams inputParams)
         {
             _inputValueX = inputParams.ValueX;
             _inputValueZ = inputParams.ValueZ;
-        }
-
-        public void ChangeMovementState()
-        {
-            _isIdle = false;
         }
 
         public void IsReadyToPlay(bool state)
@@ -64,42 +49,14 @@ namespace Controller
         
         private void FixedUpdate()
         {
-       //     if (_isReadyToPlay)
-          //  {
-           //     if (_isReadyToMove)
-              //  {
-                    Move();
-               // }
-            //     else
-            //     {
-            //         StopPlayer();
-            //     }
-            // }
-            // else
-            //     Stop();
+            Move();
         }
 
         private void Move()
         {
-      //      if (_isIdle)
-       //     {
-                IdleMove();
-       //     }
+            IdleMove();
         }
-
-        // private void StopPlayer()
-        // {
-        //     if (_isIdle)
-        //     {
-        //         StopSideways();
-        //     }
-        //     else
-        //     {
-        //         Stop();
-        //     }
-        // }
         
-
         private void IdleMove()
         {
             var velocity = rigidbody.velocity;
@@ -114,15 +71,9 @@ namespace Controller
 
         private void Rotate()
         {
-            
             var direct = Quaternion.LookRotation(_directCache);
             transform.GetChild(0).transform.rotation = direct;
         }
-
-        // private void StopSideways()
-        // {
-        //     rigidbody.velocity = new Vector3(0, rigidbody.velocity.y, _movementData.PlayerJoystickSpeed);
-        // }
 
         private void Stop()
         {

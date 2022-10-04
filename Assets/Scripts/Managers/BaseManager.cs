@@ -53,7 +53,7 @@ namespace Managers
         private void OnEnable()
         {
             SubscribeEvents();
-            GetReferances();
+            GetReferences();
         }
 
         private void SubscribeEvents()
@@ -99,7 +99,7 @@ namespace Managers
             }
         }
 
-        private void GetReferances()
+        private void GetReferences()
         {
             _baseLevel = LevelSignals.Instance.onGetLevelID();
             Data = Resources.Load<CD_Level>("Data/CD_Level").LevelDatas[_baseLevel].BaseData;

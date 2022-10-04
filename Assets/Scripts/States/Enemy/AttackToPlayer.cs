@@ -31,7 +31,6 @@ namespace States.Enemy
         
         public override void EnterState()
         {
-            Debug.Log("Attack");
             //_agent.ResetPath();
             _manager.AttackStatus(true);
             //_agent.SetDestination(_manager.PlayerTarget.transform.position);

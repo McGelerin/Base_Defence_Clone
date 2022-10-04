@@ -30,7 +30,6 @@ namespace States.Enemy
         
         public override void EnterState()
         {
-            Debug.Log("Chase");
             _manager.AttackStatus(false);
             _agent.speed = _data.ChaseSpeed;
             _manager.AnimTriggerState(EnemyStates.Chase);

@@ -39,5 +39,14 @@ namespace Signals
 
         #endregion
 
+
+        #region WeaponArea
+
+        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.Ak47;};
+        public Func<PlayerAnimState> onSelectedWeaponAnimState = delegate { return 0;};
+        public Func<PlayerAnimState> onSelectedWeaponAttackAnimState = delegate { return 0;};
+        
+        #endregion
+
     }
 }

@@ -9,6 +9,9 @@
         Ammo,
         Common,
         Tank,
-        Money
+        Money,
+        Pistol,
+        M4,
+        Ak47
     }
 }

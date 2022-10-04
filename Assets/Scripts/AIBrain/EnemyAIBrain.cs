@@ -136,7 +136,6 @@ namespace AIBrain
             {
                 AnimTriggerState(EnemyStates.Attack);
                 yield return wait;
-                Debug.Log("vurdu");
                 //invoke atılacak
             }
         }

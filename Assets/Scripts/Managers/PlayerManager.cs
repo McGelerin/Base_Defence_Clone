@@ -17,7 +17,7 @@ namespace Managers
         #region Public Variables
 
         [Header("Data")] public PlayerData Data;
-
+        
         #endregion
 
         #region Serialized Variables
@@ -29,12 +29,18 @@ namespace Managers
         #endregion
 
         #region Private Variables
+
+        private PlayerStateEnum _playerState;
+        private PlayerAnimState _weaponAnimStateCache;
+        
         #endregion
+        
         #endregion
         
         private void Awake()
         {
             Data = GetPlayerData();
+            _playerState = PlayerStateEnum.INSIDE;
             SendPlayerDataToControllers();
         }
         private PlayerData GetPlayerData() => Resources.Load<CD_PlayerData>("Data/CD_Player").Data;
@@ -53,29 +59,16 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            InputSignals.Instance.onInputTaken += OnActivateMovement;
-            InputSignals.Instance.onInputReleased += OnDeactiveMovement;
             InputSignals.Instance.onJoystickDragged += OnSetIdleInputValues;
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
-            //CoreGameSignals.Instance.onChangeGameState += OnChangeMovementState;
-            //LevelSignals.Instance.onLevelSuccessful += OnLevelSuccessful;
-            //LevelSignals.Instance.onLevelFailed += OnLevelFailed;
-            //IdleSignals.Instance.onIteractionBuild += OnInteractionBuyPoint;
-
         }
 
         private void UnsubscribeEvents()
         {
-            InputSignals.Instance.onInputTaken -= OnActivateMovement;
-            InputSignals.Instance.onInputReleased -= OnDeactiveMovement;
             InputSignals.Instance.onJoystickDragged -= OnSetIdleInputValues;
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
-            //CoreGameSignals.Instance.onChangeGameState -= OnChangeMovementState;
-            //LevelSignals.Instance.onLevelSuccessful -= OnLevelSuccessful;
-            //LevelSignals.Instance.onLevelFailed -= OnLevelFailed;
-            //IdleSignals.Instance.onIteractionBuild -= OnInteractionBuyPoint;
         }
 
         private void OnDisable()
@@ -90,35 +83,52 @@ namespace Managers
             CoreGameSignals.Instance.onSetPlayerPosition?.Invoke(transform);
         }
 
-        private void OnActivateMovement()
-        {
-            movementController.EnableMovement();
-        }
-
-        private void OnDeactiveMovement()
-        {
-            movementController.DeactiveMovement();
-        }
-
         private void OnSetIdleInputValues(IdleInputParams inputParams)
         {
-            movementController.UpdateIdleInputValue(inputParams);
-            animationController.SetSpeedVariable(inputParams);
+            switch (_playerState)
+            {
+                case PlayerStateEnum.INSIDE:
+                    movementController.UpdateIdleInputValue(inputParams);
+                    animationController.SetSpeedVariable(inputParams);
+                    break;
+                case PlayerStateEnum.OUTSIDE:
+                    movementController.UpdateIdleInputValue(inputParams);
+                    animationController.SetSpeedVariable(inputParams);
+                    animationController.SetOutSideAnimState(inputParams,TargetPosition());
+                    break;
+                case PlayerStateEnum.TARET:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        // private void OnChangeMovementState()
-        // {
-        //     movementController.IsReadyToPlay(true);
-        //     movementController.ChangeMovementState();
-        //     movementController.EnableMovement();
-        //     //_rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        // }
-        
+        private Transform TargetPosition()
+        {
+            return AttackSignals.Instance.onPlayerIsTarget();
+        }
+
+        public void SetPlayerState(PlayerStateEnum state)
+        {
+            _playerState = state;
+            if (_playerState == PlayerStateEnum.INSIDE)
+            {
+                _weaponAnimStateCache = IdleSignals.Instance.onSelectedWeaponAnimState();
+                animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
+                animationController.SetBoolAnimState(_weaponAnimStateCache,false);
+            }
+            else if (_playerState == PlayerStateEnum.OUTSIDE)
+            {
+                animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
+                animationController.SetBoolAnimState(_weaponAnimStateCache,true);
+            }
+        }
+
         private void OnPlay()
         {
             //  SetStackPosition();
             movementController.IsReadyToPlay(true);
-            animationController.SetAnimState(PlayerAnimState.Run);
+            animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
         }
         
         private void OnReset()

@@ -136,9 +136,9 @@ namespace Managers
             IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
         }
 
-        private void SetText(int remainingAmound)
+        private void SetText(int remainingAmount)
         {
-            tmp.text = remainingAmound.ToString();
+            tmp.text = remainingAmount.ToString();
         }
 
         private void BuyAreaImageChange()

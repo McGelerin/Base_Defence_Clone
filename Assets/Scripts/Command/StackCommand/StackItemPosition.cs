@@ -28,7 +28,6 @@ namespace Command.StackCommand
 
         public Vector3 Execute(Vector3 stackPosition)
         {
-            Debug.Log(_stackList.Count);
             stackPosition = _stackHolder.transform.localPosition + _data.InitPosition;
             stackPosition.x += _stackList.Count % _data.StackCountX / _data.StackOffset.x;
             stackPosition.y += (int)(_stackList.Count / _data.StackCountX)  % _data.StackCountY / _data.StackOffset.y;

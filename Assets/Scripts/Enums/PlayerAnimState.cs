@@ -2,8 +2,11 @@
 {
     public enum PlayerAnimState
     {
-        Idle,
-        Run,
-        GunRun
+        BaseState,
+        PistolState,
+        RifleState,
+        RifleAttack,
+        PistolAttack,
+        AttackEnd
     }
 }

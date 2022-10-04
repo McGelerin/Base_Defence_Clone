@@ -140,22 +140,18 @@ namespace Managers
         
         public void IncreaseBarrierArea()
         {
-            if (_stackType == StackType.NONE)
+            switch (_stackType)
             {
-                return;
-            }
-
-            if (_stackType == StackType.MONEY)
-            {
-                _addMoneyStackToScore.Execute();
-                _stackType = StackType.NONE;
-                return;
-            }
-
-            if (_stackType == StackType.AMMO)
-            {
-                
-                return;
+                case StackType.NONE:
+                    return;
+                case StackType.MONEY:
+                    _addMoneyStackToScore.Execute();
+                    _stackType = StackType.NONE;
+                    return;
+                case StackType.AMMO:
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

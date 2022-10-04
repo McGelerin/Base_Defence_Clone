@@ -4,6 +4,7 @@ using Data.UnityObject;
 using Data.ValueObject;
 using Enums;
 using Signals;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -24,7 +25,7 @@ namespace Managers
 
         #region Private Variables
 
-        private Dictionary<GameObject, List<SpawnData>> _turretsSpawnDatas =
+        [ShowInInspector]private Dictionary<GameObject, List<SpawnData>> _turretsSpawnDatas =
             new Dictionary<GameObject, List<SpawnData>>();
 
         private List<GameObject> _hostageSpawnControlList = new List<GameObject>();
