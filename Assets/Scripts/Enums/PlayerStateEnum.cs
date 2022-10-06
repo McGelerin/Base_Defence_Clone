@@ -4,6 +4,7 @@
     {
         INSIDE,
         OUTSIDE,
+        LOCKTARGET,
         TARET////BUrası artabilir :D
     }
 }

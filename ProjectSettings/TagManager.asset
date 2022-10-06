@@ -11,6 +11,8 @@ TagManager:
   - BarrierOutSide
   - Money
   - AmmoReloadArea
+  - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -19,12 +21,12 @@ TagManager:
   - Water
   - UI
   - BarrierLayer
-  - EnemyDetect
+  - EnemyDetectLayer
   - PlayerOutSideLayer
-  - 
-  - 
-  - 
-  - 
+  - BuletLayer
+  - EnemyTakeDamage
+  - HostageLayer
+  - WeaponsDetectLayer
   - 
   - 
   - 

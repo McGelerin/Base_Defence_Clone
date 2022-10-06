@@ -72,6 +72,7 @@ namespace AIBrain
 
         private void UnsubscribeEvents()
         {
+            
         }
 
         private void OnDisable()
@@ -144,9 +145,10 @@ namespace AIBrain
         {
             WaitForSeconds wait = new WaitForSeconds(1f);
             AnimBoolState(EnemyStates.Death , true);
+            AttackSignals.Instance.onEnemyDead?.Invoke(gameObject);
             //yer altına gir
-            //death invoku at
             yield return wait;
+            PoolSignals.Instance.onReleasePoolObject?.Invoke(enemyType.ToString(), gameObject);
             //poola gonder
         }
 

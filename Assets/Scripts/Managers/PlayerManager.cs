@@ -24,14 +24,16 @@ namespace Managers
 
         [Space] [SerializeField] private PlayerMovementController movementController;
         [SerializeField] private PlayerAnimationController animationController;
-        //[SerializeField] private PlayerMeshController meshController;
 
         #endregion
 
         #region Private Variables
 
         private PlayerStateEnum _playerState;
+        //private PlayerStateEnum _playerStateCache;
         private PlayerAnimState _weaponAnimStateCache;
+        private PlayerAnimState _weaponAttackAnimState;
+        //private bool _playerHasTarget = false;
         
         #endregion
         
@@ -62,6 +64,7 @@ namespace Managers
             InputSignals.Instance.onJoystickDragged += OnSetIdleInputValues;
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
+            AttackSignals.Instance.onPlayerHasTarget += OnPlayerHasTarget;
         }
 
         private void UnsubscribeEvents()
@@ -69,6 +72,7 @@ namespace Managers
             InputSignals.Instance.onJoystickDragged -= OnSetIdleInputValues;
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
+            AttackSignals.Instance.onPlayerHasTarget -= OnPlayerHasTarget;
         }
 
         private void OnDisable()
@@ -94,39 +98,67 @@ namespace Managers
                 case PlayerStateEnum.OUTSIDE:
                     movementController.UpdateIdleInputValue(inputParams);
                     animationController.SetSpeedVariable(inputParams);
-                    animationController.SetOutSideAnimState(inputParams,TargetPosition());
+                    animationController.SetOutSideAnimState(inputParams);
                     break;
                 case PlayerStateEnum.TARET:
+                    break;
+                case PlayerStateEnum.LOCKTARGET:
+                    movementController.UpdateIdleInputValue(inputParams);
+                    animationController.SetSpeedVariable(inputParams);
+                    animationController.SetOutSideAnimState(inputParams);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private Transform TargetPosition()
-        {
-            return AttackSignals.Instance.onPlayerIsTarget();
-        }
-
         public void SetPlayerState(PlayerStateEnum state)
         {
             _playerState = state;
-            if (_playerState == PlayerStateEnum.INSIDE)
+            switch (_playerState)
             {
-                _weaponAnimStateCache = IdleSignals.Instance.onSelectedWeaponAnimState();
-                animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
-                animationController.SetBoolAnimState(_weaponAnimStateCache,false);
+                case PlayerStateEnum.INSIDE:
+                    _weaponAnimStateCache = IdleSignals.Instance.onSelectedWeaponAnimState();
+                    animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
+                    animationController.SetBoolAnimState(_weaponAnimStateCache,false);
+                    break;
+                case PlayerStateEnum.OUTSIDE:
+                    animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
+                    animationController.SetBoolAnimState(_weaponAnimStateCache,true);
+                    break;
+                // case PlayerStateEnum.LOCKTARGET:
+                //     _weaponAttackAnimState = IdleSignals.Instance.onSelectedWeaponAttackAnimState();
+                //     animationController.SetAnimState(_weaponAttackAnimState);
+                //     break;
+                case PlayerStateEnum.TARET:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else if (_playerState == PlayerStateEnum.OUTSIDE)
+        }
+        
+        private void OnPlayerHasTarget(bool hasTarget)
+        {
+            //_playerHasTarget = hasTarget;
+
+            if (hasTarget)
             {
-                animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
-                animationController.SetBoolAnimState(_weaponAnimStateCache,true);
+                //_playerStateCache = _playerState;
+                movementController.IsLockTarget(true);
+                _weaponAttackAnimState = IdleSignals.Instance.onSelectedWeaponAttackAnimState();
+                animationController.SetAnimState(_weaponAttackAnimState);
+                //SetPlayerState(PlayerStateEnum.LOCKTARGET);
+            }
+            else
+            {
+                animationController.SetAnimState(PlayerAnimState.AttackEnd);
+                movementController.IsLockTarget(false);
+                //SetPlayerState(_playerStateCache);
             }
         }
 
         private void OnPlay()
         {
-            //  SetStackPosition();
             movementController.IsReadyToPlay(true);
             animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
         }
@@ -135,7 +167,6 @@ namespace Managers
         {
             gameObject.SetActive(true);
             movementController.OnReset();
-           // SetStackPosition();
         }
     }
 }

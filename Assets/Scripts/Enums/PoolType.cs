@@ -12,6 +12,7 @@
         Money,
         Pistol,
         M4,
-        Ak47
+        Ak47,
+        Bullet
     }
 }

@@ -348,7 +348,9 @@ GameObject:
   m_Component:
   - component: {fileID: 905258928736394947}
   - component: {fileID: 48534650412673925}
-  m_Layer: 0
+  - component: {fileID: 8934826869484212442}
+  - component: {fileID: 3668221400206164695}
+  m_Layer: 12
   m_Name: RangedAttackManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +383,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f020b0194247c99ce706caee075ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SCollider: {fileID: 8934826869484212442}
   weaponHolder: {fileID: 5286985283440893656}
+--- !u!135 &8934826869484212442
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5826441745921075640}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 5
+  m_Center: {x: 0, y: 1.2, z: 0}
+--- !u!54 &3668221400206164695
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5826441745921075640}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &7488847743062003470
 GameObject:
   m_ObjectHideFlags: 0
