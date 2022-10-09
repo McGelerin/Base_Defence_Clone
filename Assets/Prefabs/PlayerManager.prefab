@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 3668221400206164695}
   m_Layer: 12
   m_Name: RangedAttackManager
-  m_TagString: Untagged
+  m_TagString: WeaponAttackRadius
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -385,6 +385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SCollider: {fileID: 8934826869484212442}
   weaponHolder: {fileID: 5286985283440893656}
+  direct: {fileID: 592107626881994933}
 --- !u!135 &8934826869484212442
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -396,7 +397,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 5
+  m_Radius: 10
   m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!54 &3668221400206164695
 Rigidbody:

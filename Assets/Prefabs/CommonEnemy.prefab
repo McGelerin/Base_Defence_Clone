@@ -75,6 +75,7 @@ MonoBehaviour:
   agent: {fileID: 8960211248748188180}
   animator: {fileID: 1182678768719840508}
   checkTimer: 0.1
+  enemyBody: {fileID: 4265713679149913965}
 --- !u!135 &3376727968013693262
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -129,6 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1277165911406757787}
   - component: {fileID: 1865510322419026351}
+  - component: {fileID: 2445114310074637960}
   m_Layer: 10
   m_Name: EnemyBody
   m_TagString: Enemy
@@ -164,6 +166,19 @@ CapsuleCollider:
   m_Height: 1.9101949
   m_Direction: 1
   m_Center: {x: 0, y: 0.833493, z: 0}
+--- !u!114 &2445114310074637960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4265713679149913965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5efceacf2eb4b45aabe772c93e830a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyBrain: {fileID: 8173474899049088572}
 --- !u!1001 &5245862091469813161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -415,6 +430,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 586f865b534601a4b9d8154a9fde31f1, type: 2}
+    - target: {fileID: 6387427901919179093, guid: 1d53fa78bf18cf0488e1ed2d8eb85e78, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6516026811898930392, guid: 1d53fa78bf18cf0488e1ed2d8eb85e78, type: 3}
       propertyPath: m_Layer
       value: 7

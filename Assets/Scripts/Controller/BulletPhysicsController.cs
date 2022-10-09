@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Enums;
 using Signals;
 using UnityEngine;
@@ -9,10 +10,15 @@ namespace Controllers
     {
         #region Self Variables
 
+        #region Public Variables
+
+
+        #endregion
+
         #region Serialized Variables
 
         [SerializeField] private float bulletClosingTimer;
-        [SerializeField] private Rigidbody rb;
+        [SerializeField]private Rigidbody rb;
 
         #endregion
 
@@ -24,37 +30,28 @@ namespace Controllers
         #endregion
         #endregion
 
-        private void Awake()
-        {
-            _wait = new WaitForSeconds(bulletClosingTimer);
-        }
-
         private void OnEnable()
         {
-            StartCoroutine(BulletCloser());
-        }
-
-        private void OnDisable()
-        {
-            StopAllCoroutines();
-        }
-
-        private void BulletMove()
-        {
+            _wait = new WaitForSeconds(bulletClosingTimer);
             _direct = AttackSignals.Instance.onGetBulletDirect();
+            rb.velocity = Vector3.zero;
             rb.AddForce(_direct,ForceMode.VelocityChange);
-        }
-        
-        private IEnumerator BulletCloser()
-        {
-            BulletMove();
-            yield return bulletClosingTimer;
-            PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Bullet.ToString(), gameObject);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Bullet.ToString(), gameObject);
+            if (other.CompareTag("Enemy"))
+            {
+                PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Bullet.ToString(), gameObject);
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("WeaponAttackRadius"))
+            {
+                PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Bullet.ToString(), gameObject);
+            }
         }
     }
 }

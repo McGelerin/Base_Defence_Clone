@@ -2,6 +2,7 @@
 using Abstract;
 using Data.UnityObject;
 using Data.ValueObject;
+using DG.Tweening;
 using Enums;
 using Signals;
 using States.Enemy;
@@ -27,6 +28,7 @@ namespace AIBrain
         [SerializeField]private NavMeshAgent agent;
         [SerializeField] private Animator animator;
         [SerializeField] private float checkTimer;
+        [SerializeField] private GameObject enemyBody;
 
         #endregion
 
@@ -38,6 +40,7 @@ namespace AIBrain
         private EnemyDeath _enemyDeath;
         private EnemyBaseState _currentState;
         private EnemyTypeData _data;
+        private GameObject _money;
         private int _health;
         private float timer;
         
@@ -53,34 +56,13 @@ namespace AIBrain
             _attackToPlayer = new AttackToPlayer(ref brain, ref agent, ref _data);
             _enemyDeath = new EnemyDeath(ref brain, ref agent, ref _data);
         }
-
-        #region Event Subscription
-
         private void OnEnable()
         {
-            SubscribeEvents();
             _health = _data.Health;
             TurretTarget = IdleSignals.Instance.onEnemyTarget();
             _currentState = _moveToTurret;
             _currentState.EnterState();
         }
-
-        private void SubscribeEvents()
-        {
-            //hasar alınca
-        }
-
-        private void UnsubscribeEvents()
-        {
-            
-        }
-
-        private void OnDisable()
-        {
-            UnsubscribeEvents();
-        }
-
-        #endregion
 
         private void Update()
         {
@@ -115,19 +97,19 @@ namespace AIBrain
 
         public void AttackStatus(bool isAttack)
         {
-            if (isAttack)
-            {
-                StartCoroutine(Attack());
-            }
-            else
-            {
-                StopAllCoroutines();
-            }
+            if (isAttack)StartCoroutine(Attack());
+            else StopAllCoroutines();
+        }
+
+        public void TakeDamage()
+        {
+            _health -= AttackSignals.Instance.onGetWeaponDamage();
+            Debug.Log(_health);
         }
 
         public bool HealthCheck()
         {
-            return _health == 0;
+            return _health <= 0;
         }
 
         private IEnumerator Attack()
@@ -145,11 +127,26 @@ namespace AIBrain
         {
             WaitForSeconds wait = new WaitForSeconds(1f);
             AnimBoolState(EnemyStates.Death , true);
-            AttackSignals.Instance.onEnemyDead?.Invoke(gameObject);
             //yer altına gir
             yield return wait;
+            //enemyBody.SetActive(false);
+            PrizeMoney();
+            AttackSignals.Instance.onEnemyDead?.Invoke(enemyBody);
+            IdleSignals.Instance.onEnemyDead?.Invoke(TurretTarget,enemyType);
             PoolSignals.Instance.onReleasePoolObject?.Invoke(enemyType.ToString(), gameObject);
             //poola gonder
+        }
+
+        private void PrizeMoney()
+        {
+            Vector3 position = transform.position;
+            for (int i = 0; i < _data.PrizeMoney; i++)
+            {
+                _money = PoolSignals.Instance.onGetPoolObject?.Invoke(PoolType.Money.ToString(), transform);
+                _money.transform.DOLocalJump(
+                    new Vector3(position.x + Random.Range(-1f, 1f), 0.5f, position.z + Random.Range(-1f, 1f)), 
+                    1f, 3, 0.5f);
+            }
         }
 
         public void IsDeath(){StartCoroutine(Death());}

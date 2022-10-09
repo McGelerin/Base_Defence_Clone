@@ -63,12 +63,14 @@ namespace Managers
         {
             IdleSignals.Instance.onEnemyTarget += OnGetTarget;
             IdleSignals.Instance.onHostageCollected += OnHostageRemoveList;
+            IdleSignals.Instance.onEnemyDead += OnEnemyRemoveDic;
         }
 
         private void UnsubscribeEvents()
         {
             IdleSignals.Instance.onEnemyTarget -= OnGetTarget;
             IdleSignals.Instance.onHostageCollected -= OnHostageRemoveList;
+            IdleSignals.Instance.onEnemyDead -= OnEnemyRemoveDic;
         }
 
         private void OnDisable()
@@ -172,6 +174,12 @@ namespace Managers
                 _turretsSpawnDatas[turretPoints[_randomTurretPoints]][_randomSpawnDatas].CurrentCount++;
                 break;
             }
+        }
+
+        private void OnEnemyRemoveDic(GameObject enemyTarget, EnemyType type)
+        {
+            _spawnDatasCache = _turretsSpawnDatas[enemyTarget];
+            _spawnDatasCache[(int)type].CurrentCount--;
         }
 
         private void OnHostageRemoveList(GameObject gameObject)

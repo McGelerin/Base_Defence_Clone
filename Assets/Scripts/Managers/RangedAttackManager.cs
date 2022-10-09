@@ -1,6 +1,5 @@
-﻿using Controllers;
-using Data.UnityObject;
-using Data.ValueObject;
+﻿using System.Collections;
+using Controllers;
 using Enums;
 using Signals;
 using Sirenix.OdinInspector;
@@ -15,24 +14,27 @@ namespace Managers
         #region Serialized Variables
 
         [SerializeField] private GameObject weaponHolder;
-        
+        [SerializeField] private GameObject direct;
+
         #endregion
 
         #region Private Variables
         
         private GameObject _weapon;
+        [ShowInInspector]private GameObject _bullet;
         private bool _isPlayerOnBase;
-
+        //test
+        private float _sphereCastRadius = 1f;
 
         #endregion
 
         #endregion
-
         protected override void Awake()
         {
             base.Awake();
             _isPlayerOnBase = true;
         }
+
 
         #region Event Subscription
 
@@ -48,6 +50,8 @@ namespace Managers
             IdleSignals.Instance.onSelectedWeaponAnimState += OnGetWeaponAnimState;
             IdleSignals.Instance.onSelectedWeaponAttackAnimState += OnGetWeaponAttackAnimState;
             AttackSignals.Instance.onPlayerIsTarget += OnGetTarget;
+            AttackSignals.Instance.onGetBulletDirect += OnGetDirect;
+            base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
@@ -56,6 +60,8 @@ namespace Managers
             IdleSignals.Instance.onSelectedWeaponAnimState -= OnGetWeaponAnimState;
             IdleSignals.Instance.onSelectedWeaponAttackAnimState -= OnGetWeaponAttackAnimState;
             AttackSignals.Instance.onPlayerIsTarget -= OnGetTarget;
+            AttackSignals.Instance.onGetBulletDirect -= OnGetDirect;
+            base.UnsubscribeEvents();
         }
 
         protected override void OnDisable()
@@ -89,6 +95,13 @@ namespace Managers
             _isPlayerOnBase = true;
         }
 
+        protected override void RangedAttack()
+        {
+            PoolSignals.Instance.onGetPoolObject(PoolType.Bullet.ToString(), _weapon.transform);
+        }
+        
+        private Vector3 OnGetDirect() => direct.transform.forward * SelectedWeaponData.BulletSpeed;
+        
         private GameObject OnGetTarget() => TargetEnemy;
 
         private int OnGetDamage() => SelectedWeaponData.Damage;

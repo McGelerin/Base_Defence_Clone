@@ -10,5 +10,6 @@ namespace Data.ValueObject
         public float AttackRange;
         public float MoveSpeed;
         public float ChaseSpeed;
+        public int PrizeMoney;
     }
 }

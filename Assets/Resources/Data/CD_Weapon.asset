@@ -18,15 +18,18 @@ MonoBehaviour:
     - Damage: 5
       AttackRange: 10
       AttackDelay: 1
+      BulletSpeed: 20
       WeaponAnimState: 1
       WeaponAttackAnimState: 4
     - Damage: 6
       AttackRange: 10
       AttackDelay: 0.8
+      BulletSpeed: 20
       WeaponAnimState: 2
       WeaponAttackAnimState: 3
     - Damage: 10
       AttackRange: 10
       AttackDelay: 0.9
+      BulletSpeed: 20
       WeaponAnimState: 2
       WeaponAttackAnimState: 3

@@ -21,8 +21,10 @@ MonoBehaviour:
         AttackRange: 1.5
         MoveSpeed: 2
         ChaseSpeed: 3
+        PrizeMoney: 5
       - Health: 50
         Damage: 2
         AttackRange: 1.5
         MoveSpeed: 1.8
         ChaseSpeed: 2.8
+        PrizeMoney: 10

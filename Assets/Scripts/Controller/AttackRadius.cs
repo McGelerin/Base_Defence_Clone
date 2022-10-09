@@ -17,7 +17,7 @@ namespace Controllers
         
         public SphereCollider SCollider;
         [ShowInInspector]protected List<GameObject> Enemys = new List<GameObject>();
-        protected Coroutine AttackCoroutine;
+        private Coroutine AttackCoroutine;
         protected WeaponType SelectedWeaponType;
         protected WeaponData SelectedWeaponData = new WeaponData();
         [ShowInInspector]protected GameObject TargetEnemy;
@@ -108,14 +108,19 @@ namespace Controllers
             SelectedWeaponData = _data.Weapons[SelectedWeaponType];
         }
 
-        protected virtual void OnEnemyDead(GameObject enemy)
+        private void OnEnemyDead(GameObject enemy)
         {
+            Debug.Log("invok gedi");
             Enemys.Remove(enemy);
             Enemys.TrimExcess();
-            _isRemoveEnemy = true;
+            if (enemy == TargetEnemy)
+            {
+                _isRemoveEnemy = true;
+                Debug.Log("enemy oldu");
+            }
         }
         
-        protected virtual IEnumerator Attack()
+        private IEnumerator Attack()
         {
             WaitForSeconds Wait = new WaitForSeconds(SelectedWeaponData.AttackDelay);
             yield return Wait;
@@ -142,7 +147,8 @@ namespace Controllers
                     AttackSignals.Instance.onPlayerHasTarget?.Invoke(true);
                     _isRemoveEnemy = false;
                 }
-                
+
+                RangedAttack();
                 Debug.Log("target bulundu");
                 yield return Wait;
             }
@@ -150,6 +156,10 @@ namespace Controllers
             TargetEnemy = null;
             _isRemoveEnemy = true;
             AttackCoroutine = null;
+        }
+
+        protected virtual void RangedAttack()
+        {
         }
     }
 }

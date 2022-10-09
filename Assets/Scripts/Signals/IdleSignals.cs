@@ -34,6 +34,7 @@ namespace Signals
         #region OutSideSignals
 
         public Func<GameObject> onEnemyTarget = delegate { return default;};
+        public UnityAction<GameObject,EnemyType> onEnemyDead = delegate(GameObject arg0, EnemyType type) {  };
         public UnityAction<GameObject> onHostageCollected = delegate {  };
         //public Func<int> onMineAreaCurrentScore = delegate { return 0;};
 
@@ -42,7 +43,7 @@ namespace Signals
 
         #region WeaponArea
 
-        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.Ak47;};
+        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.M4;};
         public Func<PlayerAnimState> onSelectedWeaponAnimState = delegate { return 0;};
         public Func<PlayerAnimState> onSelectedWeaponAttackAnimState = delegate { return 0;};
         
