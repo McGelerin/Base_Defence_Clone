@@ -58,7 +58,6 @@ namespace States.Enemy
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Trigger cıktı");
                 _manager.AttackStatus(false);
                 _manager.SwichState(EnemyStates.Walk);
             }

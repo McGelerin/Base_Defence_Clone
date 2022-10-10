@@ -1,143 +1,140 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections.Generic;
+using Controllers;
 using Data.ValueObject;
 using Enums;
-using Keys;
 using Signals;
 using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 
 namespace Managers
 {
-    public class TurretManager : MonoBehaviour
+    public class TurretManager : AttackRadius
     {
         #region Self Variables
 
         #region Public Variables
-        
-        public int PayedAmound
+
+        public GameObject Target;
+        public List<GameObject> EnemysCache;
+
+        #endregion
+
+        #region Serialized Variables
+
+        [SerializeField] private GameObject ammoStackHolder;
+        [SerializeField] private GameObject ammoSpawnPoint;
+        [SerializeField] private TurretMovementController movementController;
+
+        #endregion
+
+        #region Private Variables
+
+        [ShowInInspector]private TurretStateEnum _turretState;
+        private List<GameObject> _ammoStack = new List<GameObject>();
+        private TurretData _data;
+        private GameObject _ammoPrefab;
+
+        #endregion
+
+        #endregion
+
+        protected override void Awake()
         {
-            get => _payedAmound;
-            set
+            GameObject obj = new GameObject();
+            EnemysCache = Enemys;
+            _ammoStack.Add(obj);
+            movementController.SetRotateDelay(0.1f);
+            AttackDelay = 0.5f;
+            base.Awake();
+            //_turretState = TurretStateEnum.None;
+        }
+
+        public void SetData(TurretData data)
+        {
+            //almama gerek kalmayabilir
+            _data = data;
+        }
+
+        public void HasSolder()
+        {
+            _turretState = TurretStateEnum.WithBot;
+            if (Enemys.Count > 0)
             {
-                _payedAmound = value;
-                _remainingAmound = _turretData.Cost - _payedAmound;
-                if (_remainingAmound ==0)
+                if (AttackCoroutine == null)
                 {
-                    _textParentGameObject.SetActive(false);
+                    AttackCoroutine = StartCoroutine(Attack());
+                }
+            }
+        }
+
+        protected override void RangedAttack()
+        {
+            _ammoPrefab = PoolSignals.Instance.onGetPoolObject(PoolType.Ammo.ToString(), ammoSpawnPoint.transform);
+            _ammoPrefab.GetComponent<AmmoPhysicsController>().SetAddForce(ammoSpawnPoint.transform.forward * 10);
+        }
+        
+        protected override void HasTarget()
+        {
+            Target = TargetEnemy;
+            movementController.LockTarget(true);
+        }
+
+        protected override void AttackEnd()
+        {
+            movementController.LockTarget(false);
+        }
+
+        private void AddEnemy(Component other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                Enemys.Add(other.gameObject);
+            }
+        }
+
+        private void RemoveEnemy(Component other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                Enemys.Remove(other.gameObject);
+                Enemys.TrimExcess();
+            }
+        }
+        
+        protected override void OnTriggerEnter(Collider other)
+        {
+            if (_turretState != TurretStateEnum.None)
+            {
+                if (_ammoStack.Count > 0)
+                {
+                    if (_turretState == TurretStateEnum.WithBot)
+                    {
+                        base.OnTriggerEnter(other);
+                    }
                 }
                 else
                 {
-                    SetText(_remainingAmound);
+                    AddEnemy(other);
+                    if (AttackCoroutine != null)
+                    {
+                        StopCoroutine(AttackCoroutine);
+                        AttackCoroutine = null;
+                    }
                 }
             }
+            else AddEnemy(other);
         }
 
-        #endregion
-
-        #region SerializeField Variables
-
-        [SerializeField] private TurretNameEnum turretName;
-        [SerializeField] private TextMeshPro tmp;
-
-        #endregion
-        
-        #region Private Variables
-
-        private TurretData _turretData;
-        private int _payedAmound;
-        private int _remainingAmound;
-        private ScoreDataParams _scoreCache;
-        private GameObject _textParentGameObject;
-
-        #endregion
-
-        #endregion
-
-        private void Awake()
+        protected override void OnTriggerExit(Collider other)
         {
-            _textParentGameObject = tmp.transform.parent.gameObject;
-        }
-        #region Event Subscription
-
-        private void OnEnable()
-        {
-            //SubscribeEvents();
-            OnSetData();
-        }
-
-        private void SubscribeEvents()
-        {
-            IdleSignals.Instance.onGettedBaseData += OnSetData;
-        }
-
-        private void UnsubscribeEvents()
-        {
-            IdleSignals.Instance.onGettedBaseData -= OnSetData;
-        }
-
-        private void OnDisable()
-        {
-            //UnsubscribeEvents();
-        }
-        
-        #endregion
-        private void OnSetData()
-        {
-            _turretData = IdleSignals.Instance.onTurretData(turretName);
-            PayedAmound = IdleSignals.Instance.onPayedTurretData(turretName);
-            BuyAreaImageChange();
-        }
-        
-        public void BuyAreaEnter()
-        {
-            _scoreCache = ScoreSignals.Instance.onScoreData();
-            switch (_turretData.PayType)
+            if (_turretState != TurretStateEnum.None)
             {
-                case PayTypeEnum.Money:
-                    if (_scoreCache.MoneyScore >= _remainingAmound)
-                    {
-                        StartCoroutine(Buy());
-                    }
-                    break;
-                case PayTypeEnum.Gem :
-                    if (_scoreCache.GemScore >= _remainingAmound)
-                    {
-                        StartCoroutine(Buy());
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                base.OnTriggerExit(other);
             }
-        }
-
-        public void BuyAreaExit()
-        {
-            StopAllCoroutines();
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
-        }
-
-        private IEnumerator Buy()
-        {
-            var waitForSecond = new WaitForSeconds(0.02f);
-            while (_remainingAmound > 0)
+            else
             {
-                PayedAmound += 10;
-                ScoreSignals.Instance.onSetScore?.Invoke(_turretData.PayType, -10);
-                yield return waitForSecond;
+                RemoveEnemy(other);
             }
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
-        }
-
-        private void SetText(int remainingAmound)
-        {
-            tmp.text = remainingAmound.ToString();
-        }
-
-        private void BuyAreaImageChange()
-        {
-            _textParentGameObject.transform.GetChild(((int)_turretData.PayType) + 1).gameObject.SetActive(false);
         }
     }
 }

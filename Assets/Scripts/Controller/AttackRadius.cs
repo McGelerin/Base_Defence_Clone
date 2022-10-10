@@ -1,8 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Data.UnityObject;
-using Data.ValueObject;
-using Enums;
 using Signals;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -15,34 +12,26 @@ namespace Controllers
 
         #region Public Variables
         
-        public SphereCollider SCollider;
+        public Collider TCollider;
+
+        #endregion
+
+        #region Protected Variables
+
         [ShowInInspector]protected List<GameObject> Enemys = new List<GameObject>();
-        private Coroutine AttackCoroutine;
-        protected WeaponType SelectedWeaponType;
-        protected WeaponData SelectedWeaponData = new WeaponData();
-        [ShowInInspector]protected GameObject TargetEnemy;
-
-        #endregion
-
-        #region Private Variables
-        
-        private CD_Weapon _data;
-        private bool _isRemoveEnemy;
+        protected float AttackDelay;
+        protected Coroutine AttackCoroutine;
+        protected bool IsRemoveEnemy; 
+        protected GameObject TargetEnemy;
         
         #endregion
-
         #endregion
-
-
+        
         protected virtual void Awake()
         {
-            SCollider = GetComponent<SphereCollider>();
-            _isRemoveEnemy = true;
-            _data = GetData();
+            IsRemoveEnemy = true;
         }
-
-        private CD_Weapon GetData() => Resources.Load<CD_Weapon>("Data/CD_Weapon");
-
+        
         #region Event Subscription
 
         protected virtual void OnEnable()
@@ -67,7 +56,7 @@ namespace Controllers
 
         #endregion
         
-        protected void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Enemy"))
             {
@@ -88,78 +77,64 @@ namespace Controllers
                 Enemys.TrimExcess();
                 if (other.gameObject == TargetEnemy)
                 {
-                    //AttackSignals.Instance.onPlayerHasTarget?.Invoke(false);
-                    //TargetEnemy = null;
-                    _isRemoveEnemy = true;
-                    //return;
+                    IsRemoveEnemy = true;
                 }
 
                 if (Enemys.Count != 0) return;
-                AttackSignals.Instance.onPlayerHasTarget?.Invoke(false);
+                if (AttackCoroutine == null) return;
+                AttackEnd();
                 StopCoroutine(AttackCoroutine);
                 AttackCoroutine = null;
-                _isRemoveEnemy = true;
+                IsRemoveEnemy = true;
             }
         }
         
-        protected virtual void SetWeapon()
-        {
-            SelectedWeaponType = IdleSignals.Instance.onSelectedWeapon();
-            SelectedWeaponData = _data.Weapons[SelectedWeaponType];
-        }
-
         private void OnEnemyDead(GameObject enemy)
         {
-            Debug.Log("invok gedi");
+            if (!Enemys.Contains(enemy)) return;
             Enemys.Remove(enemy);
             Enemys.TrimExcess();
             if (enemy == TargetEnemy)
             {
-                _isRemoveEnemy = true;
-                Debug.Log("enemy oldu");
+                IsRemoveEnemy = true;
             }
         }
         
-        private IEnumerator Attack()
+        protected virtual IEnumerator Attack()
         {
-            WaitForSeconds Wait = new WaitForSeconds(SelectedWeaponData.AttackDelay);
+            WaitForSeconds Wait = new WaitForSeconds(AttackDelay);
             yield return Wait;
 
-            //TargetEnemy = null;
-            
             while (Enemys.Count > 0)
             {
-                if (_isRemoveEnemy)
+                if (IsRemoveEnemy)
                 {
-                    float closestDistance = float.MaxValue;
-                    for (int i = 0; i < Enemys.Count; i++)
+                    var closestDistance = float.MaxValue;
+                    foreach (var t in Enemys)
                     {
-                        Transform enemyTransform = Enemys[i].transform;
-                        float distance = Vector3.Distance(transform.position, enemyTransform.position);
-                        if (distance < closestDistance)
-                        {
-                            closestDistance = distance;
-                            TargetEnemy = Enemys[i];
-                        }
+                        var enemyTransform = t.transform;
+                        var distance = Vector3.Distance(transform.position, enemyTransform.position);
+                        if (!(distance < closestDistance)) continue;
+                        closestDistance = distance;
+                        TargetEnemy = t;
                     }
 
                     TargetEnemy = TargetEnemy.gameObject;
-                    AttackSignals.Instance.onPlayerHasTarget?.Invoke(true);
-                    _isRemoveEnemy = false;
+                    HasTarget();
+                    IsRemoveEnemy = false;
                 }
-
                 RangedAttack();
-                Debug.Log("target bulundu");
                 yield return Wait;
             }
-            AttackSignals.Instance.onPlayerHasTarget?.Invoke(false);
+
+            AttackEnd();
             TargetEnemy = null;
-            _isRemoveEnemy = true;
+            IsRemoveEnemy = true;
             AttackCoroutine = null;
         }
 
-        protected virtual void RangedAttack()
-        {
-        }
+        protected virtual void RangedAttack() { }
+        protected virtual void AttackEnd() { }
+        protected virtual void HasTarget(){ }
     }
 }

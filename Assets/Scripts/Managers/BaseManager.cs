@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Controllers;
 using Data.UnityObject;
 using Data.ValueObject;
 using Enums;
 using Keys;
 using Signals;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 
@@ -30,6 +26,7 @@ namespace Managers
         [SerializeField] private BaseStage baseStage;
         [SerializeField] private TextMeshPro tmp;
         [SerializeField] private List<BaseObjects> level = new List<BaseObjects>();
+        [SerializeField] private GameObject wareHouse;
 
 
         #endregion
@@ -65,6 +62,7 @@ namespace Managers
             IdleSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
             IdleSignals.Instance.onPayedTurretData += OnGetTurretPayedAmound;
             IdleSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
+            IdleSignals.Instance.onGetWarHousePositon += OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
         }
 
@@ -77,6 +75,7 @@ namespace Managers
             IdleSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
             IdleSignals.Instance.onPayedTurretData -= OnGetTurretPayedAmound;
             IdleSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
+            IdleSignals.Instance.onGetWarHousePositon -= OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
         }
 
@@ -152,6 +151,8 @@ namespace Managers
         }
         
         private AreaDataParams OnGetAreaDatas() => _areaData;
+        
+        private Transform OnGetWareHousePosition() => wareHouse.transform;
 
         private void SetBaseLevelText()
         {

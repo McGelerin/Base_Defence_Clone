@@ -17,6 +17,8 @@ namespace Signals
         public UnityAction onGettedBaseData = delegate {  };
         public Func<RoomNameEnum,RoomData> onRoomData = delegate{return  default;};
         public Func<RoomNameEnum,int> onPayedRoomData = delegate{return  default;};
+        public  Func<Transform> onGetWarHousePositon = delegate { return default;};
+
         public Func<TurretNameEnum,TurretData> onTurretData = delegate{return  default;};
         public Func<TurretNameEnum,int> onPayedTurretData = delegate{return  default;};
 
@@ -39,8 +41,7 @@ namespace Signals
         //public Func<int> onMineAreaCurrentScore = delegate { return 0;};
 
         #endregion
-
-
+        
         #region WeaponArea
 
         public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.M4;};

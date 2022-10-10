@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class EnemyBodyPhysichsController : MonoBehaviour
+    public class EnemyBodyPhysicsController : MonoBehaviour
     {
         #region Self Variables
 
@@ -17,7 +17,10 @@ namespace Controllers
         #endregion
         private void OnTriggerEnter(Collider other)
         {
-            enemyBrain.TakeDamage();
+            if (other.CompareTag("Bullet"))
+            {
+                enemyBrain.TakeDamage();
+            }
         }
     }
 }

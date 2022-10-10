@@ -104,7 +104,6 @@ namespace AIBrain
         public void TakeDamage()
         {
             _health -= AttackSignals.Instance.onGetWeaponDamage();
-            Debug.Log(_health);
         }
 
         public bool HealthCheck()

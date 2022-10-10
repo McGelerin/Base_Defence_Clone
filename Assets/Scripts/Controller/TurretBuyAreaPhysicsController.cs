@@ -9,7 +9,7 @@ namespace Controllers
 
         #region SerializeField Variables
 
-        [SerializeField] private TurretManager manager;
+        [SerializeField] private TurretAreaManager areaManager;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace Controllers
         {
             if (other.CompareTag("Player"))
             {
-                manager.BuyAreaEnter();
+                areaManager.BuyAreaEnter();
             }
         }
 
@@ -27,7 +27,7 @@ namespace Controllers
         {
             if (other.CompareTag("Player"))
             {
-                manager.BuyAreaExit();
+                areaManager.BuyAreaExit();
             }
         }
     }

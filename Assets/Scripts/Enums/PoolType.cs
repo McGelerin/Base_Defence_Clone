@@ -13,6 +13,7 @@
         Pistol,
         M4,
         Ak47,
-        Bullet
+        Bullet,
+        AmmoBox
     }
 }

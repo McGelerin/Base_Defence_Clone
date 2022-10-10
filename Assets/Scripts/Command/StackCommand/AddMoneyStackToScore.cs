@@ -13,16 +13,14 @@ namespace Command.StackCommand
         #region Private Variables
 
         private List<GameObject> _stackList;
-        private GameObject _stackHolder;
 
         #endregion
 
         #endregion
 
-        public AddMoneyStackToScore(ref List<GameObject> stackList,ref GameObject stackHolder)
+        public AddMoneyStackToScore(ref List<GameObject> stackList)
         {
-            _stackList = stackList;
-            _stackHolder = stackHolder;
+            _stackList = stackList; ;
         }
 
         public void Execute()
@@ -30,7 +28,6 @@ namespace Command.StackCommand
             for (int i = 0; i < _stackList.Count; i++)
             {
                 var money = _stackList[i];
-                money.transform.SetParent(_stackHolder.transform.parent);
                 money.transform.DOLocalMove(
                     money.transform.localPosition + new Vector3(Random.Range(-3f, 3f), 0.5f, Random.Range(-3f, 3f)), 0.5f);
                 money.transform.DOLocalMove(Vector3.zero, 0.5f).SetDelay(0.5f).OnComplete(() =>

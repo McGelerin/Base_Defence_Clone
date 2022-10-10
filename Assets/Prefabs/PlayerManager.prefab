@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f020b0194247c99ce706caee075ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SCollider: {fileID: 8934826869484212442}
+  TCollider: {fileID: 8934826869484212442}
   weaponHolder: {fileID: 5286985283440893656}
   direct: {fileID: 592107626881994933}
 --- !u!135 &8934826869484212442

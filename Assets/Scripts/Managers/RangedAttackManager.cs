@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using Controllers;
+﻿using Controllers;
+using Data.UnityObject;
+using Data.ValueObject;
 using Enums;
 using Signals;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Managers
@@ -21,20 +21,27 @@ namespace Managers
         #region Private Variables
         
         private GameObject _weapon;
-        [ShowInInspector]private GameObject _bullet;
         private bool _isPlayerOnBase;
-        //test
-        private float _sphereCastRadius = 1f;
-
+        private CD_Weapon _data;
+        private WeaponType _selectedWeaponType;
+        private WeaponData _selectedWeaponData = new WeaponData();
         #endregion
-
+        
         #endregion
         protected override void Awake()
         {
+            _data = GetData();
             base.Awake();
             _isPlayerOnBase = true;
         }
 
+        private CD_Weapon GetData() => Resources.Load<CD_Weapon>("Data/CD_Weapon");
+        
+        private void SetWeapon()
+        {
+            _selectedWeaponType = IdleSignals.Instance.onSelectedWeapon();
+            _selectedWeaponData = _data.Weapons[_selectedWeaponType];
+        }
 
         #region Event Subscription
 
@@ -75,13 +82,14 @@ namespace Managers
         private void Start()
         {
             SetWeapon();
+            AttackDelay = _selectedWeaponData.AttackDelay;
         }
 
         public void PlayerIncreaseOutSide()
         {
             if (!_isPlayerOnBase) return;
-            _weapon = PoolSignals.Instance.onGetPoolObject(SelectedWeaponType.ToString(), weaponHolder.transform);
-            
+            TCollider.enabled = true;
+            _weapon = PoolSignals.Instance.onGetPoolObject(_selectedWeaponType.ToString(), weaponHolder.transform);
             _weapon.transform.SetParent(weaponHolder.transform);
             _weapon.transform.localRotation = Quaternion.Euler(-95, -230, 145);
             _isPlayerOnBase = false;
@@ -90,24 +98,60 @@ namespace Managers
         public void PlayerIncreaseBase()
         {
             if (_isPlayerOnBase) return;
-            PoolSignals.Instance.onReleasePoolObject?.Invoke(SelectedWeaponType.ToString(),_weapon);
+            PoolSignals.Instance.onReleasePoolObject?.Invoke(_selectedWeaponType.ToString(),_weapon);
+            TCollider.enabled = false;
+            if (AttackCoroutine != null)
+            {
+                StopCoroutine(AttackCoroutine);
+                AttackCoroutine = null;
+                Enemys.Clear();
+                IsRemoveEnemy = true;
+                AttackSignals.Instance.onPlayerHasTarget?.Invoke(false);
+            }
             _weapon = null;
             _isPlayerOnBase = true;
         }
 
+        protected override void HasTarget()
+        {
+            AttackSignals.Instance.onPlayerHasTarget?.Invoke(true);
+        }
+
         protected override void RangedAttack()
         {
+
             PoolSignals.Instance.onGetPoolObject(PoolType.Bullet.ToString(), _weapon.transform);
         }
-        
-        private Vector3 OnGetDirect() => direct.transform.forward * SelectedWeaponData.BulletSpeed;
+
+        protected override void AttackEnd()
+        {
+            AttackSignals.Instance.onPlayerHasTarget?.Invoke(false);
+        }
+
+        protected override void OnTriggerEnter(Collider other)
+        {
+            if (!_isPlayerOnBase)
+            {
+                base.OnTriggerEnter(other);
+            }
+        }
+
+        protected override void OnTriggerExit(Collider other)
+        {
+            if (!_isPlayerOnBase)
+            {
+                base.OnTriggerExit(other);
+            }
+        }
+
+        private Vector3 OnGetDirect() => direct.transform.forward * _selectedWeaponData.BulletSpeed;
         
         private GameObject OnGetTarget() => TargetEnemy;
 
-        private int OnGetDamage() => SelectedWeaponData.Damage;
+        private int OnGetDamage() => _selectedWeaponData.Damage;
 
-        private PlayerAnimState OnGetWeaponAnimState() => SelectedWeaponData.WeaponAnimState;
+        private PlayerAnimState OnGetWeaponAnimState() => _selectedWeaponData.WeaponAnimState;
 
-        private PlayerAnimState OnGetWeaponAttackAnimState() => SelectedWeaponData.WeaponAttackAnimState;
+        private PlayerAnimState OnGetWeaponAttackAnimState() => _selectedWeaponData.WeaponAttackAnimState;
     }
 }

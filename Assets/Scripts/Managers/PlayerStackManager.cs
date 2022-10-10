@@ -33,6 +33,9 @@ namespace Managers
         private StackItemPosition _ammoStackItemPosition;
         private ItemAddOnStack _objAddOnStack;
         private AddMoneyStackToScore _addMoneyStackToScore;
+        private RemoveAmmoStackItems _removeAmmoStackItems;
+
+        private Transform _warHouseTransform;
         
 
         #endregion
@@ -45,7 +48,8 @@ namespace Managers
             _moneyStackItemPosition = new StackItemPosition(ref _stackList,ref _moneyStackData, ref stackHolder);
             _ammoStackItemPosition = new StackItemPosition(ref _stackList, ref _ammoStackData, ref stackHolder);
             _objAddOnStack = new ItemAddOnStack(ref _stackList, ref stackHolder, ref _moneyStackData);
-            _addMoneyStackToScore = new AddMoneyStackToScore(ref _stackList, ref stackHolder);
+            _addMoneyStackToScore = new AddMoneyStackToScore(ref _stackList);
+
         }
         
         #region Event Subscription
@@ -76,8 +80,13 @@ namespace Managers
         }
 
         #endregion
-        
-        
+
+        private void Start()
+        {
+            _warHouseTransform = IdleSignals.Instance.onGetWarHousePositon();
+            _removeAmmoStackItems = new RemoveAmmoStackItems(ref _stackList, _warHouseTransform);
+        }
+
         private GameObject OnGetHostageTarget(GameObject hostage)
         {
             if (_hostageList.Count == 0)
@@ -127,7 +136,7 @@ namespace Managers
             {
                 _stackType = StackType.AMMO;
                 _stackPositionCache = _ammoStackItemPosition.Execute(_stackPositionCache);
-                var obj = PoolSignals.Instance.onGetPoolObject(PoolType.Ammo.ToString(), ammoArea);
+                var obj = PoolSignals.Instance.onGetPoolObject(PoolType.AmmoBox.ToString(), ammoArea);
                 _objAddOnStack.Execute(obj,_stackPositionCache);
                 yield return waitForSeconds;
             }
@@ -149,6 +158,8 @@ namespace Managers
                     _stackType = StackType.NONE;
                     return;
                 case StackType.AMMO:
+                    _removeAmmoStackItems.Execute();
+                    _stackType = StackType.NONE;
                     return;
                 default:
                     throw new ArgumentOutOfRangeException();

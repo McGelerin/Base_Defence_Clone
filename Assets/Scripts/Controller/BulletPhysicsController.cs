@@ -10,21 +10,14 @@ namespace Controllers
     {
         #region Self Variables
 
-        #region Public Variables
-
-
-        #endregion
-
         #region Serialized Variables
-
-        [SerializeField] private float bulletClosingTimer;
+        
         [SerializeField]private Rigidbody rb;
 
         #endregion
 
         #region Private Variables
 
-        private WaitForSeconds _wait;
         private Vector3 _direct;
 
         #endregion
@@ -32,7 +25,6 @@ namespace Controllers
 
         private void OnEnable()
         {
-            _wait = new WaitForSeconds(bulletClosingTimer);
             _direct = AttackSignals.Instance.onGetBulletDirect();
             rb.velocity = Vector3.zero;
             rb.AddForce(_direct,ForceMode.VelocityChange);
