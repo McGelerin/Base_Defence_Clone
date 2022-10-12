@@ -36,7 +36,7 @@ namespace Command.StackCommand
                     0.8f, localPosition.z + Random.Range(-1f, 1f)), 0.5f);
                 ammoBox.transform.DOLocalMove(Vector3.zero, 0.5f).SetDelay(0.5f).OnComplete(() =>
                 {
-                    PoolSignals.Instance.onReleasePoolObject(PoolType.Ammo.ToString(), ammoBox);
+                    PoolSignals.Instance.onReleasePoolObject(PoolType.AmmoBox.ToString(), ammoBox);
                 });
             }
             _stackList.Clear();

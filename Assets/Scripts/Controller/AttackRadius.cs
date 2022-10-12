@@ -39,12 +39,12 @@ namespace Controllers
             SubscribeEvents();
         }
 
-        protected virtual void SubscribeEvents()
+        private void SubscribeEvents()
         {
             AttackSignals.Instance.onEnemyDead += OnEnemyDead;
         }
 
-        protected virtual void UnsubscribeEvents()
+        private void UnsubscribeEvents()
         {
             AttackSignals.Instance.onEnemyDead -= OnEnemyDead;
         }
@@ -56,21 +56,26 @@ namespace Controllers
 
         #endregion
         
-        protected virtual void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
+            if (TriggerEnter(other))
+            {
+                return;
+            }
             if (other.CompareTag("Enemy"))
             {
                 Enemys.Add(other.gameObject);
-                
-                if (AttackCoroutine == null)
-                {
-                    AttackCoroutine = StartCoroutine(Attack());
-                }
+                AttackCoroutine ??= StartCoroutine(Attack());
             }
         }
         
-        protected virtual void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
+            if (TriggerExit(other))
+            {
+                return;
+            }
+
             if (other.CompareTag("Enemy"))
             {
                 Enemys.Remove(other.gameObject);
@@ -79,7 +84,6 @@ namespace Controllers
                 {
                     IsRemoveEnemy = true;
                 }
-
                 if (Enemys.Count != 0) return;
                 if (AttackCoroutine == null) return;
                 AttackEnd();
@@ -93,14 +97,13 @@ namespace Controllers
         {
             if (!Enemys.Contains(enemy)) return;
             Enemys.Remove(enemy);
-            Enemys.TrimExcess();
             if (enemy == TargetEnemy)
             {
                 IsRemoveEnemy = true;
             }
         }
         
-        protected virtual IEnumerator Attack()
+        protected IEnumerator Attack()
         {
             WaitForSeconds Wait = new WaitForSeconds(AttackDelay);
             yield return Wait;
@@ -132,9 +135,12 @@ namespace Controllers
             IsRemoveEnemy = true;
             AttackCoroutine = null;
         }
-
         protected virtual void RangedAttack() { }
         protected virtual void AttackEnd() { }
         protected virtual void HasTarget(){ }
+
+        protected virtual bool TriggerEnter(Collider other){ return false;}
+        
+        protected virtual bool TriggerExit(Collider other){ return false;}
     }
 }

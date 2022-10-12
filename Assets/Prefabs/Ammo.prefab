@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4050376251764277846}
   m_Layer: 9
   m_Name: Ammo
-  m_TagString: Untagged
+  m_TagString: TurretAmmo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,19 +132,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3703277659360275799, guid: d556f77ace486c5419185e225d80df85, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98416847
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3703277659360275799, guid: d556f77ace486c5419185e225d80df85, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.015831519
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3703277659360275799, guid: d556f77ace486c5419185e225d80df85, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.17580697
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3703277659360275799, guid: d556f77ace486c5419185e225d80df85, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.015928809
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3703277659360275799, guid: d556f77ace486c5419185e225d80df85, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

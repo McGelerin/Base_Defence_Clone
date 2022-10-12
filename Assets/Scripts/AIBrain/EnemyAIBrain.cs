@@ -101,7 +101,11 @@ namespace AIBrain
             else StopAllCoroutines();
         }
 
-        public void TakeDamage()
+        public void TakeBulletDamage()
+        {
+            _health -= AttackSignals.Instance.onGetWeaponDamage();
+        }
+        public void TakeAmmoDamage()
         {
             _health -= AttackSignals.Instance.onGetWeaponDamage();
         }
@@ -127,11 +131,11 @@ namespace AIBrain
             WaitForSeconds wait = new WaitForSeconds(1f);
             AnimBoolState(EnemyStates.Death , true);
             //yer altına gir
+            AttackSignals.Instance.onEnemyDead?.Invoke(enemyBody);
+            IdleSignals.Instance.onEnemyDead?.Invoke(TurretTarget,enemyType);
             yield return wait;
             //enemyBody.SetActive(false);
             PrizeMoney();
-            AttackSignals.Instance.onEnemyDead?.Invoke(enemyBody);
-            IdleSignals.Instance.onEnemyDead?.Invoke(TurretTarget,enemyType);
             PoolSignals.Instance.onReleasePoolObject?.Invoke(enemyType.ToString(), gameObject);
             //poola gonder
         }

@@ -85,7 +85,7 @@ MonoBehaviour:
   Agent: {fileID: 8960211248748188180}
   Target: {fileID: 0}
   animator: {fileID: 6232249111733475726}
-  chackTimer: 0.1
+  checkTimer: 0
 --- !u!1 &2144250802277432400
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,6 +170,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1028121442517150511, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2163386424615276934, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2163386424615276934, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2163386424615276934, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5409763619289458593, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5409763619289458593, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5409763619289458593, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5581755929046110506, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6248323572905314611, guid: 8292c3696e913b945b27e5727bf3fa91, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

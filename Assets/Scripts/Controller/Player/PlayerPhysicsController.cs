@@ -1,6 +1,7 @@
 ﻿using System;
 using Enums;
 using Managers;
+using Signals;
 using UnityEngine;
 
 namespace Controllers
@@ -24,8 +25,8 @@ namespace Controllers
             {
                 gameObject.layer = LayerMask.NameToLayer("Default");
                 manager.SetPlayerState(PlayerStateEnum.INSIDE);
-                stackManager.IncreaseBarrierArea();
-                rangedAttackManager.PlayerIncreaseBase();
+                stackManager.InteractBarrierArea();
+                rangedAttackManager.PlayerInteractBase();
                 return;
             }
 
@@ -33,19 +34,25 @@ namespace Controllers
             {
                 gameObject.layer = LayerMask.NameToLayer("PlayerOutSideLayer");
                 manager.SetPlayerState(PlayerStateEnum.OUTSIDE);
-                rangedAttackManager.PlayerIncreaseOutSide();
+                rangedAttackManager.PlayerInteractOutSide();
                 return;
             }
 
             if (other.CompareTag("Money"))
             {
-                stackManager.IncreaseMoney(other.gameObject);
+                stackManager.InteractMoney(other.gameObject);
                 return;
             }
 
             if (other.CompareTag("AmmoReloadArea"))
             {
-                stackManager.IncreaseAmmoArea(other.transform,true);
+                stackManager.InteractWareHouseArea(other.transform,true);
+                return;
+            }
+
+            if (other.CompareTag("TurretAmmoArea"))
+            {
+                stackManager.InteractTurretAmmoArea(other.gameObject);
             }
         }
 
@@ -53,7 +60,13 @@ namespace Controllers
         {
             if (other.CompareTag("AmmoReloadArea"))
             {
-                stackManager.IncreaseAmmoArea(default,false);
+                stackManager.InteractWareHouseArea(default,false);
+            }
+
+            if (other.CompareTag("TurretAmmoArea"))
+            {
+                StackSignals.Instance.onDecreseStackHolder?.Invoke(other.gameObject);
+                stackManager.AmmoStackChack();
             }
         }
     }

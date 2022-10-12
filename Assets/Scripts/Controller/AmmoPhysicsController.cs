@@ -1,5 +1,4 @@
-﻿using System;
-using Enums;
+﻿using Enums;
 using Signals;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ namespace Controllers
 
         #endregion
 
-        private void OnEnable()
+        private void OnDisable()
         {
             rb.velocity = Vector3.zero;
         }

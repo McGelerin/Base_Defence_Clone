@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Command.StackCommand
 {
-    public class StackItemPosition
+    public class DinamicStackItemPosition
     {
         #region Self Variables
 
@@ -18,7 +18,7 @@ namespace Command.StackCommand
         #endregion
         #endregion
 
-        public StackItemPosition(ref List<GameObject> stackList,ref StackData stackData, ref GameObject stackHolder)
+        public DinamicStackItemPosition(ref List<GameObject> stackList,ref StackData stackData, ref GameObject stackHolder)
         {
             _stackList = stackList;
             _data = stackData;

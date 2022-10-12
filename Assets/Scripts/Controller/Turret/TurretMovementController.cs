@@ -18,8 +18,8 @@ namespace Controllers
         #region Private Variables
 
         private WaitForSeconds _rotateDelay;
-        private bool _isAttack;
-        
+        private Coroutine rotate;
+
         #endregion
 
         #endregion
@@ -31,14 +31,17 @@ namespace Controllers
 
         public void LockTarget(bool isAttack)
         {
-            _isAttack = isAttack;
             if (isAttack)
             {
-                StartCoroutine(Rotate());
+                rotate ??= StartCoroutine(Rotate());
             }
             else
             {
-                StopAllCoroutines();
+                if (rotate != null)
+                {
+                    StopCoroutine(rotate);
+                    rotate = null;
+                }
                 DefaultPosition();
             }
         }
@@ -47,19 +50,18 @@ namespace Controllers
         {
             while (manager.EnemysCache.Count > 0)
             {
-                var transform1 = transform;
-                var direct = manager.Target.transform.position - transform1.position;
-                transform.rotation = Quaternion.Slerp(transform1.rotation,
-                    Quaternion.LookRotation(direct), 0.2f);
+                var direct = manager.Target.transform.position - transform.position;
+                var lookRotation = Quaternion.LookRotation(direct,Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation,
+                    lookRotation, 0.2f);
                 yield return _rotateDelay;
             }
         }
 
         private void DefaultPosition()
         {
-            transform.rotation = Quaternion.Slerp(transform.transform.rotation,
-                quaternion.identity, 0.2f);
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.identity, 0.5f);
         }
-        
     }
 }

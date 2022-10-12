@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Command;
+using Command.StackCommand;
 using Data.ValueObject;
 using DG.Tweening;
 using Enums;
@@ -27,12 +29,13 @@ namespace Managers
 
         private MineAreaData _data;
         private List<int> _capacity;
-        [ShowInInspector]private List<GameObject>_gemHolderGameObjects = new List<GameObject>();
+        private List<GameObject>_gemHolderGameObjects = new List<GameObject>();
+        private List<GameObject> _hostageGameObjects = new List<GameObject>();
         private List<GameObject>_gemHolderGameObjectsCache;
+        private StaticStackItemPosition _staticStackItemPosition;
+        private StaticItemAddOnStack _staticItemAddOnStack;
         private int _random;
-        private int _squareMeters;
-        private Vector3 _direct = Vector3.zero;
-        [ShowInInspector]private List<GameObject> _hostageGameObjects = new List<GameObject>();
+        private Vector3 _direct;
         private int _currentMiner;
 
 
@@ -73,9 +76,11 @@ namespace Managers
             _currentMiner = 0;
             _capacity = new List<int>(new int [mines.Count]);
             _data = IdleSignals.Instance.onGetMineAreaData();
-            _squareMeters =_data.GemHolderData.GemCountX * _data.GemHolderData.GemCountZ;
+            _staticStackItemPosition = new StaticStackItemPosition(ref _gemHolderGameObjects, ref _data.StaticStackData,
+                ref gemAreaHolder);
+            _staticItemAddOnStack =
+                new StaticItemAddOnStack(ref _gemHolderGameObjects, ref _data.StaticStackData, ref gemAreaHolder);
             SetText();
-
         }
 
         public void PlayerTriggerEnter(Transform other)
@@ -106,16 +111,15 @@ namespace Managers
             miner.position = position;
             GameObject gem = PoolSignals.Instance.onGetPoolObject(PoolType.Gem.ToString(), miner);
             SetGemPosition(gem);
-            _gemHolderGameObjects.Add(gem);
+            
+            //_gemHolderGameObjects.Add(gem);
         }
 
         private void SetGemPosition(GameObject gem)
         {
-            _direct = _data.GemHolderData.GemInitPoint + gemAreaHolder.transform.position;
-            _direct.x += (int)(_gemHolderGameObjects.Count % _data.GemHolderData.GemCountX) / _data.GemHolderData.OffsetFactor;
-            _direct.y += (int)(_gemHolderGameObjects.Count / _squareMeters) / _data.GemHolderData.OffsetFactor;
-            _direct.z -= (int)((_gemHolderGameObjects.Count / _data.GemHolderData.GemCountX) % _data.GemHolderData.GemCountZ) / _data.GemHolderData.OffsetFactor;
-            gem.transform.DOLocalMove(_direct,0.5f);
+            _direct = _staticStackItemPosition.Execute(_direct);
+            _staticItemAddOnStack.Execute(gem,_direct);
+            //gem.transform.DOLocalMove(_direct,0.5f);
         }
         
         private GameObject OnGetMineGameObject()
@@ -133,7 +137,6 @@ namespace Managers
             }
             return mines[_random];
         }
-        private GameObject OnGetGemAreaHolder() => gemAreaHolder;
 
         public void PlayerEntryGemArea()
         {
@@ -152,6 +155,7 @@ namespace Managers
             }
         }
 
+        private GameObject OnGetGemAreaHolder() => gemAreaHolder;
         private void SetText()
         {
             tmp.SetText(_currentMiner.ToString() + " / " + _data.MaxWorkerAmound);

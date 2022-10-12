@@ -19,7 +19,13 @@ namespace Controllers
         {
             if (other.CompareTag("Bullet"))
             {
-                enemyBrain.TakeDamage();
+                enemyBrain.TakeBulletDamage();
+                return;
+            }
+
+            if (other.CompareTag("TurretAmmo"))
+            {
+                enemyBrain.TakeAmmoDamage();
             }
         }
     }

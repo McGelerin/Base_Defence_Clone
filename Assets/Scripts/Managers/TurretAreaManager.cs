@@ -4,7 +4,6 @@ using Data.ValueObject;
 using Enums;
 using Keys;
 using Signals;
-using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
@@ -22,10 +21,9 @@ namespace Managers
             set
             {
                 _payedAmound = value;
-                _remainingAmound = _turretData.Cost - _payedAmound;
+                _remainingAmound = _buyableTurretData.Cost - _payedAmound;
                 if (_remainingAmound <=0)
                 {
-                    Debug.Log("turret bot alındı");
                     turretManager.HasSolder();
                     _textParentGameObject.SetActive(false);
                 }
@@ -48,7 +46,7 @@ namespace Managers
         
         #region Private Variables
 
-        private TurretData _turretData;
+        private BuyableTurretData _buyableTurretData;
         private int _payedAmound;
         private int _remainingAmound;
         private ScoreDataParams _scoreCache;
@@ -66,38 +64,22 @@ namespace Managers
 
         private void OnEnable()
         {
-            //SubscribeEvents();
             OnSetData();
-            turretManager.SetData(_turretData);
         }
-
-        private void SubscribeEvents()
-        {
-            //dleSignals.Instance.onGettedBaseData += OnSetData;
-        }
-
-        private void UnsubscribeEvents()
-        {
-            //IdleSignals.Instance.onGettedBaseData -= OnSetData;
-        }
-
-        private void OnDisable()
-        {
-            //UnsubscribeEvents();
-        }
-        
         #endregion
+        
         private void OnSetData()
         {
-            _turretData = IdleSignals.Instance.onTurretData(turretName);
+            _buyableTurretData = IdleSignals.Instance.onTurretData(turretName);
             PayedAmound = IdleSignals.Instance.onPayedTurretData(turretName);
             BuyAreaImageChange();
         }
         
+        //bu kısımları command yapabilirim
         public void BuyAreaEnter()
         {
             _scoreCache = ScoreSignals.Instance.onScoreData();
-            switch (_turretData.PayType)
+            switch (_buyableTurretData.PayType)
             {
                 case PayTypeEnum.Money:
                     if (_scoreCache.MoneyScore >= _remainingAmound)
@@ -128,7 +110,7 @@ namespace Managers
             while (_remainingAmound > 0)
             {
                 PayedAmound += 10;
-                ScoreSignals.Instance.onSetScore?.Invoke(_turretData.PayType, -10);
+                ScoreSignals.Instance.onSetScore?.Invoke(_buyableTurretData.PayType, -10);
                 yield return waitForSecond;
             }
             IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
@@ -141,7 +123,7 @@ namespace Managers
 
         private void BuyAreaImageChange()
         {
-            _textParentGameObject.transform.GetChild(((int)_turretData.PayType) + 1).gameObject.SetActive(false);
+            _textParentGameObject.transform.GetChild(((int)_buyableTurretData.PayType) + 1).gameObject.SetActive(false);
         }
         
     }

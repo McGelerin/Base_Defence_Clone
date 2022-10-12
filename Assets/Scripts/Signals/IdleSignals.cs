@@ -19,7 +19,7 @@ namespace Signals
         public Func<RoomNameEnum,int> onPayedRoomData = delegate{return  default;};
         public  Func<Transform> onGetWarHousePositon = delegate { return default;};
 
-        public Func<TurretNameEnum,TurretData> onTurretData = delegate{return  default;};
+        public Func<TurretNameEnum,BuyableTurretData> onTurretData = delegate{return  default;};
         public Func<TurretNameEnum,int> onPayedTurretData = delegate{return  default;};
 
         #endregion
@@ -44,7 +44,7 @@ namespace Signals
         
         #region WeaponArea
 
-        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.M4;};
+        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.Pistol;};
         public Func<PlayerAnimState> onSelectedWeaponAnimState = delegate { return 0;};
         public Func<PlayerAnimState> onSelectedWeaponAttackAnimState = delegate { return 0;};
         

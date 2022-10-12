@@ -111,7 +111,7 @@ namespace Managers
         private RoomData OnGetRoomData(RoomNameEnum roomName) =>  Data.BaseRoomDatas.Rooms[(int)roomName];
 
         
-        private TurretData OnGetTurretData(TurretNameEnum turret) => Data.BaseRoomDatas.Rooms[(int)turret].TurretData;
+        private BuyableTurretData OnGetTurretData(TurretNameEnum turret) => Data.BaseRoomDatas.Rooms[(int)turret].buyableTurretData;
 
         private MineAreaData OnGetMineAreaData() => Data.MineAreaData;
 

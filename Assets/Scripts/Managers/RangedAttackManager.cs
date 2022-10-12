@@ -51,24 +51,22 @@ namespace Managers
             SubscribeEvents();
         }
 
-        protected override void SubscribeEvents()
+        private void SubscribeEvents()
         {
             AttackSignals.Instance.onGetWeaponDamage += OnGetDamage;
             IdleSignals.Instance.onSelectedWeaponAnimState += OnGetWeaponAnimState;
             IdleSignals.Instance.onSelectedWeaponAttackAnimState += OnGetWeaponAttackAnimState;
             AttackSignals.Instance.onPlayerIsTarget += OnGetTarget;
             AttackSignals.Instance.onGetBulletDirect += OnGetDirect;
-            base.SubscribeEvents();
         }
 
-        protected override void UnsubscribeEvents()
+        private void UnsubscribeEvents()
         {
             AttackSignals.Instance.onGetWeaponDamage -= OnGetDamage;
             IdleSignals.Instance.onSelectedWeaponAnimState -= OnGetWeaponAnimState;
             IdleSignals.Instance.onSelectedWeaponAttackAnimState -= OnGetWeaponAttackAnimState;
             AttackSignals.Instance.onPlayerIsTarget -= OnGetTarget;
             AttackSignals.Instance.onGetBulletDirect -= OnGetDirect;
-            base.UnsubscribeEvents();
         }
 
         protected override void OnDisable()
@@ -85,7 +83,7 @@ namespace Managers
             AttackDelay = _selectedWeaponData.AttackDelay;
         }
 
-        public void PlayerIncreaseOutSide()
+        public void PlayerInteractOutSide()
         {
             if (!_isPlayerOnBase) return;
             TCollider.enabled = true;
@@ -95,7 +93,7 @@ namespace Managers
             _isPlayerOnBase = false;
         }
 
-        public void PlayerIncreaseBase()
+        public void PlayerInteractBase()
         {
             if (_isPlayerOnBase) return;
             PoolSignals.Instance.onReleasePoolObject?.Invoke(_selectedWeaponType.ToString(),_weapon);
@@ -119,7 +117,6 @@ namespace Managers
 
         protected override void RangedAttack()
         {
-
             PoolSignals.Instance.onGetPoolObject(PoolType.Bullet.ToString(), _weapon.transform);
         }
 
@@ -128,20 +125,24 @@ namespace Managers
             AttackSignals.Instance.onPlayerHasTarget?.Invoke(false);
         }
 
-        protected override void OnTriggerEnter(Collider other)
+        protected override bool TriggerEnter(Collider other)
         {
-            if (!_isPlayerOnBase)
+            if (!_isPlayerOnBase) return false;
+            if (other.CompareTag("Enemy"))
             {
-                base.OnTriggerEnter(other);
+                Enemys.Add(other.gameObject);
             }
+            return true;
         }
 
-        protected override void OnTriggerExit(Collider other)
+        protected override bool TriggerExit(Collider other)
         {
-            if (!_isPlayerOnBase)
+            if (!_isPlayerOnBase) return false;
+            if (other.CompareTag("Enemy"))
             {
-                base.OnTriggerExit(other);
+                Enemys.Remove(other.gameObject);
             }
+            return true;
         }
 
         private Vector3 OnGetDirect() => direct.transform.forward * _selectedWeaponData.BulletSpeed;

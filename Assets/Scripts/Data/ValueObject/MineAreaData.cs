@@ -8,6 +8,6 @@ namespace Data.ValueObject
         public int MaxWorkerAmound;
         public int CurrentWorkerAmound;
         public int MaxWorkerFromMine;
-        public GemHolderData GemHolderData;
+        public StaticStackData StaticStackData;
     }
 }

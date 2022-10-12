@@ -26,8 +26,12 @@ namespace Controllers
         private void OnEnable()
         {
             _direct = AttackSignals.Instance.onGetBulletDirect();
-            rb.velocity = Vector3.zero;
             rb.AddForce(_direct,ForceMode.VelocityChange);
+        }
+
+        private void OnDisable()
+        {
+            rb.velocity = Vector3.zero;
         }
 
         private void OnTriggerEnter(Collider other)
