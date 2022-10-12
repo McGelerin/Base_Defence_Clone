@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Keys;
 using Managers;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,7 +19,9 @@ namespace Controllers
         #region Private Variables
 
         private WaitForSeconds _rotateDelay;
-        private Coroutine rotate;
+        private float _turretRotation;
+        private bool _playerUseIt;
+        private Coroutine _rotate;
 
         #endregion
 
@@ -33,16 +36,16 @@ namespace Controllers
         {
             if (isAttack)
             {
-                rotate ??= StartCoroutine(Rotate());
+                _rotate ??= StartCoroutine(Rotate());
             }
             else
             {
-                if (rotate != null)
+                if (_rotate != null)
                 {
-                    StopCoroutine(rotate);
-                    rotate = null;
+                    StopCoroutine(_rotate);
+                    _rotate = null;
+                    DefaultPosition();
                 }
-                DefaultPosition();
             }
         }
 
@@ -58,6 +61,17 @@ namespace Controllers
             }
         }
 
+        public void SetTurnValue(IdleInputParams data)
+        {
+            _turretRotation += data.ValueX;
+            _turretRotation = Mathf.Clamp(_turretRotation, -35, 35);
+            if (_turretRotation > -35 && _turretRotation < 35)
+            {
+                transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, transform.rotation.y, 0), 
+                    Quaternion.Euler(0,_turretRotation, 1f),0.5f);
+            }
+        }
+        
         private void DefaultPosition()
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,

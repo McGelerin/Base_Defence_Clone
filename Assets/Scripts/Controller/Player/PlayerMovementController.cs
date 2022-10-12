@@ -1,5 +1,6 @@
 ﻿using Data.ValueObject;
 using Keys;
+using Managers;
 using Signals;
 using Unity.Mathematics;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Controller
         #region Serialized Variables
         
         [SerializeField] private new Rigidbody rigidbody;
+        [SerializeField] private PlayerManager manager;
         
         #endregion
         
@@ -42,6 +44,14 @@ namespace Controller
             _inputValueZ = inputParams.ValueZ;
         }
 
+        public void UpdateTurretInputValue(IdleInputParams inputParams)
+        {
+            if (inputParams.ValueZ <= -0.6f)
+            {
+                manager.PlayerOutTurret();
+            }
+        }
+
         public void IsLockTarget(bool lockTarget)
         {
             _lockTarget = lockTarget;
@@ -58,7 +68,14 @@ namespace Controller
         
         private void FixedUpdate()
         {
-            Move();
+            if (_isReadyToPlay)
+            {
+                Move();
+            }
+            else
+            {
+                Stop();
+            }
         }
 
         private void Move()

@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 592107626927977715}
+  manager: {fileID: 592107626927977708}
 --- !u!136 &592107626927977714
 CapsuleCollider:
   m_ObjectHideFlags: 0

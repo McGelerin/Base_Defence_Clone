@@ -37,7 +37,7 @@ namespace Controllers
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("WeaponAttackRadius"))
+            if (other.CompareTag("TurretAttackRadius"))
             {
                 PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Ammo.ToString(), gameObject);
             }

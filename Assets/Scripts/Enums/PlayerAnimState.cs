@@ -7,6 +7,8 @@
         RifleState,
         RifleAttack,
         PistolAttack,
-        AttackEnd
+        AttackEnd,
+        PlayerInTurret,
+        PlayerOutTurret
     }
 }

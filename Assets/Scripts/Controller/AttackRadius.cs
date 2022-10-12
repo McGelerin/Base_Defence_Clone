@@ -138,9 +138,7 @@ namespace Controllers
         protected virtual void RangedAttack() { }
         protected virtual void AttackEnd() { }
         protected virtual void HasTarget(){ }
-
         protected virtual bool TriggerEnter(Collider other){ return false;}
-        
         protected virtual bool TriggerExit(Collider other){ return false;}
     }
 }

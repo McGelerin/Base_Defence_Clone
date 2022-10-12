@@ -30,6 +30,7 @@ namespace Managers
         #region Private Variables
 
         private PlayerStateEnum _playerState;
+        private Transform _currentParent;
         //private PlayerStateEnum _playerStateCache;
         private PlayerAnimState _weaponAnimStateCache;
         private PlayerAnimState _weaponAttackAnimState;
@@ -41,6 +42,7 @@ namespace Managers
         
         private void Awake()
         {
+            _currentParent = transform.parent;
             Data = GetPlayerData();
             _playerState = PlayerStateEnum.INSIDE;
             SendPlayerDataToControllers();
@@ -62,6 +64,7 @@ namespace Managers
         private void SubscribeEvents()
         {
             InputSignals.Instance.onJoystickDragged += OnSetIdleInputValues;
+            IdleSignals.Instance.onInteractPlayerWithTurret += OnPlayerInTurret;
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
             AttackSignals.Instance.onPlayerHasTarget += OnPlayerHasTarget;
@@ -70,6 +73,7 @@ namespace Managers
         private void UnsubscribeEvents()
         {
             InputSignals.Instance.onJoystickDragged -= OnSetIdleInputValues;
+            IdleSignals.Instance.onInteractPlayerWithTurret -= OnPlayerInTurret;
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
             AttackSignals.Instance.onPlayerHasTarget -= OnPlayerHasTarget;
@@ -101,6 +105,7 @@ namespace Managers
                     animationController.SetOutSideAnimState(inputParams);
                     break;
                 case PlayerStateEnum.TARET:
+                    movementController.UpdateTurretInputValue(inputParams);
                     break;
                 case PlayerStateEnum.LOCKTARGET:
                     movementController.UpdateIdleInputValue(inputParams);
@@ -126,12 +131,6 @@ namespace Managers
                     animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
                     animationController.SetBoolAnimState(_weaponAnimStateCache,true);
                     break;
-                // case PlayerStateEnum.LOCKTARGET:
-                //     _weaponAttackAnimState = IdleSignals.Instance.onSelectedWeaponAttackAnimState();
-                //     animationController.SetAnimState(_weaponAttackAnimState);
-                //     break;
-                case PlayerStateEnum.TARET:
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -155,6 +154,21 @@ namespace Managers
                 movementController.IsLockTarget(false);
                 //SetPlayerState(_playerStateCache);
             }
+        }
+
+        private void OnPlayerInTurret()
+        {
+            _playerState = PlayerStateEnum.TARET;
+            animationController.SetAnimState(PlayerAnimState.PlayerInTurret);
+            movementController.IsReadyToPlay(false);
+        }
+
+        public void PlayerOutTurret()
+        {
+            _playerState = PlayerStateEnum.INSIDE;
+            animationController.SetAnimState(PlayerAnimState.PlayerOutTurret);
+            movementController.IsReadyToPlay(true);
+            transform.SetParent(_currentParent);
         }
 
         private void OnPlay()

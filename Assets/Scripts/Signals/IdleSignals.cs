@@ -50,5 +50,11 @@ namespace Signals
         
         #endregion
 
+        #region Turret
+
+        public UnityAction onInteractPlayerWithTurret = delegate { };
+
+        #endregion
+
     }
 }
