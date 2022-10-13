@@ -130,14 +130,11 @@ namespace AIBrain
         {
             WaitForSeconds wait = new WaitForSeconds(1f);
             AnimBoolState(EnemyStates.Death , true);
-            //yer altına gir
             AttackSignals.Instance.onEnemyDead?.Invoke(enemyBody);
             IdleSignals.Instance.onEnemyDead?.Invoke(TurretTarget,enemyType);
             yield return wait;
-            //enemyBody.SetActive(false);
             PrizeMoney();
             PoolSignals.Instance.onReleasePoolObject?.Invoke(enemyType.ToString(), gameObject);
-            //poola gonder
         }
 
         private void PrizeMoney()

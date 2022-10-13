@@ -1,5 +1,6 @@
 ﻿using Abstract;
 using AIBrain;
+using Enums;
 using UnityEngine;
 
 namespace States.AmmoWorker
@@ -23,22 +24,11 @@ namespace States.AmmoWorker
         
         public override void EnterState()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override void UpdateState()
-        {
-            throw new System.NotImplementedException();
+            _manager.InteractTurretAmmoArea();
+            _manager.AnimTriggerState(WorkerAnimState.Idle);
         }
 
         public override void OnTriggerEnterState(Collider other)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnTriggerExitState(Collider other)
-        {
-            throw new System.NotImplementedException();
-        }
+        { }
     }
 }

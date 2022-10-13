@@ -13,5 +13,6 @@ namespace Signals
         //public Func<GameObject> onGetWarHouseArea = delegate { return default;};
         public Func<GameObject> onGetTurretArea = delegate { return default;};
         //public Func<GameObject,int> onRemainingCapacity = delegate { return default;};
+        public UnityAction<GameObject> onAmmoAreaFull = delegate {  };
     }
 }

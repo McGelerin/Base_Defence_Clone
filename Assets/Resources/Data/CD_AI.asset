@@ -28,3 +28,10 @@ MonoBehaviour:
         MoveSpeed: 1.8
         ChaseSpeed: 2.8
         PrizeMoney: 10
+  AmmoWorkerAIData:
+    WorkerStackData:
+      Capacity: 12
+      InitPosition: {x: 0, y: 0, z: 0}
+      StackCountX: 2
+      StackCountY: 3
+      StackOffset: {x: 2, y: 2, z: 2}

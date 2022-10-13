@@ -12,20 +12,8 @@ namespace Managers
     {
         #region Self Variables
 
-        #region Public Variables
-        
-
-        #endregion
-
-        #region Serialized Variables
-        
-        
-
-        #endregion
-
         #region Private Variables
 
-        private GameObject _warHouse;
         private GameObject _turretArea;
         private StaticStackData _turretData;
         [ShowInInspector]private Dictionary<GameObject,List<GameObject>> _turretAmmoAreas = new Dictionary<GameObject, List<GameObject>>();
@@ -50,20 +38,14 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            //WorkerSignals.Instance.onWareHouse += OnWareHouseGO;
             WorkerSignals.Instance.onTurretAmmoAreas += OnTurretAmmoAreas;
-            //WorkerSignals.Instance.onGetWarHouseArea += OnGetWarHouseArea;
             WorkerSignals.Instance.onGetTurretArea += OnGetTurretArea;
-            //WorkerSignals.Instance.onRemainingCapacity += OnGetRemainingCapacity;
         }
 
         private void UnsubscribeEvents()
         {
-            //WorkerSignals.Instance.onWareHouse -= OnWareHouseGO;
             WorkerSignals.Instance.onTurretAmmoAreas -= OnTurretAmmoAreas;
-            //WorkerSignals.Instance.onGetWarHouseArea -= OnGetWarHouseArea;
             WorkerSignals.Instance.onGetTurretArea -= OnGetTurretArea;
-            //WorkerSignals.Instance.onRemainingCapacity -= OnGetRemainingCapacity;
         }
 
         private void OnDisable()
@@ -73,30 +55,22 @@ namespace Managers
 
         #endregion
 
-        // private void OnWareHouseGO(GameObject wareHouse)
-        // {
-        //     _warHouse = wareHouse;
-        // }
-
         private void OnTurretAmmoAreas(GameObject ammoArea, List<GameObject> ammoAreaStackList)
         {
             _turretAmmoAreas.Add(ammoArea,ammoAreaStackList);
         }
 
-       // private GameObject OnGetWarHouseArea() => _warHouse;
-
         private GameObject OnGetTurretArea()
         {
-            var capacity = int.MaxValue;
+            var maxCapacity = int.MinValue;
             foreach (var VARIABLE in _turretAmmoAreas)
             {
-                if (capacity > _turretData.Capacity - VARIABLE.Value.Count) continue;
-                capacity = VARIABLE.Value.Count;
+                var remainingCapacity = _turretData.Capacity - VARIABLE.Value.Count;
+                if (remainingCapacity <= maxCapacity) continue;
+                maxCapacity = remainingCapacity;
                 _turretArea = VARIABLE.Key;
             }
             return _turretArea;
         }
-
-        //private int OnGetRemainingCapacity(GameObject Area) => _turretData.Capacity - _turretAmmoAreas[Area].Count;
     }
 }

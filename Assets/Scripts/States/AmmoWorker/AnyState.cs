@@ -1,13 +1,12 @@
 ﻿using Abstract;
 using AIBrain;
 using Enums;
-using Signals;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace States.AmmoWorker
 {
-    public class MoveToWareHouseArea : AmmoWorkerBaseState
+    public class AnyState : AmmoWorkerBaseState
     {
         #region Self Variables
 
@@ -20,7 +19,7 @@ namespace States.AmmoWorker
 
         #endregion
 
-        public MoveToWareHouseArea(ref AmmoWorkerAIBrain manager, ref NavMeshAgent agent)
+        public AnyState(ref AmmoWorkerAIBrain manager, ref NavMeshAgent agent)
         {
             _manager = manager;
             _agent = agent;
@@ -28,17 +27,12 @@ namespace States.AmmoWorker
         
         public override void EnterState()
         {
-            _manager.Target = IdleSignals.Instance.onGetWarHousePositon().gameObject;
-            _agent.SetDestination(_manager.Target.transform.position);
+            _agent.SetDestination(Vector3.zero);
             _manager.AnimTriggerState(WorkerAnimState.Walk);
+            _manager.Wait();
         }
 
         public override void OnTriggerEnterState(Collider other)
-        {
-            if (other.CompareTag("AmmoReloadArea"))
-            {
-                _manager.SwitchState(AmmoWorkerStates.WaitForFullStack);
-            }
-        }
+        {}
     }
 }

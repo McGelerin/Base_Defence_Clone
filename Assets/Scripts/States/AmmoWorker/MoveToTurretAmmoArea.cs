@@ -1,6 +1,7 @@
 ﻿using System;
 using Abstract;
 using AIBrain;
+using Enums;
 using Signals;
 using UnityEngine;
 using UnityEngine.AI;
@@ -30,24 +31,17 @@ namespace States.AmmoWorker
         {
             _manager.Target = WorkerSignals.Instance.onGetTurretArea();
             _agent.SetDestination(_manager.Target.transform.position);
-        }
-
-        public override void UpdateState()
-        {
-            throw new System.NotImplementedException();
+            _manager.AnimTriggerState(WorkerAnimState.Walk);
         }
 
         public override void OnTriggerEnterState(Collider other)
         {
-            if (other.CompareTag(""))
+            if (other.CompareTag("TurretAmmoArea"))
             {
-                throw new NotImplementedException();
+                if ((_agent.remainingDistance > 1.5f)) return;
+                _manager.TurretAmmoArea(other.gameObject);
+                _manager.SwitchState(AmmoWorkerStates.WaitToAmmoArea);
             }
-        }
-
-        public override void OnTriggerExitState(Collider other)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

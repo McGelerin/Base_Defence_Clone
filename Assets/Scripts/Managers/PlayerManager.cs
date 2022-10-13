@@ -29,8 +29,8 @@ namespace Managers
 
         #region Private Variables
 
-        private PlayerStateEnum _playerState;
         private Transform _currentParent;
+        private PlayerStateEnum _playerState;
         private PlayerStateEnum _playerStateCache;
         private PlayerAnimState _weaponAnimStateCache;
         private PlayerAnimState _weaponAttackAnimState;

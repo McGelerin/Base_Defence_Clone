@@ -3,6 +3,9 @@
     public enum AmmoWorkerStates
     {
         MoveToWareHouse,
-        
+        WaitForFullStack,
+        MoveToTurretAmmoArea,
+        WaitToAmmoArea,
+        AnyState
     }
 }

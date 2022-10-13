@@ -9,7 +9,6 @@ using DG.Tweening;
 using Enums;
 using Keys;
 using Signals;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Managers
@@ -40,7 +39,7 @@ namespace Managers
         #region Private Variables
 
         private List<GameObject> _ammoStack = new List<GameObject>();
-        [ShowInInspector]private TurretStateEnum _turretState;
+        private TurretStateEnum _turretState;
         private GameObject _ammoPrefab;
         private TurretData _data;
         private int _ammoCache;
@@ -96,21 +95,16 @@ namespace Managers
 
         #endregion
         
-
         private void OnInteractPlayerWithAmmoArea(GameObject holder , List<GameObject> ammoStack)
         {
-            if (holder == ammoHolder)
-            {
-                turretAmmoAreaController.AmmoAddToStack(ammoStack);
-            }
+            if (holder != ammoHolder) return;
+            turretAmmoAreaController.AmmoAddToStack(ammoStack);
         }
 
         private void OnUnInteractPlayerWithAmmoArea(GameObject holder)
         {
-            if (holder == ammoHolder)
-            {
-                turretAmmoAreaController.PlayerUnInteractAmmoArea();
-            }
+            if (holder != ammoHolder) return;
+            turretAmmoAreaController.PlayerUnInteractAmmoArea();
         }
         
         public void HasSolder()

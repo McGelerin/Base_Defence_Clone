@@ -1,5 +1,6 @@
 ﻿using Abstract;
 using AIBrain;
+using Enums;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,10 +24,9 @@ namespace States.AmmoWorker
         
         public override void EnterState()
         {
-            _manager.InteractWareHouseArea(_manager.Target.transform);
+            _manager.AnimTriggerState(WorkerAnimState.Idle);
+            _manager.InteractWareHouseArea();
         }
-        public override void UpdateState() { }
         public override void OnTriggerEnterState(Collider other) { }
-        public override void OnTriggerExitState(Collider other) { }
     }
 }

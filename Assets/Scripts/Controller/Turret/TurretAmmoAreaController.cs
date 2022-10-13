@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using Data.ValueObject;
@@ -30,6 +31,7 @@ namespace Controllers
         private WaitForSeconds _delay;
         private Vector3 _direct;
         private bool _isInteractPlayer;
+        private bool _isInteractAmmoWorker;
         
         #endregion
 
@@ -40,6 +42,7 @@ namespace Controllers
             _managerStackListCache = managerStackList;
             _data = data;
             _delay = new WaitForSeconds(data.Delay);
+            WorkerSignals.Instance.onTurretAmmoAreas?.Invoke(gameObject,managerStackList);
         }
 
         public void AmmoAddToStack(List<GameObject> AmmoBoxs)
@@ -48,7 +51,6 @@ namespace Controllers
             if (_addStack != null) return;
             _isInteractPlayer = true;
             _addStack = StartCoroutine(AmmoAdd());
-
         }
 
         public void PlayerUnInteractAmmoArea()
@@ -65,7 +67,7 @@ namespace Controllers
 
         private IEnumerator AmmoAdd()
         {
-            while (_managerStackListCache.Count < _data.Capacity && _isInteractPlayer)
+            while (_managerStackListCache.Count < _data.Capacity && (_isInteractPlayer || _isInteractAmmoWorker))
             {
                 if (_ammoListCache.Count == 0) break;
                 var ammoBox = _ammoListCache.Last();
@@ -74,6 +76,7 @@ namespace Controllers
                 _ammoListCache.Remove(ammoBox);
                 yield return _delay;
             }
+            WorkerSignals.Instance.onAmmoAreaFull?.Invoke(gameObject);
             _addStack = null;
         }
     }
