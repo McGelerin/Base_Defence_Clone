@@ -16,6 +16,7 @@ TagManager:
   - WeaponAttackRadius
   - TurretAmmo
   - TurretAmmoArea
+  - TurretAttackRadius
   layers:
   - Default
   - TransparentFX

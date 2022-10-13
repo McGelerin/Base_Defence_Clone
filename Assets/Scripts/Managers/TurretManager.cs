@@ -138,7 +138,7 @@ namespace Managers
             if (_ammoStack.Count == 0) return;
             Fire();
         }
-
+        
         private void Fire()
         {
             _ammoPrefab = PoolSignals.Instance.onGetPoolObject(PoolType.Ammo.ToString(), ammoSpawnPoint.transform);

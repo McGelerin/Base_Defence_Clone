@@ -31,11 +31,10 @@ namespace Managers
 
         private PlayerStateEnum _playerState;
         private Transform _currentParent;
-        //private PlayerStateEnum _playerStateCache;
+        private PlayerStateEnum _playerStateCache;
         private PlayerAnimState _weaponAnimStateCache;
         private PlayerAnimState _weaponAttackAnimState;
-        //private bool _playerHasTarget = false;
-        
+
         #endregion
         
         #endregion
@@ -102,15 +101,16 @@ namespace Managers
                 case PlayerStateEnum.OUTSIDE:
                     movementController.UpdateIdleInputValue(inputParams);
                     animationController.SetSpeedVariable(inputParams);
-                    animationController.SetOutSideAnimState(inputParams);
+                    animationController.SetOutSideAnimState(inputParams,default,false);
                     break;
                 case PlayerStateEnum.TARET:
                     movementController.UpdateTurretInputValue(inputParams);
                     break;
                 case PlayerStateEnum.LOCKTARGET:
+                    var target = AttackSignals.Instance.onPlayerIsTarget();
                     movementController.UpdateIdleInputValue(inputParams);
                     animationController.SetSpeedVariable(inputParams);
-                    animationController.SetOutSideAnimState(inputParams);
+                    animationController.SetOutSideAnimState(inputParams,target.transform,true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -131,6 +131,10 @@ namespace Managers
                     animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
                     animationController.SetBoolAnimState(_weaponAnimStateCache,true);
                     break;
+                case PlayerStateEnum.LOCKTARGET:
+                    break;
+                case PlayerStateEnum.TARET:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -138,21 +142,18 @@ namespace Managers
         
         private void OnPlayerHasTarget(bool hasTarget)
         {
-            //_playerHasTarget = hasTarget;
-
             if (hasTarget)
             {
-                //_playerStateCache = _playerState;
                 movementController.IsLockTarget(true);
                 _weaponAttackAnimState = IdleSignals.Instance.onSelectedWeaponAttackAnimState();
                 animationController.SetAnimState(_weaponAttackAnimState);
-                //SetPlayerState(PlayerStateEnum.LOCKTARGET);
+                _playerState = PlayerStateEnum.LOCKTARGET;
             }
             else
             {
                 animationController.SetAnimState(PlayerAnimState.AttackEnd);
                 movementController.IsLockTarget(false);
-                //SetPlayerState(_playerStateCache);
+                _playerState = PlayerStateEnum.OUTSIDE;
             }
         }
 

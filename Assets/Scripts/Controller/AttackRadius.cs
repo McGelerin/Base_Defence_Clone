@@ -131,7 +131,7 @@ namespace Controllers
             }
 
             AttackEnd();
-            TargetEnemy = null;
+            //TargetEnemy = null;
             IsRemoveEnemy = true;
             AttackCoroutine = null;
         }

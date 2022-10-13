@@ -40,7 +40,7 @@ namespace States.Enemy
         {
             if (_manager.HealthCheck())
             {
-                _manager.SwichState(EnemyStates.Death);
+                _manager.SwitchState(EnemyStates.Death);
             }
 
             _manager.AnimBoolState(EnemyStates.Idle, _data.AttackRange > _agent.remainingDistance);
@@ -51,7 +51,7 @@ namespace States.Enemy
             if (other.CompareTag("Player"))
             {
                 _manager.PlayerTarget = other.transform.parent.gameObject;
-                _manager.SwichState(EnemyStates.Chase);
+                _manager.SwitchState(EnemyStates.Chase);
             }
         }
 

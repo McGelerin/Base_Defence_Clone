@@ -82,7 +82,7 @@ namespace AIBrain
             _currentState.OnTriggerExitState(other);
         }
 
-        public void SwichState(EnemyStates state)//get set ile yapılabilir
+        public void SwitchState(EnemyStates state)//get set ile yapılabilir
         {
             _currentState = state switch
             {

@@ -7,5 +7,6 @@ namespace Data.UnityObject
     public class Cd_AI : ScriptableObject
     {
         public EnemyAIData EnemyAIData;
+        public AmmoWorkerAIData AmmoWorkerAIData;
     }
 }

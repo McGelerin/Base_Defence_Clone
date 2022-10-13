@@ -42,11 +42,11 @@ namespace States.Enemy
             _agent.destination = _manager.PlayerTarget.transform.position;
             if (_data.AttackRange < _agent.remainingDistance)
             {
-                _manager.SwichState(EnemyStates.Chase);
+                _manager.SwitchState(EnemyStates.Chase);
             }
             if (_manager.HealthCheck())
             {
-                _manager.SwichState(EnemyStates.Death);
+                _manager.SwitchState(EnemyStates.Death);
             }
         }
 
@@ -59,7 +59,7 @@ namespace States.Enemy
             if (other.CompareTag("Player"))
             {
                 _manager.AttackStatus(false);
-                _manager.SwichState(EnemyStates.Walk);
+                _manager.SwitchState(EnemyStates.Walk);
             }
         }
     }
