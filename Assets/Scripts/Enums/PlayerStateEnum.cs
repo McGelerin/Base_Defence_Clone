@@ -2,9 +2,9 @@
 {
     public enum PlayerStateEnum
     {
-        INSIDE,
-        OUTSIDE,
-        LOCKTARGET,
-        TARET////BUrası artabilir :D
+        Inside,
+        Outside,
+        LockTarget,
+        Taret////BUrası artabilir :D
     }
 }

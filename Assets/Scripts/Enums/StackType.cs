@@ -2,8 +2,8 @@
 {
     public enum StackType
     {
-        NONE,
-        MONEY,
-        AMMO
+        None,
+        Money,
+        Ammo
     }
 }

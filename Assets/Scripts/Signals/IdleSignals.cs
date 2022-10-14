@@ -23,6 +23,17 @@ namespace Signals
         public Func<TurretNameEnum,int> onPayedTurretData = delegate{return  default;};
 
         #endregion
+
+        #region OutsideArea
+        
+        public UnityAction onGettedOutSideData = delegate {  };
+        public Func<OutSideStateLevels,OutsideData> onGetOutsideData = delegate { return default;};
+        public Func<OutSideStateLevels,int> onGetPayedStageData = delegate { return default;};
+        public UnityAction<OutSideStateLevels,int> onOutsideBuyedItems = delegate {  };
+        
+
+        #endregion
+        
         
         #region Mine Area
 

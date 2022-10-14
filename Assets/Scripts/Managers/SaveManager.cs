@@ -15,6 +15,7 @@ namespace Managers
         private int _levelCache;
         private ScoreDataParams _scoreDataCache;
         private AreaDataParams _areaDataCache;
+        private Dictionary<OutSideStateLevels, int> _outsideDataCache;
         
         #endregion
 
@@ -32,9 +33,11 @@ namespace Managers
             SaveSignals.Instance.onLevelSave += OnLevelSave;
             SaveSignals.Instance.onScoreSave += OnScoreSave;
             SaveSignals.Instance.onAreaDataSave += OnAreaDataSave;
+            SaveSignals.Instance.onOutSideDataSave += OnOutsideStageDataSave;
             SaveSignals.Instance.onLoadCurrentLevel += OnLevelLoad;
             SaveSignals.Instance.onLoadScoreData += OnLoadScoreData;
             SaveSignals.Instance.onLoadAreaData += OnLoadAreaData;
+            SaveSignals.Instance.onLoadOutsideData += OnLoadOutsideStageData;
         }
 
 
@@ -43,9 +46,11 @@ namespace Managers
             SaveSignals.Instance.onLevelSave -= OnLevelSave;
             SaveSignals.Instance.onScoreSave -= OnScoreSave;
             SaveSignals.Instance.onAreaDataSave -= OnAreaDataSave;
+            SaveSignals.Instance.onOutSideDataSave -= OnOutsideStageDataSave;
             SaveSignals.Instance.onLoadCurrentLevel -= OnLevelLoad;
             SaveSignals.Instance.onLoadScoreData -= OnLoadScoreData;
             SaveSignals.Instance.onLoadAreaData -= OnLoadAreaData;
+            SaveSignals.Instance.onLoadOutsideData -= OnLoadOutsideStageData;
         }
 
         private void OnDisable()
@@ -85,6 +90,12 @@ namespace Managers
                 _areaDataCache.RoomTurretPayedAmound,"AreaData.es3");
         }
 
+        private void OnOutsideStageDataSave()
+        {
+            _outsideDataCache = SaveSignals.Instance.onSaveOutsideData();
+            if (_outsideDataCache != null) ES3.Save("OutsidePayedAmount", _outsideDataCache,"OutsideData.es3");
+        }
+
         private int OnLevelLoad()
         {
             return ES3.KeyExists("Level", "Level.es3") 
@@ -116,6 +127,13 @@ namespace Managers
                     ? ES3.Load < Dictionary<TurretNameEnum, int>>("RoomTurretPayedAmound", "AreaData.es3")
                     : new Dictionary<TurretNameEnum, int>()
             };
+        }
+
+        private Dictionary<OutSideStateLevels, int> OnLoadOutsideStageData()
+        {
+            return ES3.KeyExists("OutsidePayedAmount", "OutsideData.es3")
+                ? ES3.Load<Dictionary<OutSideStateLevels, int>>("OutsidePayedAmount", "OutsideData.es3")
+                : new Dictionary<OutSideStateLevels, int>();
         }
     }
 }

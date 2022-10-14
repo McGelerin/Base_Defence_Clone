@@ -24,7 +24,7 @@ namespace Controllers
             if (other.CompareTag("BarrierInSide"))
             {
                 gameObject.layer = LayerMask.NameToLayer("Default");
-                manager.SetPlayerState(PlayerStateEnum.INSIDE);
+                manager.SetPlayerState(PlayerStateEnum.Inside);
                 stackManager.InteractBarrierArea();
                 rangedAttackManager.PlayerInteractBase();
                 return;
@@ -33,7 +33,7 @@ namespace Controllers
             if (other.CompareTag("BarrierOutSide"))
             {
                 gameObject.layer = LayerMask.NameToLayer("PlayerOutSideLayer");
-                manager.SetPlayerState(PlayerStateEnum.OUTSIDE);
+                manager.SetPlayerState(PlayerStateEnum.Outside);
                 rangedAttackManager.PlayerInteractOutSide();
                 return;
             }

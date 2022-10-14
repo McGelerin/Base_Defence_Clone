@@ -43,7 +43,7 @@ namespace Managers
         {
             _currentParent = transform.parent;
             Data = GetPlayerData();
-            _playerState = PlayerStateEnum.INSIDE;
+            _playerState = PlayerStateEnum.Inside;
             SendPlayerDataToControllers();
         }
         private PlayerData GetPlayerData() => Resources.Load<CD_PlayerData>("Data/CD_Player").Data;
@@ -94,19 +94,19 @@ namespace Managers
         {
             switch (_playerState)
             {
-                case PlayerStateEnum.INSIDE:
+                case PlayerStateEnum.Inside:
                     movementController.UpdateIdleInputValue(inputParams);
                     animationController.SetSpeedVariable(inputParams);
                     break;
-                case PlayerStateEnum.OUTSIDE:
+                case PlayerStateEnum.Outside:
                     movementController.UpdateIdleInputValue(inputParams);
                     animationController.SetSpeedVariable(inputParams);
                     animationController.SetOutSideAnimState(inputParams,default,false);
                     break;
-                case PlayerStateEnum.TARET:
+                case PlayerStateEnum.Taret:
                     movementController.UpdateTurretInputValue(inputParams);
                     break;
-                case PlayerStateEnum.LOCKTARGET:
+                case PlayerStateEnum.LockTarget:
                     var target = AttackSignals.Instance.onPlayerIsTarget();
                     movementController.UpdateIdleInputValue(inputParams);
                     animationController.SetSpeedVariable(inputParams);
@@ -122,18 +122,18 @@ namespace Managers
             _playerState = state;
             switch (_playerState)
             {
-                case PlayerStateEnum.INSIDE:
+                case PlayerStateEnum.Inside:
                     _weaponAnimStateCache = IdleSignals.Instance.onSelectedWeaponAnimState();
                     animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
                     animationController.SetBoolAnimState(_weaponAnimStateCache,false);
                     break;
-                case PlayerStateEnum.OUTSIDE:
+                case PlayerStateEnum.Outside:
                     animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
                     animationController.SetBoolAnimState(_weaponAnimStateCache,true);
                     break;
-                case PlayerStateEnum.LOCKTARGET:
+                case PlayerStateEnum.LockTarget:
                     break;
-                case PlayerStateEnum.TARET:
+                case PlayerStateEnum.Taret:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -147,26 +147,26 @@ namespace Managers
                 movementController.IsLockTarget(true);
                 _weaponAttackAnimState = IdleSignals.Instance.onSelectedWeaponAttackAnimState();
                 animationController.SetAnimState(_weaponAttackAnimState);
-                _playerState = PlayerStateEnum.LOCKTARGET;
+                _playerState = PlayerStateEnum.LockTarget;
             }
             else
             {
                 animationController.SetAnimState(PlayerAnimState.AttackEnd);
                 movementController.IsLockTarget(false);
-                _playerState = PlayerStateEnum.OUTSIDE;
+                _playerState = PlayerStateEnum.Outside;
             }
         }
 
         private void OnPlayerInTurret()
         {
-            _playerState = PlayerStateEnum.TARET;
+            _playerState = PlayerStateEnum.Taret;
             animationController.SetAnimState(PlayerAnimState.PlayerInTurret);
             movementController.IsReadyToPlay(false);
         }
 
         public void PlayerOutTurret()
         {
-            _playerState = PlayerStateEnum.INSIDE;
+            _playerState = PlayerStateEnum.Inside;
             animationController.SetAnimState(PlayerAnimState.PlayerOutTurret);
             movementController.IsReadyToPlay(true);
             transform.SetParent(_currentParent);

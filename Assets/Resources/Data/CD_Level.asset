@@ -54,7 +54,21 @@ MonoBehaviour:
           StackCountX: 5
           StackCountZ: 5
           StackOffset: {x: 2, y: 2, z: 2}
+          Delay: 0
     FrontYardData:
+      OutsideLevelData:
+      - PayType: 1
+        Cost: 250
+        levels: 0
+      - PayType: 1
+        Cost: 300
+        levels: 1
+      - PayType: 1
+        Cost: 400
+        levels: 2
+      - PayType: 1
+        Cost: 500
+        levels: 3
       SpawnDatas:
       - EnemyType: 0
         EnemyCount: 5

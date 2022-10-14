@@ -110,8 +110,8 @@ namespace Managers
 
         public void InteractMoney(GameObject money)
         {
-            if (_stackType == StackType.AMMO) return;
-            _stackType = StackType.MONEY;
+            if (_stackType == StackType.Ammo) return;
+            _stackType = StackType.Money;
             if (_stackList.Count >= _moneyStackData.Capacity) return;
             money.GetComponent<BoxCollider>().enabled = false;
             _stackPositionCache = _moneyDinamicStackItemPosition.Execute(_stackPositionCache);
@@ -120,7 +120,7 @@ namespace Managers
 
         public void InteractWareHouseArea(Transform ammoArea,bool isTriggerAmmoArea)
         {
-            if (_stackType == StackType.MONEY) return;
+            if (_stackType == StackType.Money) return;
             if (isTriggerAmmoArea)
             {
                 StartCoroutine(AddAmmoToStack(ammoArea));
@@ -135,7 +135,7 @@ namespace Managers
         {
             if (_stackList.Count == 0)
             {
-                _stackType = StackType.NONE;
+                _stackType = StackType.None;
             }
         }
 
@@ -144,7 +144,7 @@ namespace Managers
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.3f);
             while (_stackList.Count < _ammoStackData.Capacity)
             {
-                _stackType = StackType.AMMO;
+                _stackType = StackType.Ammo;
                 _stackPositionCache = _ammoDinamicStackItemPosition.Execute(_stackPositionCache);
                 var obj = PoolSignals.Instance.onGetPoolObject(PoolType.AmmoBox.ToString(), ammoArea);
                 _objAddOnStack.Execute(obj,_stackPositionCache);
@@ -154,7 +154,7 @@ namespace Managers
 
         public void InteractTurretAmmoArea(GameObject AmmoArea)
         {
-            if (_stackType == StackType.AMMO)
+            if (_stackType == StackType.Ammo)
             {
                 StackSignals.Instance.onInteractStackHolder?.Invoke(AmmoArea,_stackList);
             }
@@ -164,15 +164,15 @@ namespace Managers
         {
             switch (_stackType)
             {
-                case StackType.NONE:
+                case StackType.None:
                     return;
-                case StackType.MONEY:
+                case StackType.Money:
                     _addMoneyStackToScore.Execute();
-                    _stackType = StackType.NONE;
+                    _stackType = StackType.None;
                     return;
-                case StackType.AMMO:
+                case StackType.Ammo:
                     _removeAmmoStackItems.Execute();
-                    _stackType = StackType.NONE;
+                    _stackType = StackType.None;
                     return;
                 default:
                     throw new ArgumentOutOfRangeException();

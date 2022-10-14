@@ -4,60 +4,59 @@ using Data.ValueObject;
 using Enums;
 using Keys;
 using Signals;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
 namespace Managers
 {
-    public class TurretAreaManager : MonoBehaviour
+    public class StageManager : MonoBehaviour
     {
         #region Self Variables
 
         #region Public Variables
         
-        public int PayedAmound
+        public int PayedAmount
         {
-            get => _payedAmound;
+            get => _payedAmount;
             set
             {
-                _payedAmound = value;
-                _remainingAmound = _buyableTurretData.Cost - _payedAmound;
-                if (_remainingAmound <=0)
+                _payedAmount = value;
+                _remainingAmount = _data.Cost - _payedAmount;
+                if (_remainingAmount <=0)
                 {
                     if (_buyCoroutine != null)
                     {
                         StopCoroutine(_buyCoroutine);
                         _buyCoroutine = null;
-                        IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+                        IdleSignals.Instance.onOutsideBuyedItems?.Invoke(stageLevel,_payedAmount);
                     }
-                    turretManager.HasSolder();
-                    _textParentGameObject.SetActive(false);
+                    gameObject.SetActive(false);
                 }
                 else
                 {
-                    SetText(_remainingAmound);
+                    SetText(_remainingAmount);
                 }
             }
         }
 
         #endregion
 
-        #region SerializeField Variables
-
-        [SerializeField] private TurretNameEnum turretName;
+        #region Serialized Variables
+        
+        [SerializeField] private OutSideStateLevels stageLevel;
         [SerializeField] private TextMeshPro tmp;
-        [SerializeField] private TurretManager turretManager;
 
         #endregion
-        
+
         #region Private Variables
 
-        private BuyableTurretData _buyableTurretData;
-        private int _payedAmound;
-        private int _remainingAmound;
+        [ShowInInspector]private OutsideData _data;
+        [ShowInInspector]private int _payedAmount;
+        private Coroutine _buyCoroutine;
+        private int _remainingAmount;
         private ScoreDataParams _scoreCache;
         private GameObject _textParentGameObject;
-        private Coroutine _buyCoroutine;
 
         #endregion
 
@@ -67,35 +66,51 @@ namespace Managers
         {
             _textParentGameObject = tmp.transform.parent.gameObject;
         }
+
         #region Event Subscription
 
         private void OnEnable()
         {
-            OnSetData();
+            SubscribeEvents();
         }
+
+        private void SubscribeEvents()
+        {
+            IdleSignals.Instance.onGettedOutSideData += OnSetData;
+        }
+
+        private void UnsubscribeEvents()
+        {
+            IdleSignals.Instance.onGettedOutSideData -= OnSetData;
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeEvents();
+        }
+
         #endregion
         
         private void OnSetData()
         {
-            _buyableTurretData = IdleSignals.Instance.onTurretData(turretName);
-            PayedAmound = IdleSignals.Instance.onPayedTurretData(turretName);
+            _data = IdleSignals.Instance.onGetOutsideData(stageLevel);
+            PayedAmount = IdleSignals.Instance.onGetPayedStageData(stageLevel);
             BuyAreaImageChange();
         }
         
-        //bu kısımları command yapabilirim
         public void BuyAreaEnter()
         {
             _scoreCache = ScoreSignals.Instance.onScoreData();
-            switch (_buyableTurretData.PayType)
+            switch (_data.PayType)
             {
                 case PayTypeEnum.Money:
-                    if (_scoreCache.MoneyScore >= _remainingAmound)
+                    if (_scoreCache.MoneyScore >= _remainingAmount)
                     {
                         _buyCoroutine = StartCoroutine(Buy());
                     }
                     break;
                 case PayTypeEnum.Gem :
-                    if (_scoreCache.GemScore >= _remainingAmound)
+                    if (_scoreCache.GemScore >= _remainingAmount)
                     {
                         _buyCoroutine = StartCoroutine(Buy());
                     }
@@ -109,31 +124,30 @@ namespace Managers
         {
             StopCoroutine(_buyCoroutine);
             _buyCoroutine = null;
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+            IdleSignals.Instance.onOutsideBuyedItems?.Invoke(stageLevel,_payedAmount);
         }
-
+        
         private IEnumerator Buy()
         {
-            var waitForSecond = new WaitForSeconds(0.02f);
-            while (_remainingAmound > 0)
+            var waitForSecond = new WaitForSeconds(0.05f);
+            while (_remainingAmount > 0)
             {
-                PayedAmound += 10;
-                ScoreSignals.Instance.onSetScore?.Invoke(_buyableTurretData.PayType, -10);
+                PayedAmount += 10;
+                ScoreSignals.Instance.onSetScore?.Invoke(_data.PayType, -10);
                 yield return waitForSecond;
             }
             _buyCoroutine = null;
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+            IdleSignals.Instance.onOutsideBuyedItems?.Invoke(stageLevel,_payedAmount);
         }
 
-        private void SetText(int remainingAmound)
+        private void SetText(int remainingAmount)
         {
-            tmp.text = remainingAmound.ToString();
-        }
-
-        private void BuyAreaImageChange()
-        {
-            _textParentGameObject.transform.GetChild(((int)_buyableTurretData.PayType) + 1).gameObject.SetActive(false);
+            tmp.text = remainingAmount.ToString();
         }
         
+        private void BuyAreaImageChange()
+        {
+            _textParentGameObject.transform.GetChild(((int)_data.PayType) + 1).gameObject.SetActive(false);
+        }
     }
 }
