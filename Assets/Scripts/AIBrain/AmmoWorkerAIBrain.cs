@@ -69,7 +69,7 @@ namespace AIBrain
             _anyState = new AnyState(ref brain, ref agent);
         }
 
-        private AmmoWorkerAIData GetTurretData() => Resources.Load<Cd_AI>("Data/CD_AI").AmmoWorkerAIData;
+        private AmmoWorkerAIData GetTurretData() => Resources.Load<CD_AI>("Data/CD_AI").AmmoWorkerAIData;
 
         #region Event Subscription
 

@@ -75,7 +75,7 @@ namespace Managers
         {
             _currentMiner = 0;
             _capacity = new List<int>(new int [mines.Count]);
-            _data = IdleSignals.Instance.onGetMineAreaData();
+            _data = DataTransferSignals.Instance.onGetMineAreaData();
             _staticStackItemPosition = new StaticStackItemPosition(ref _gemHolderGameObjects, ref _data.StaticStackData,
                 ref gemAreaHolder);
             _staticItemAddOnStack =

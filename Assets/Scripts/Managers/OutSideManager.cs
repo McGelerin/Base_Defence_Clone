@@ -33,17 +33,17 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            IdleSignals.Instance.onGetOutsideData += OnGetOutsideData;
-            IdleSignals.Instance.onGetPayedStageData += OnGetOutsideStagePayedAmount;
-            IdleSignals.Instance.onOutsideBuyedItems += OnSetPayedStageData;
+            DataTransferSignals.Instance.onGetOutsideData += OnGetOutsideData;
+            DataTransferSignals.Instance.onGetPayedStageData += OnGetOutsideStagePayedAmount;
+            DataTransferSignals.Instance.onOutsideBuyedItems += OnSetPayedStageData;
             SaveSignals.Instance.onSaveOutsideData += OnGetOutsideData;
         }
 
         private void UnsubscribeEvents()
         {
-            IdleSignals.Instance.onGetOutsideData -= OnGetOutsideData;
-            IdleSignals.Instance.onGetPayedStageData -= OnGetOutsideStagePayedAmount;
-            IdleSignals.Instance.onOutsideBuyedItems -= OnSetPayedStageData;
+            DataTransferSignals.Instance.onGetOutsideData -= OnGetOutsideData;
+            DataTransferSignals.Instance.onGetPayedStageData -= OnGetOutsideStagePayedAmount;
+            DataTransferSignals.Instance.onOutsideBuyedItems -= OnSetPayedStageData;
             SaveSignals.Instance.onSaveOutsideData -= OnGetOutsideData;
         }
 
@@ -56,7 +56,7 @@ namespace Managers
 
         private void Start()
         {
-            IdleSignals.Instance.onGettedOutSideData?.Invoke();
+            DataTransferSignals.Instance.onGettedOutSideData?.Invoke();
         }
 
         private void GetReferences()

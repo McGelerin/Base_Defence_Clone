@@ -14,6 +14,7 @@
         M4,
         Ak47,
         Bullet,
-        AmmoBox
+        AmmoBox,
+        AmmoWorker
     }
 }

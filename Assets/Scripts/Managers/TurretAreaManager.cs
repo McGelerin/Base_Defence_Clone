@@ -28,7 +28,7 @@ namespace Managers
                     {
                         StopCoroutine(_buyCoroutine);
                         _buyCoroutine = null;
-                        IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+                        DataTransferSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
                     }
                     turretManager.HasSolder();
                     _textParentGameObject.SetActive(false);
@@ -77,8 +77,8 @@ namespace Managers
         
         private void OnSetData()
         {
-            _buyableTurretData = IdleSignals.Instance.onTurretData(turretName);
-            PayedAmound = IdleSignals.Instance.onPayedTurretData(turretName);
+            _buyableTurretData = DataTransferSignals.Instance.onTurretData(turretName);
+            PayedAmound = DataTransferSignals.Instance.onPayedTurretData(turretName);
             BuyAreaImageChange();
         }
         
@@ -107,9 +107,10 @@ namespace Managers
 
         public void BuyAreaExit()
         {
+            if (_buyCoroutine == null) return;
             StopCoroutine(_buyCoroutine);
             _buyCoroutine = null;
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+            DataTransferSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
         }
 
         private IEnumerator Buy()
@@ -122,7 +123,7 @@ namespace Managers
                 yield return waitForSecond;
             }
             _buyCoroutine = null;
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+            DataTransferSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
         }
 
         private void SetText(int remainingAmound)

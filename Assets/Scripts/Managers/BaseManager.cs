@@ -55,26 +55,26 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            IdleSignals.Instance.onBaseAreaBuyedItem += OnSetPayedRoomData;
-            IdleSignals.Instance.onTurretAreaBuyedItem += OnSetPayedTurretData;
-            IdleSignals.Instance.onRoomData += OnGetRoomData;
-            IdleSignals.Instance.onTurretData += OnGetTurretData;
-            IdleSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
-            IdleSignals.Instance.onPayedTurretData += OnGetTurretPayedAmound;
-            IdleSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
+            DataTransferSignals.Instance.onBaseAreaBuyedItem += OnSetPayedRoomData;
+            DataTransferSignals.Instance.onTurretAreaBuyedItem += OnSetPayedTurretData;
+            DataTransferSignals.Instance.onRoomData += OnGetRoomData;
+            DataTransferSignals.Instance.onTurretData += OnGetTurretData;
+            DataTransferSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
+            DataTransferSignals.Instance.onPayedTurretData += OnGetTurretPayedAmound;
+            DataTransferSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
             IdleSignals.Instance.onGetWarHousePositon += OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
         }
 
         private void UnsubscribeEvents()
         {
-            IdleSignals.Instance.onBaseAreaBuyedItem -= OnSetPayedRoomData;
-            IdleSignals.Instance.onTurretAreaBuyedItem -= OnSetPayedTurretData;
-            IdleSignals.Instance.onRoomData -= OnGetRoomData;
-            IdleSignals.Instance.onTurretData -= OnGetTurretData;
-            IdleSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
-            IdleSignals.Instance.onPayedTurretData -= OnGetTurretPayedAmound;
-            IdleSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
+            DataTransferSignals.Instance.onBaseAreaBuyedItem -= OnSetPayedRoomData;
+            DataTransferSignals.Instance.onTurretAreaBuyedItem -= OnSetPayedTurretData;
+            DataTransferSignals.Instance.onRoomData -= OnGetRoomData;
+            DataTransferSignals.Instance.onTurretData -= OnGetTurretData;
+            DataTransferSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
+            DataTransferSignals.Instance.onPayedTurretData -= OnGetTurretPayedAmound;
+            DataTransferSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
             IdleSignals.Instance.onGetWarHousePositon -= OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
         }
@@ -87,7 +87,7 @@ namespace Managers
 
         private void Start()
         {
-            IdleSignals.Instance.onGettedBaseData?.Invoke();
+            DataTransferSignals.Instance.onGettedBaseData?.Invoke();
         }
 
         private void ColoseGameObjects()
@@ -104,7 +104,7 @@ namespace Managers
             Data = Resources.Load<CD_Level>("Data/CD_Level").LevelDatas[_baseLevel].BaseData;
             _payedRoomDatas = SaveSignals.Instance.onLoadAreaData().RoomPayedAmound;
             _payedTurretDatas = SaveSignals.Instance.onLoadAreaData().RoomTurretPayedAmound;
-            IdleSignals.Instance.onGettedBaseData?.Invoke();
+            DataTransferSignals.Instance.onGettedBaseData?.Invoke();
             SetBaseLevelText();
         }
 

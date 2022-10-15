@@ -75,12 +75,12 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            IdleSignals.Instance.onGettedBaseData += OnSetData;
+            DataTransferSignals.Instance.onGettedBaseData += OnSetData;
         }
 
         private void UnsubscribeEvents()
         {
-            IdleSignals.Instance.onGettedBaseData -= OnSetData;
+            DataTransferSignals.Instance.onGettedBaseData -= OnSetData;
         }
 
         private void OnDisable()
@@ -91,8 +91,8 @@ namespace Managers
         #endregion
         private void OnSetData()
         {
-            _roomData = IdleSignals.Instance.onRoomData(roomName);
-            PayedAmound = IdleSignals.Instance.onPayedRoomData(roomName);
+            _roomData = DataTransferSignals.Instance.onRoomData(roomName);
+            PayedAmound = DataTransferSignals.Instance.onPayedRoomData(roomName);
             BuyAreaImageChange();
         }
         
@@ -121,7 +121,7 @@ namespace Managers
         public void BuyAreaExit()
         {
             StopAllCoroutines();
-            IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
+            DataTransferSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
         }
 
         private IEnumerator Buy()
@@ -133,7 +133,7 @@ namespace Managers
                 ScoreSignals.Instance.onSetScore?.Invoke(_roomData.PayType, -10);
                 yield return waitForSecond;
             }
-            IdleSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
+            DataTransferSignals.Instance.onBaseAreaBuyedItem?.Invoke(roomName,_payedAmound);
         }
 
         private void SetText(int remainingAmount)

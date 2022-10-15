@@ -28,7 +28,7 @@ namespace Controller.Barrier
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag("Player")/*Buraya boşatma ve yoldurma yapmak için bir değer gelmesi gerekmektedir*/)
+            if (other.CompareTag("Player"))
             {
                 manager.BarrierState = BarrierEnum.Open;
             }

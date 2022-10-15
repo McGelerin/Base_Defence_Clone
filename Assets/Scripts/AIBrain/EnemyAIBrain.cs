@@ -50,7 +50,7 @@ namespace AIBrain
         private void Awake()
         {
             var brain = this;
-            _data = Resources.Load<Cd_AI>("Data/Cd_AI").EnemyAIData.EnemyTypeDatas[enemyType];
+            _data = Resources.Load<CD_AI>("Data/Cd_AI").EnemyAIData.EnemyTypeDatas[enemyType];
             _moveToTurret = new MoveToTurret(ref brain, ref agent,ref _data);
             _chaseToPlayer = new ChaseToPlayer(ref brain, ref agent, ref _data);
             _attackToPlayer = new AttackToPlayer(ref brain, ref agent, ref _data);

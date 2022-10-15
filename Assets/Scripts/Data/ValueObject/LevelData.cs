@@ -8,5 +8,6 @@ namespace Data.ValueObject
     {
         public BaseData BaseData;
         public FrontYardData FrontYardData;
+        public SupporterData SupporterData;
     }
 }

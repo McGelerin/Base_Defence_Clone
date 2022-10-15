@@ -76,3 +76,7 @@ MonoBehaviour:
       - EnemyType: 1
         EnemyCount: 2
         CurrentCount: 0
+    SupporterData:
+      AmmoWorkerBuyData:
+        PayType: 0
+        Cost: 600

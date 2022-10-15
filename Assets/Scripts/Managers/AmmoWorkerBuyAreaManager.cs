@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class StageManager : MonoBehaviour
+    public class AmmoWorkerBuyAreaManager : MonoBehaviour
     {
         #region Self Variables
 
@@ -29,8 +29,11 @@ namespace Managers
                     {
                         StopCoroutine(_buyCoroutine);
                         _buyCoroutine = null;
-                        DataTransferSignals.Instance.onOutsideBuyedItems?.Invoke(stageLevel,_payedAmount);
+                        DataTransferSignals.Instance.onAmmoWorkerAreaBuyedItems?.Invoke(_payedAmount);
                     }
+
+                    var ammoWorker =PoolSignals.Instance.onGetPoolObject(PoolType.AmmoWorker.ToString(), botPosition.transform);
+                    ammoWorker.transform.localRotation = botPosition.transform.localRotation;
                     gameObject.SetActive(false);
                 }
                 else
@@ -39,29 +42,31 @@ namespace Managers
                 }
             }
         }
-
+        
         #endregion
 
         #region Serialized Variables
-        
-        [SerializeField] private OutSideStateLevels stageLevel;
-        [SerializeField] private TextMeshPro tmp;
 
+        [SerializeField] private GameObject botPosition;
+        [SerializeField] private TextMeshPro tmp;
+        
+        
         #endregion
 
         #region Private Variables
 
-        [ShowInInspector]private OutsideData _data;
+        [ShowInInspector]private AmmoWorkerBuyData _data;
         [ShowInInspector]private int _payedAmount;
         private Coroutine _buyCoroutine;
         private int _remainingAmount;
         private ScoreDataParams _scoreCache;
         private GameObject _textParentGameObject;
 
-        #endregion
 
         #endregion
 
+        #endregion
+        
         private void Awake()
         {
             _textParentGameObject = tmp.transform.parent.gameObject;
@@ -76,12 +81,12 @@ namespace Managers
 
         private void SubscribeEvents()
         {
-            DataTransferSignals.Instance.onGettedOutSideData += OnSetData;
+            DataTransferSignals.Instance.onGettedSupporterData += OnSetData;
         }
 
         private void UnsubscribeEvents()
         {
-            DataTransferSignals.Instance.onGettedOutSideData -= OnSetData;
+            DataTransferSignals.Instance.onGettedSupporterData -= OnSetData;
         }
 
         private void OnDisable()
@@ -93,8 +98,8 @@ namespace Managers
         
         private void OnSetData()
         {
-            _data = DataTransferSignals.Instance.onGetOutsideData(stageLevel);
-            PayedAmount = DataTransferSignals.Instance.onGetPayedStageData(stageLevel);
+            _data = DataTransferSignals.Instance.onGetAmmoWorkerData();
+            PayedAmount = DataTransferSignals.Instance.onGetPayedWorkerAreaData();
             BuyAreaImageChange();
         }
         
@@ -125,7 +130,7 @@ namespace Managers
             if (_buyCoroutine == null) return;
             StopCoroutine(_buyCoroutine);
             _buyCoroutine = null;
-            DataTransferSignals.Instance.onOutsideBuyedItems?.Invoke(stageLevel,_payedAmount);
+            DataTransferSignals.Instance.onAmmoWorkerAreaBuyedItems?.Invoke(_payedAmount);
         }
         
         private IEnumerator Buy()
@@ -138,9 +143,9 @@ namespace Managers
                 yield return waitForSecond;
             }
             _buyCoroutine = null;
-            DataTransferSignals.Instance.onOutsideBuyedItems?.Invoke(stageLevel,_payedAmount);
+            DataTransferSignals.Instance.onAmmoWorkerAreaBuyedItems?.Invoke(_payedAmount);
         }
-
+        
         private void SetText(int remainingAmount)
         {
             tmp.text = remainingAmount.ToString();

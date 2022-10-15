@@ -182,9 +182,9 @@ namespace Managers
             _spawnDatasCache[(int)type].CurrentCount--;
         }
 
-        private void OnHostageRemoveList(GameObject gameObject)
+        private void OnHostageRemoveList(GameObject hostage)
         {
-            _hostageSpawnControlList[_hostageSpawnControlList.IndexOf(gameObject)] = null;
+            _hostageSpawnControlList[_hostageSpawnControlList.IndexOf(hostage)] = null;
         }
 
         private GameObject OnGetTarget() => turretPoints[_randomTurretPoints];
