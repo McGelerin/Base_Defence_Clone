@@ -22,6 +22,7 @@ namespace Managers
 
         #region Serializefield Variables
 
+        [SerializeField] private GameObject baseCenter;
         [SerializeField] private GameObject backDoor;
         [SerializeField] private BaseStage baseStage;
         [SerializeField] private TextMeshPro tmp;
@@ -64,6 +65,7 @@ namespace Managers
             DataTransferSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
             IdleSignals.Instance.onGetWarHousePositon += OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
+            WorkerSignals.Instance.onGetBaseCenter += OnGetBaseCenter;
         }
 
         private void UnsubscribeEvents()
@@ -77,6 +79,7 @@ namespace Managers
             DataTransferSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
             IdleSignals.Instance.onGetWarHousePositon -= OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
+            WorkerSignals.Instance.onGetBaseCenter -= OnGetBaseCenter;
         }
 
         private void OnDisable()
@@ -153,6 +156,8 @@ namespace Managers
         private AreaDataParams OnGetAreaDatas() => _areaData;
         
         private Transform OnGetWareHousePosition() => wareHouse.transform;
+
+        private GameObject OnGetBaseCenter() => baseCenter;
 
         private void SetBaseLevelText()
         {

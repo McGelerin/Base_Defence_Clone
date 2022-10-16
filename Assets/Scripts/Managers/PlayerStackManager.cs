@@ -30,8 +30,8 @@ namespace Managers
         private StackData _ammoStackData;
         private Vector3 _stackPositionCache;
 
-        private DinamicStackItemPosition _moneyDinamicStackItemPosition;
-        private DinamicStackItemPosition _ammoDinamicStackItemPosition;
+        private DynamicStackItemPosition _moneyDynamicStackItemPosition;
+        private DynamicStackItemPosition _ammoDynamicStackItemPosition;
         private ItemAddOnStack _objAddOnStack;
         private AddMoneyStackToScore _addMoneyStackToScore;
         private RemoveAmmoStackItems _removeAmmoStackItems;
@@ -46,8 +46,8 @@ namespace Managers
         {
             _moneyStackData = Resources.Load<CD_PlayerData>("Data/CD_Player").MoneyStackData;
             _ammoStackData = Resources.Load<CD_PlayerData>("Data/CD_Player").AmmoStackData;
-            _moneyDinamicStackItemPosition = new DinamicStackItemPosition(ref _stackList,ref _moneyStackData, ref stackHolder);
-            _ammoDinamicStackItemPosition = new DinamicStackItemPosition(ref _stackList, ref _ammoStackData, ref stackHolder);
+            _moneyDynamicStackItemPosition = new DynamicStackItemPosition(ref _stackList,ref _moneyStackData, ref stackHolder);
+            _ammoDynamicStackItemPosition = new DynamicStackItemPosition(ref _stackList, ref _ammoStackData, ref stackHolder);
             _objAddOnStack = new ItemAddOnStack(ref _stackList, ref stackHolder, ref _moneyStackData);
             _addMoneyStackToScore = new AddMoneyStackToScore(ref _stackList);
 
@@ -114,7 +114,7 @@ namespace Managers
             _stackType = StackType.Money;
             if (_stackList.Count >= _moneyStackData.Capacity) return;
             money.GetComponent<BoxCollider>().enabled = false;
-            _stackPositionCache = _moneyDinamicStackItemPosition.Execute(_stackPositionCache);
+            _stackPositionCache = _moneyDynamicStackItemPosition.Execute(_stackPositionCache);
             _objAddOnStack.Execute(money,_stackPositionCache);
         }
 
@@ -145,7 +145,7 @@ namespace Managers
             while (_stackList.Count < _ammoStackData.Capacity)
             {
                 _stackType = StackType.Ammo;
-                _stackPositionCache = _ammoDinamicStackItemPosition.Execute(_stackPositionCache);
+                _stackPositionCache = _ammoDynamicStackItemPosition.Execute(_stackPositionCache);
                 var obj = PoolSignals.Instance.onGetPoolObject(PoolType.AmmoBox.ToString(), ammoArea);
                 _objAddOnStack.Execute(obj,_stackPositionCache);
                 yield return waitForSeconds;

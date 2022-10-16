@@ -38,7 +38,7 @@ namespace AIBrain
         private Vector3 _stackPositionCache;
         private List<GameObject> _stackList = new List<GameObject>();
         private ItemAddOnStack _objAddOnStack;
-        private DinamicStackItemPosition _ammoDinamicStackItemPosition;
+        private DynamicStackItemPosition _ammoDynamicStackItemPosition;
         private WaitForSeconds _waitForSeconds = new WaitForSeconds(0.3f);
 
         #region States
@@ -60,7 +60,7 @@ namespace AIBrain
         {
             _data = GetTurretData();
             var brain = this;
-            _ammoDinamicStackItemPosition = new DinamicStackItemPosition(ref _stackList, ref _data.WorkerStackData, ref stackHolder);
+            _ammoDynamicStackItemPosition = new DynamicStackItemPosition(ref _stackList, ref _data.WorkerStackData, ref stackHolder);
             _objAddOnStack = new ItemAddOnStack(ref _stackList, ref stackHolder, ref _data.WorkerStackData);
             _moveToWareHouse = new MoveToWareHouseArea(ref brain, ref agent);
             _waitForFullStack = new WaitForFullStack(ref brain, ref agent);
@@ -168,7 +168,7 @@ namespace AIBrain
         {
             while (_stackList.Count < _data.WorkerStackData.Capacity)
             {
-                _stackPositionCache = _ammoDinamicStackItemPosition.Execute(_stackPositionCache);
+                _stackPositionCache = _ammoDynamicStackItemPosition.Execute(_stackPositionCache);
                 var obj = PoolSignals.Instance.onGetPoolObject(PoolType.AmmoBox.ToString(), Target.transform);
                 _objAddOnStack.Execute(obj,_stackPositionCache);
                 yield return _waitForSeconds;

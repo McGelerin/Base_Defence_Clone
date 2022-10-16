@@ -4,6 +4,7 @@ using Data.UnityObject;
 using Data.ValueObject;
 using Signals;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Managers
@@ -16,8 +17,10 @@ namespace Managers
 
         private GameObject _turretArea;
         private StaticStackData _turretData;
-        [ShowInInspector]private Dictionary<GameObject,List<GameObject>> _turretAmmoAreas = new Dictionary<GameObject, List<GameObject>>();
-        
+        private Dictionary<GameObject,List<GameObject>> _turretAmmoAreas = new Dictionary<GameObject, List<GameObject>>();
+        private List<GameObject> _moneyList = new List<GameObject>();
+        private GameObject _targetMoneyCache;
+
         #endregion
 
         private void Awake()
@@ -40,12 +43,18 @@ namespace Managers
         {
             WorkerSignals.Instance.onTurretAmmoAreas += OnTurretAmmoAreas;
             WorkerSignals.Instance.onGetTurretArea += OnGetTurretArea;
+            WorkerSignals.Instance.onAddListToMoney += OnAddListToMoney;
+            WorkerSignals.Instance.onRemoveMoneyFromList += OnRemoveMoneyFromList;
+            WorkerSignals.Instance.onGetMoneyGameObject += OnGetMoneyGameObject;
         }
 
         private void UnsubscribeEvents()
         {
             WorkerSignals.Instance.onTurretAmmoAreas -= OnTurretAmmoAreas;
             WorkerSignals.Instance.onGetTurretArea -= OnGetTurretArea;
+            WorkerSignals.Instance.onAddListToMoney -= OnAddListToMoney;
+            WorkerSignals.Instance.onRemoveMoneyFromList -= OnRemoveMoneyFromList;
+            WorkerSignals.Instance.onGetMoneyGameObject -= OnGetMoneyGameObject;
         }
 
         private void OnDisable()
@@ -71,6 +80,31 @@ namespace Managers
                 _turretArea = VARIABLE.Key;
             }
             return _turretArea;
+        }
+
+        private void OnAddListToMoney(GameObject money)
+        {
+            if (!_moneyList.Contains(money))
+            {
+                _moneyList.Add(money);
+            }
+        }
+
+        private void OnRemoveMoneyFromList(GameObject money)
+        {
+            _moneyList.Remove(money);
+            _moneyList.TrimExcess();
+            if (money == _targetMoneyCache)
+            {
+                WorkerSignals.Instance.onChangeDestination?.Invoke();
+            }
+        }
+
+        private GameObject OnGetMoneyGameObject()
+        {
+            if (_moneyList.IsNullOrEmpty()) return null;
+            _targetMoneyCache = _moneyList[0];
+            return _targetMoneyCache;
         }
     }
 }
