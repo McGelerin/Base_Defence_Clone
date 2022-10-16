@@ -41,7 +41,9 @@ namespace States.MoneyWorker
             if (other.CompareTag("BarrierInSide"))
             {
                 _manager.InteractBarrierArea();
-                _manager.SwitchState(MoneyWorkerStates.MoveToBase);
+                _manager.SwitchState(_manager.Target == null 
+                    ? MoneyWorkerStates.MoveToBase 
+                    : MoneyWorkerStates.MoveToMoneyPosition);
             }
         }
     }

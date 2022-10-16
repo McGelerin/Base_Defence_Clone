@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class AmmoWorkerBuyAreaManager : MonoBehaviour
+    public class MoneyWorkerBuyAreaManager : MonoBehaviour
     {
         #region Self Variables
 
@@ -29,11 +29,11 @@ namespace Managers
                     {
                         StopCoroutine(_buyCoroutine);
                         _buyCoroutine = null;
-                        DataTransferSignals.Instance.onAmmoWorkerAreaBuyedItems?.Invoke(_payedAmount);
+                        DataTransferSignals.Instance.onMoneyWorkerAreaBuyedItems?.Invoke(_payedAmount);
                     }
 
-                    var ammoWorker =PoolSignals.Instance.onGetPoolObject(PoolType.AmmoWorker.ToString(), botPosition.transform);
-                    ammoWorker.transform.localRotation = botPosition.transform.localRotation;
+                    var moneyWorker =PoolSignals.Instance.onGetPoolObject(PoolType.MoneyWorker.ToString(), botPosition.transform);
+                    moneyWorker.transform.localRotation = botPosition.transform.localRotation;
                     gameObject.SetActive(false);
                 }
                 else
@@ -55,7 +55,7 @@ namespace Managers
 
         #region Private Variables
 
-        [ShowInInspector]private AmmoWorkerBuyData _data;
+        [ShowInInspector]private MoneyWorkerBuyData _data;
         [ShowInInspector]private int _payedAmount;
         private Coroutine _buyCoroutine;
         private int _remainingAmount;
@@ -98,8 +98,8 @@ namespace Managers
         
         private void OnSetData()
         {
-            _data = DataTransferSignals.Instance.onGetAmmoWorkerData();
-            PayedAmount = DataTransferSignals.Instance.onGetPayedAmmoWorkerData();
+            _data = DataTransferSignals.Instance.onGetMoneyWorkerData();
+            PayedAmount = DataTransferSignals.Instance.onGetPayedMoneyWorkerData();
             BuyAreaImageChange();
         }
         
@@ -130,7 +130,7 @@ namespace Managers
             if (_buyCoroutine == null) return;
             StopCoroutine(_buyCoroutine);
             _buyCoroutine = null;
-            DataTransferSignals.Instance.onAmmoWorkerAreaBuyedItems?.Invoke(_payedAmount);
+            DataTransferSignals.Instance.onMoneyWorkerAreaBuyedItems?.Invoke(_payedAmount);
         }
         
         private IEnumerator Buy()
@@ -143,7 +143,7 @@ namespace Managers
                 yield return waitForSecond;
             }
             _buyCoroutine = null;
-            DataTransferSignals.Instance.onAmmoWorkerAreaBuyedItems?.Invoke(_payedAmount);
+            DataTransferSignals.Instance.onMoneyWorkerAreaBuyedItems?.Invoke(_payedAmount);
         }
         
         private void SetText(int remainingAmount)

@@ -40,9 +40,12 @@ namespace Signals
         
         public UnityAction onGettedSupporterData = delegate {  };
         public Func<AmmoWorkerBuyData> onGetAmmoWorkerData = delegate { return default;};
-        public Func<int> onGetPayedWorkerAreaData = delegate { return default;};
+        public Func<int> onGetPayedAmmoWorkerData = delegate { return default;};
         public UnityAction<int> onAmmoWorkerAreaBuyedItems = delegate {  };
         
+        public Func<MoneyWorkerBuyData> onGetMoneyWorkerData = delegate { return default;};
+        public Func<int> onGetPayedMoneyWorkerData = delegate { return default;};
+        public UnityAction<int> onMoneyWorkerAreaBuyedItems = delegate {  };
         #endregion
     }
 }

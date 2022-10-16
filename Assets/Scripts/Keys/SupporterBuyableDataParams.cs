@@ -5,6 +5,6 @@ namespace Keys
     public struct SupporterBuyableDataParams
     {
         public int AmmoWorkerPayedAmount;
-        //moneyworkerpayedMoney
+        public int MoneyWorkerPayedAmount;
     }
 }

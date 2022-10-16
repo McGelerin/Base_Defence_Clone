@@ -15,6 +15,7 @@
         Ak47,
         Bullet,
         AmmoBox,
-        AmmoWorker
+        AmmoWorker,
+        MoneyWorker
     }
 }

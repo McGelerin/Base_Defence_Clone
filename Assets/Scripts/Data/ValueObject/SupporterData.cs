@@ -6,6 +6,6 @@ namespace Data.ValueObject
     public class SupporterData
     {
         public AmmoWorkerBuyData AmmoWorkerBuyData;
-        // maybe moneyworker data
+        public MoneyWorkerBuyData MoneyWorkerBuyData;
     }
 }

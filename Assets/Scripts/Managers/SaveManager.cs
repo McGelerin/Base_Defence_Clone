@@ -99,10 +99,13 @@ namespace Managers
         {
             _supporterBuyableDataCache = new SupporterBuyableDataParams()
             {
-                AmmoWorkerPayedAmount = SaveSignals.Instance.onSaveSupporterData().AmmoWorkerPayedAmount
+                AmmoWorkerPayedAmount = SaveSignals.Instance.onSaveSupporterData().AmmoWorkerPayedAmount,
+                MoneyWorkerPayedAmount = SaveSignals.Instance.onSaveSupporterData().MoneyWorkerPayedAmount
             };
             if (_supporterBuyableDataCache.AmmoWorkerPayedAmount != 0)ES3.Save("AmmoWorkerPayedAmount",
                 _supporterBuyableDataCache.AmmoWorkerPayedAmount,"SupporterData.es3");
+            if (_supporterBuyableDataCache.MoneyWorkerPayedAmount != 0)ES3.Save("MoneyWorkerPayedAmount",
+                _supporterBuyableDataCache.MoneyWorkerPayedAmount,"SupporterData.es3");
         }
 
         private void OnOutsideStageDataSave()
@@ -157,7 +160,10 @@ namespace Managers
             {
                 AmmoWorkerPayedAmount = ES3.KeyExists("AmmoWorkerPayedAmount", "SupporterData.es3")
                     ? ES3.Load<int>("AmmoWorkerPayedAmount", "SupporterData.es3")
-                    : 0
+                    : 0,
+                MoneyWorkerPayedAmount = ES3.KeyExists("MoneyWorkerPayedAmount", "SupporterData.es3")
+                    ? ES3.Load<int>("MoneyWorkerPayedAmount", "SupporterData.es3")
+                    :0
             };
         }
     }

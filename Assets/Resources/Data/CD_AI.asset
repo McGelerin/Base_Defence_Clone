@@ -35,3 +35,10 @@ MonoBehaviour:
       StackCountX: 2
       StackCountY: 3
       StackOffset: {x: 2, y: 2, z: 2}
+  MoneyWorkerData:
+    WorkerStackData:
+      Capacity: 10
+      InitPosition: {x: 0, y: 0, z: 0}
+      StackCountX: 1
+      StackCountY: 4
+      StackOffset: {x: 2, y: 5, z: 2}
