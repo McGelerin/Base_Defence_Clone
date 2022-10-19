@@ -107,7 +107,7 @@ namespace AIBrain
         }
         public void TakeAmmoDamage()
         {
-            _health -= AttackSignals.Instance.onGetWeaponDamage();
+            _health -= AttackSignals.Instance.onGetAmmoDamage();
         }
 
         public bool HealthCheck()
@@ -130,10 +130,11 @@ namespace AIBrain
         {
             WaitForSeconds wait = new WaitForSeconds(1f);
             AnimBoolState(EnemyStates.Death , true);
-            AttackSignals.Instance.onEnemyDead?.Invoke(enemyBody);
             IdleSignals.Instance.onEnemyDead?.Invoke(TurretTarget,enemyType);
             yield return wait;
             PrizeMoney();
+            AttackSignals.Instance.onEnemyDead?.Invoke(enemyBody);
+            yield return new WaitForSeconds(0.1f);
             PoolSignals.Instance.onReleasePoolObject?.Invoke(enemyType.ToString(), gameObject);
         }
 

@@ -129,7 +129,9 @@ namespace AIBrain
             else
             {
                 Target = WorkerSignals.Instance.onGetMoneyGameObject();
-                SwitchState(Target == null ? MoneyWorkerStates.MoveToBase : MoneyWorkerStates.MoveToMoneyPosition);
+                SwitchState(Target == null 
+                    ? MoneyWorkerStates.MoveToBase 
+                    : MoneyWorkerStates.MoveToMoneyPosition);
             }
         }
 
@@ -144,6 +146,7 @@ namespace AIBrain
             money.GetComponent<BoxCollider>().enabled = false;
             _stackPositionCache = _moneyDynamicStackItemPosition.Execute(_stackPositionCache);
             _objAddOnStack.Execute(money,_stackPositionCache);
+            WorkerSignals.Instance.onRemoveMoneyFromList?.Invoke(money);
         }
         
         public void InteractBarrierArea()

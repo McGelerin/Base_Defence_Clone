@@ -1,5 +1,4 @@
-﻿using System;
-using Signals;
+﻿using Signals;
 using UnityEngine;
 
 namespace Controllers
@@ -25,14 +24,6 @@ namespace Controllers
         {
             transform.rotation = Quaternion.identity;
             boxCollider.enabled = true;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Player") || other.CompareTag("MoneyWorker"))
-            {
-                WorkerSignals.Instance.onRemoveMoneyFromList?.Invoke(gameObject);
-            }
         }
     }
 }

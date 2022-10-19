@@ -116,6 +116,7 @@ namespace Managers
             money.GetComponent<BoxCollider>().enabled = false;
             _stackPositionCache = _moneyDynamicStackItemPosition.Execute(_stackPositionCache);
             _objAddOnStack.Execute(money,_stackPositionCache);
+            WorkerSignals.Instance.onRemoveMoneyFromList?.Invoke(money);
         }
 
         public void InteractWareHouseArea(Transform ammoArea,bool isTriggerAmmoArea)

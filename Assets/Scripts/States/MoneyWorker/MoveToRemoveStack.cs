@@ -2,6 +2,7 @@
 using Abstract;
 using AIBrain;
 using Enums;
+using Signals;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,7 +34,12 @@ namespace States.MoneyWorker
 
         public override void UpdateState()
         {
+            Debug.Log("money to stack");
             _manager.AnimFloatState(_agent.velocity.magnitude);
+            if (_agent.remainingDistance <= 0.2f)
+            {
+                _manager.SwitchState(MoneyWorkerStates.MoveToBase);
+            }
         }
 
         public override void OnTriggerEnterState(Collider other)
@@ -41,6 +47,7 @@ namespace States.MoneyWorker
             if (other.CompareTag("BarrierInSide"))
             {
                 _manager.InteractBarrierArea();
+                _manager.Target = WorkerSignals.Instance.onGetMoneyGameObject();
                 _manager.SwitchState(_manager.Target == null 
                     ? MoneyWorkerStates.MoveToBase 
                     : MoneyWorkerStates.MoveToMoneyPosition);

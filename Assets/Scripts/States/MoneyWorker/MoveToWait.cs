@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 namespace States.MoneyWorker
 {
-    public class MoveToBase : MoneyWorkerBaseState
+    public class MoveToWait : MoneyWorkerBaseState
     {
         #region Self Variables
 
@@ -22,7 +22,7 @@ namespace States.MoneyWorker
 
         #endregion
 
-        public MoveToBase(ref MoneyWorkerAIBrain manager, ref NavMeshAgent agent)
+        public MoveToWait(ref MoneyWorkerAIBrain manager, ref NavMeshAgent agent)
         {
             _manager = manager;
             _agent = agent;
@@ -57,6 +57,16 @@ namespace States.MoneyWorker
             _currentTime = 0;
         }
 
-        public override void OnTriggerEnterState(Collider other) { }
+        public override void OnTriggerEnterState(Collider other)
+        {
+            if (other.CompareTag("BarrierInSide"))
+            {
+                _manager.InteractBarrierArea();
+                _manager.Target = WorkerSignals.Instance.onGetMoneyGameObject();
+                _manager.SwitchState(_manager.Target == null 
+                    ? MoneyWorkerStates.MoveToBase 
+                    : MoneyWorkerStates.MoveToMoneyPosition);
+            }
+        }
     }
 }

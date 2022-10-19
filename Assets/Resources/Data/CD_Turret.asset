@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TurretData:
     TurretRange: 0
-    AttackDelay: 1
+    AttackDelay: 0.5
     RotateDelay: 0.2
     AmmoCapacity: 10
     AmmoDamage: 5

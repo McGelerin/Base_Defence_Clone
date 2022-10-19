@@ -38,12 +38,12 @@ namespace States.Enemy
 
         public override void UpdateState()
         {
+            _manager.AnimBoolState(EnemyStates.Idle, _data.AttackRange > _agent.remainingDistance);
+            
             if (_manager.HealthCheck())
             {
                 _manager.SwitchState(EnemyStates.Death);
             }
-
-            _manager.AnimBoolState(EnemyStates.Idle, _data.AttackRange > _agent.remainingDistance);
         }
 
         public override void OnTriggerEnterState(Collider other)

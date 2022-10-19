@@ -18,20 +18,18 @@ namespace Managers
         private GameObject _turretArea;
         private StaticStackData _turretData;
         private Dictionary<GameObject,List<GameObject>> _turretAmmoAreas = new Dictionary<GameObject, List<GameObject>>();
-        private List<GameObject> _moneyList = new List<GameObject>();
+        [ShowInInspector]private List<GameObject> _moneyList = new List<GameObject>();
         private GameObject _targetMoneyCache;
 
         #endregion
-
+        #endregion
         private void Awake()
         {
             _turretData = GetTurretData();
         }
         
         private StaticStackData GetTurretData() => Resources.Load<CD_Turret>("Data/CD_Turret").TurretData.TurretStackData;
-
-        #endregion
-
+        
         #region Event Subscription
 
         private void OnEnable()
@@ -84,14 +82,17 @@ namespace Managers
 
         private void OnAddListToMoney(GameObject money)
         {
+            Debug.Log("Mony bağırdı");
             if (!_moneyList.Contains(money))
             {
+                Debug.Log("Mony eklendi");
                 _moneyList.Add(money);
             }
         }
 
         private void OnRemoveMoneyFromList(GameObject money)
         {
+            Debug.Log("sildi");
             _moneyList.Remove(money);
             _moneyList.TrimExcess();
             if (money == _targetMoneyCache)

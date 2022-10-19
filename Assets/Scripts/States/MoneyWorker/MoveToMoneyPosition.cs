@@ -34,6 +34,7 @@ namespace States.MoneyWorker
 
         public override void UpdateState()
         {
+            Debug.Log("move to money");
             _manager.AnimFloatState(_agent.velocity.magnitude);
             _currentTime += Time.deltaTime;
             if (!(_currentTime >= 1f))
