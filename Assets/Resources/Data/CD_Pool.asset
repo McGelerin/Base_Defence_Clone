@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CD_Pool
   m_EditorClassIdentifier: 
   PoolValueDatas:
-    m_Keys: 0000000002000000030000000500000006000000070000000c00000008000000090000000a0000000b000000040000000d0000000e000000
+    m_Keys: 0000000002000000030000000500000006000000070000000c00000008000000090000000a0000000b000000040000000d0000000e0000000f00000010000000
     m_Values:
     - ObjectLimit: 40
       PooledObject: {fileID: 2980977172278769893, guid: 5af2ad45c65c392438653a29acef5c06, type: 3}
@@ -43,3 +43,7 @@ MonoBehaviour:
       PooledObject: {fileID: 2118468669246769685, guid: fd7561c5d87ba6b48acc4f671f232303, type: 3}
     - ObjectLimit: 1
       PooledObject: {fileID: 2118468669246769685, guid: 20c8015140d4b2246869e7f0fd955fdc, type: 3}
+    - ObjectLimit: 5
+      PooledObject: {fileID: 2390034795183758345, guid: 0629b434699c68e4e812a59d23a96d7a, type: 3}
+    - ObjectLimit: 30
+      PooledObject: {fileID: 5135668884997208679, guid: fd74dba11c0957b42b9dd4d5459f1457, type: 3}

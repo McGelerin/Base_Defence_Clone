@@ -63,16 +63,16 @@ namespace Managers
         private void Subscribe()
         {
             StackSignals.Instance.onGetHostageTarget += OnGetHostageTarget;
-            StackSignals.Instance.onLastGameObjectRemone += OnLastHostageRemove;
-            StackSignals.Instance.onGetHostageList += onGetHostageList;
+            StackSignals.Instance.onLastGameObjectRemove += OnLastHostageRemove;
+            StackSignals.Instance.onGetHostageList += OnGetHostageList;
         }
 
 
         private void Unsubscribe()
         {
             StackSignals.Instance.onGetHostageTarget -= OnGetHostageTarget;
-            StackSignals.Instance.onLastGameObjectRemone -= OnLastHostageRemove;
-            StackSignals.Instance.onGetHostageList -= onGetHostageList;
+            StackSignals.Instance.onLastGameObjectRemove -= OnLastHostageRemove;
+            StackSignals.Instance.onGetHostageList -= OnGetHostageList;
         }
         
         private void OnDisable()
@@ -99,14 +99,17 @@ namespace Managers
             return _hostageList[_hostageList.Count - 2];
         }
 
-        private void OnLastHostageRemove ()
+        private void OnLastHostageRemove(bool sendPool)
         {
-            PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Hostage.ToString(),_hostageList.Last());
+            if (sendPool)
+            {
+                PoolSignals.Instance.onReleasePoolObject?.Invoke(PoolType.Hostage.ToString(),_hostageList.Last());
+            }
             _hostageList.Remove(_hostageList.Last());
             _hostageList.TrimExcess();
         }
         
-        private List<GameObject> onGetHostageList() => _hostageList;
+        private List<GameObject> OnGetHostageList() => _hostageList;
 
         public void InteractMoney(GameObject money)
         {

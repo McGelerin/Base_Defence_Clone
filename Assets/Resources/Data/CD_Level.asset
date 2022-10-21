@@ -55,6 +55,8 @@ MonoBehaviour:
           StackCountZ: 5
           StackOffset: {x: 2, y: 2, z: 2}
           Delay: 0
+      SoldierAreaData:
+        MaxWorkerAmount: 0
     FrontYardData:
       OutsideLevelData:
       - PayType: 1
@@ -83,3 +85,92 @@ MonoBehaviour:
       MoneyWorkerBuyData:
         PayType: 0
         Cost: 800
+  - BaseData:
+      BaseRoomDatas:
+        Rooms:
+        - PayType: 0
+          Cost: 0
+          RoomName: 0
+          Isbase: 0
+          buyableTurretData:
+            PayType: 0
+            Cost: 500
+        - PayType: 0
+          Cost: 0
+          RoomName: 1
+          Isbase: 0
+          buyableTurretData:
+            PayType: 0
+            Cost: 500
+        - PayType: 0
+          Cost: 600
+          RoomName: 2
+          Isbase: 0
+          buyableTurretData:
+            PayType: 0
+            Cost: 800
+        - PayType: 0
+          Cost: 600
+          RoomName: 3
+          Isbase: 0
+          buyableTurretData:
+            PayType: 0
+            Cost: 800
+        - PayType: 0
+          Cost: 1600
+          RoomName: 4
+          Isbase: 0
+          buyableTurretData:
+            PayType: 0
+            Cost: 1000
+        - PayType: 0
+          Cost: 1600
+          RoomName: 5
+          Isbase: 0
+          buyableTurretData:
+            PayType: 0
+            Cost: 1000
+      MineAreaData:
+        MaxWorkerAmound: 15
+        CurrentWorkerAmound: 0
+        MaxWorkerFromMine: 5
+        StaticStackData:
+          Capacity: 0
+          InitPosition: {x: -1, y: 0.3, z: 1}
+          StackCountX: 5
+          StackCountZ: 5
+          StackOffset: {x: 2, y: 2, z: 2}
+          Delay: 0
+      SoldierAreaData:
+        MaxWorkerAmount: 4
+    FrontYardData:
+      OutsideLevelData:
+      - PayType: 1
+        Cost: 500
+        levels: 0
+      - PayType: 1
+        Cost: 750
+        levels: 1
+      - PayType: 1
+        Cost: 900
+        levels: 2
+      - PayType: 1
+        Cost: 1000
+        levels: 3
+      - PayType: 1
+        Cost: 1200
+        levels: 4
+      SpawnDatas:
+      - EnemyType: 0
+        EnemyCount: 8
+        CurrentCount: 0
+      - EnemyType: 1
+        EnemyCount: 3
+        CurrentCount: 0
+    SupporterData:
+      AmmoWorkerBuyData:
+        PayType: 0
+        Cost: 1000
+      MoneyWorkerBuyData:
+        PayType: 0
+        Cost: 1500

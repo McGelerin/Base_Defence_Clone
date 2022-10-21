@@ -18,6 +18,9 @@ TagManager:
   - TurretAmmoArea
   - TurretAttackRadius
   - MoneyWorker
+  - SoldierBullet
+  - SoldierAttackRadius
+  - SoldierBarrack
   layers:
   - Default
   - TransparentFX

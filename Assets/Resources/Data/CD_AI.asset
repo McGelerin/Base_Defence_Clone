@@ -42,3 +42,8 @@ MonoBehaviour:
       StackCountX: 1
       StackCountY: 8
       StackOffset: {x: 1, y: 5, z: 4}
+  SoldierAIData:
+    Health: 50
+    Damage: 10
+    AttackDelay: 0.5
+    AttackRange: 5

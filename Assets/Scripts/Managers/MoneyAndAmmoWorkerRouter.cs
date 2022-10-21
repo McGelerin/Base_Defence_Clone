@@ -82,17 +82,14 @@ namespace Managers
 
         private void OnAddListToMoney(GameObject money)
         {
-            Debug.Log("Mony bağırdı");
             if (!_moneyList.Contains(money))
             {
-                Debug.Log("Mony eklendi");
                 _moneyList.Add(money);
             }
         }
 
         private void OnRemoveMoneyFromList(GameObject money)
         {
-            Debug.Log("sildi");
             _moneyList.Remove(money);
             _moneyList.TrimExcess();
             if (money == _targetMoneyCache)

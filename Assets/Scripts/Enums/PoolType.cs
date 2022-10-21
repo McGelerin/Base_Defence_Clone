@@ -16,6 +16,8 @@
         Bullet,
         AmmoBox,
         AmmoWorker,
-        MoneyWorker
+        MoneyWorker,
+        Soldier,
+        SoldierBullet
     }
 }

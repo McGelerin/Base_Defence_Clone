@@ -30,7 +30,7 @@ namespace Managers
         private MineAreaData _data;
         private List<int> _capacity;
         private List<GameObject>_gemHolderGameObjects = new List<GameObject>();
-        private List<GameObject> _hostageGameObjects = new List<GameObject>();
+        [ShowInInspector]private List<GameObject> _hostageGameObjects;
         private List<GameObject>_gemHolderGameObjectsCache;
         private StaticStackItemPosition _staticStackItemPosition;
         private StaticItemAddOnStack _staticItemAddOnStack;
@@ -80,6 +80,7 @@ namespace Managers
                 ref gemAreaHolder);
             _staticItemAddOnStack =
                 new StaticItemAddOnStack(ref _gemHolderGameObjects, ref _data.StaticStackData, ref gemAreaHolder);
+            _hostageGameObjects = StackSignals.Instance.onGetHostageList();
             SetText();
         }
 
@@ -111,15 +112,12 @@ namespace Managers
             miner.position = position;
             GameObject gem = PoolSignals.Instance.onGetPoolObject(PoolType.Gem.ToString(), miner);
             SetGemPosition(gem);
-            
-            //_gemHolderGameObjects.Add(gem);
         }
 
         private void SetGemPosition(GameObject gem)
         {
             _direct = _staticStackItemPosition.Execute(_direct);
             _staticItemAddOnStack.Execute(gem,_direct);
-            //gem.transform.DOLocalMove(_direct,0.5f);
         }
         
         private GameObject OnGetMineGameObject()
@@ -140,16 +138,16 @@ namespace Managers
 
         public void PlayerEntryGemArea()
         {
-            _hostageGameObjects = StackSignals.Instance.onGetHostageList();
+            //_hostageGameObjects = StackSignals.Instance.onGetHostageList();
             if (_hostageGameObjects.Count <= 0) return;
-            while (_hostageGameObjects.Count<_data.MaxWorkerAmound)
+            while (_currentMiner < _data.MaxWorkerAmound)
             {
-                if(_currentMiner == _data.MaxWorkerAmound) break;
+                //if(_currentMiner == _data.MaxWorkerAmound) break;
                 if (_hostageGameObjects.Count <= 0) break;
                 GameObject miner = PoolSignals.Instance.onGetPoolObject(PoolType.Miner.ToString(), _hostageGameObjects.Last().transform);
                 miner.transform.rotation = _hostageGameObjects.Last().transform.rotation;
-                StackSignals.Instance.onLastGameObjectRemone?.Invoke();
-                _hostageGameObjects = StackSignals.Instance.onGetHostageList();
+                StackSignals.Instance.onLastGameObjectRemove?.Invoke(true);
+                //_hostageGameObjects = StackSignals.Instance.onGetHostageList();
                 _currentMiner++;
                 SetText();
             }

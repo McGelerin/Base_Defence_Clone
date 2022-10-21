@@ -34,7 +34,6 @@ namespace States.MoneyWorker
 
         public override void UpdateState()
         {
-            Debug.Log("money to stack");
             _manager.AnimFloatState(_agent.velocity.magnitude);
             if (_agent.remainingDistance <= 0.2f)
             {

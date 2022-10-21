@@ -1,6 +1,7 @@
 ﻿using System;
 using Abstract;
 using Enums;
+using Signals;
 using States.Hostage;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,6 +17,7 @@ namespace AIBrain
         public NavMeshAgent Agent;
         public HostageTerrifiedState HostageTerrifiedState;
         public HostageFollowState HostageFollowState;
+        public MoveToBarrack MoveToBarrackState;
         public GameObject Target;
 
         #endregion
@@ -39,14 +41,36 @@ namespace AIBrain
         {
             HostageTerrifiedState = new HostageTerrifiedState();
             HostageFollowState = new HostageFollowState();
+            MoveToBarrackState = new MoveToBarrack();
             Agent = GetComponent<NavMeshAgent>();
         }
 
+        #region Event Subscription
+        
         private void OnEnable()
         {
             _currentState = HostageTerrifiedState;
             _currentState.EnterState(this);
+            SubscribeEvents();
         }
+
+        private void SubscribeEvents()
+        {
+            IdleSignals.Instance.onPlayerEntrySoldierArea += OnPlayerEntrySoldierArea;
+        }
+
+        private void UnsubscribeEvents()
+        {
+            IdleSignals.Instance.onPlayerEntrySoldierArea -= OnPlayerEntrySoldierArea;
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeEvents();
+        }
+
+        #endregion
+
         
         private void Update()
         {
@@ -61,7 +85,7 @@ namespace AIBrain
             _currentState.OnTriggerEnterState(this,other);
         }
         
-        public void SwichState(HostageBaseStates state)//get set ile yapılabilir
+        public void SwitchState(HostageBaseStates state)
         {
             _currentState = state;
             _currentState.EnterState(this);
@@ -75,6 +99,14 @@ namespace AIBrain
         public void AnimBoolState(HostageAnimState animState,bool isFollow)
         {
             animator.SetBool(animState.ToString(),isFollow);
+        }
+
+        private void OnPlayerEntrySoldierArea(GameObject hostage)
+        {
+            if (hostage == gameObject)
+            {
+                SwitchState(MoveToBarrackState);
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Managers
         private AreaDataParams _areaData;
         [ShowInInspector]private Dictionary<RoomNameEnum,int> _payedRoomDatas;
         [ShowInInspector]private Dictionary<TurretNameEnum,int> _payedTurretDatas;
-        private int _baseLevel;
+        [ShowInInspector]private int _baseLevel = 0;
         #endregion
         #endregion
 
@@ -63,6 +63,7 @@ namespace Managers
             DataTransferSignals.Instance.onPayedRoomData += OnGetRoomPayedAmound;
             DataTransferSignals.Instance.onPayedTurretData += OnGetTurretPayedAmound;
             DataTransferSignals.Instance.onGetMineAreaData += OnGetMineAreaData;
+            DataTransferSignals.Instance.onGetSoldierAreaData += OnGetSoldierAreaData;
             IdleSignals.Instance.onGetWarHousePositon += OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData += OnGetAreaDatas;
             WorkerSignals.Instance.onGetBaseCenter += OnGetBaseCenter;
@@ -77,6 +78,7 @@ namespace Managers
             DataTransferSignals.Instance.onPayedRoomData -= OnGetRoomPayedAmound;
             DataTransferSignals.Instance.onPayedTurretData -= OnGetTurretPayedAmound;
             DataTransferSignals.Instance.onGetMineAreaData -= OnGetMineAreaData;
+            DataTransferSignals.Instance.onGetSoldierAreaData -= OnGetSoldierAreaData;
             IdleSignals.Instance.onGetWarHousePositon -= OnGetWareHousePosition;
             SaveSignals.Instance.onSaveAreaData -= OnGetAreaDatas;
             WorkerSignals.Instance.onGetBaseCenter -= OnGetBaseCenter;
@@ -113,10 +115,11 @@ namespace Managers
 
         private RoomData OnGetRoomData(RoomNameEnum roomName) =>  Data.BaseRoomDatas.Rooms[(int)roomName];
 
-        
         private BuyableTurretData OnGetTurretData(TurretNameEnum turret) => Data.BaseRoomDatas.Rooms[(int)turret].buyableTurretData;
 
         private MineAreaData OnGetMineAreaData() => Data.MineAreaData;
+        
+        private SoldierAreaData OnGetSoldierAreaData() => Data.SoldierAreaData;
 
         private int OnGetRoomPayedAmound(RoomNameEnum room)
         {

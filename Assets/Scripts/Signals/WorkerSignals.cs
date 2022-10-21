@@ -17,5 +17,8 @@ namespace Signals
         public UnityAction<GameObject> onRemoveMoneyFromList = delegate(GameObject arg0) {  };
         public UnityAction onChangeDestination = delegate {  };
         public Func<GameObject> onGetMoneyGameObject = delegate { return default;};
+        
+        public UnityAction onSoldierAttack = delegate {  };
+        public UnityAction onSoldierDeath = delegate {  };
     }
 }

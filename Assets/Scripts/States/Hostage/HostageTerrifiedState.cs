@@ -21,7 +21,7 @@ namespace States.Hostage
         {
             if (other.CompareTag("Player"))
             {
-                hostage.SwichState(hostage.HostageFollowState);
+                hostage.SwitchState(hostage.HostageFollowState);
                 IdleSignals.Instance.onHostageCollected?.Invoke(hostage.gameObject);
             }
         }

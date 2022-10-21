@@ -36,7 +36,6 @@ namespace States.MoneyWorker
 
         public override void UpdateState()
         {
-            Debug.Log("movetobase");
             _manager.AnimFloatState(_agent.velocity.magnitude);
             if (_agent.remainingDistance > 0.5f)
             {

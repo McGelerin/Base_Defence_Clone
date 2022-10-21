@@ -9,5 +9,6 @@ namespace Data.UnityObject
         public EnemyAIData EnemyAIData;
         public AmmoWorkerAIData AmmoWorkerAIData;
         public MoneyWorkerData MoneyWorkerData;
+        public SoldierAIData SoldierAIData;
     }
 }

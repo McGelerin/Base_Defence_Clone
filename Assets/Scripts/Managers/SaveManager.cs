@@ -118,7 +118,7 @@ namespace Managers
         {
             return ES3.KeyExists("Level", "Level.es3") 
                 ? ES3.Load<int>("Level", "Level.es3") 
-                : 0;
+                : 1;
         }
 
         private ScoreDataParams OnLoadScoreData()

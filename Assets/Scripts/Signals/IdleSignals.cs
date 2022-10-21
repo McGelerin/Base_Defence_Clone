@@ -1,5 +1,4 @@
 ﻿using System;
-using Data.ValueObject;
 using Enums;
 using Extentions;
 using UnityEngine;
@@ -45,5 +44,15 @@ namespace Signals
 
         #endregion
 
+        #region SoldierSignals
+
+        public Func<GameObject> onSoldierInitPosition = delegate { return default;};
+        public Func<GameObject> onSoldierSearchInitPosition = delegate { return default;};
+        public UnityAction<GameObject> onPlayerEntrySoldierArea = delegate(GameObject arg0) {  };
+        public Func<GameObject> onGetSoldierBarrack = delegate { return default;};
+        public UnityAction onHostageEntryBarrack = delegate {  };
+        
+        #endregion
+        
     }
 }

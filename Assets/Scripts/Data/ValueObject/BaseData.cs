@@ -7,5 +7,6 @@ namespace Data.ValueObject
     {
         public BaseRoomDatas BaseRoomDatas;
         public MineAreaData MineAreaData;
+        public SoldierAreaData SoldierAreaData;
     }
 }

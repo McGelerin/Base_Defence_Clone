@@ -128,7 +128,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.4454236, y: 0.49270466, z: 2.183689}
   m_Center: {x: -0.2211287, y: 0.25364769, z: 0.17560196}
---- !u!1 &2819923205712576098
+--- !u!1 &2715723655646449296
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -136,27 +136,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7533378359484244233}
+  - component: {fileID: 2699789132033074912}
   m_Layer: 0
-  m_Name: Holder
+  m_Name: SearchPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7533378359484244233
+--- !u!4 &2699789132033074912
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2819923205712576098}
+  m_GameObject: {fileID: 2715723655646449296}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 12.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5490281231417255768}
-  m_RootOrder: 2
+  m_Father: {fileID: 6647153490528256836}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3158723702096534840
 GameObject:
@@ -389,6 +389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6647153490528256836}
+  - component: {fileID: 6851918986893793221}
   m_Layer: 0
   m_Name: SoldierArea
   m_TagString: Untagged
@@ -410,13 +411,31 @@ Transform:
   - {fileID: 1210805222872184093}
   - {fileID: 6561597286209184945}
   - {fileID: 5490281231417255768}
+  - {fileID: 9185731309268369417}
   - {fileID: 1434496507832161450}
   - {fileID: 6530412247469065889}
   - {fileID: 6695834553084800037}
-  - {fileID: 9185731309268369417}
+  - {fileID: 2699789132033074912}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6851918986893793221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5376736324100199451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89456ab97f09418da2f96120f69ff78a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tmp: {fileID: 6509069063102787410}
+  soldierBarrackFrontDoor: {fileID: 2087710343566773928}
+  soldierBarrackBackDoor: {fileID: 8189729545936210206}
+  soldierSearchPosition: {fileID: 2715723655646449296}
+  soldierInitPositions: []
 --- !u!1 &5392906047913748941
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +548,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5490281231417255768}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -931,7 +950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9185731309268369417}
   m_Layer: 0
-  m_Name: SoldierPosition (3)
+  m_Name: SoldierPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -950,7 +969,7 @@ Transform:
   m_Children:
   - {fileID: 4709211760996981583}
   m_Father: {fileID: 6647153490528256836}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6721762501328485691
 GameObject:
@@ -962,7 +981,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6695834553084800037}
   m_Layer: 0
-  m_Name: SoldierPosition (2)
+  m_Name: SoldierPosition (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -981,7 +1000,7 @@ Transform:
   m_Children:
   - {fileID: 844554919452779951}
   m_Father: {fileID: 6647153490528256836}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6803690619474537832
 GameObject:
@@ -1075,7 +1094,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1434496507832161450}
   m_Layer: 0
-  m_Name: SoldierPosition
+  m_Name: SoldierPosition (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1094,7 +1113,7 @@ Transform:
   m_Children:
   - {fileID: 1128014936864160833}
   m_Father: {fileID: 6647153490528256836}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8721855371146981538
 GameObject:
@@ -1125,7 +1144,6 @@ Transform:
   m_Children:
   - {fileID: 1859680780306760696}
   - {fileID: 864671431478297276}
-  - {fileID: 7533378359484244233}
   - {fileID: 4415708388258857938}
   m_Father: {fileID: 6647153490528256836}
   m_RootOrder: 2
@@ -1140,7 +1158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6530412247469065889}
   m_Layer: 0
-  m_Name: SoldierPosition (1)
+  m_Name: SoldierPosition (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1159,7 +1177,7 @@ Transform:
   m_Children:
   - {fileID: 5968089601234536746}
   m_Father: {fileID: 6647153490528256836}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5562284790312571042
 PrefabInstance:
@@ -1233,5 +1251,15 @@ PrefabInstance:
 --- !u!4 &1210805222872184093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6772446701167338943, guid: e26db33de28d4634aa07717dcd0b3982, type: 3}
+  m_PrefabInstance: {fileID: 5562284790312571042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2087710343566773928 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5893028234422345226, guid: e26db33de28d4634aa07717dcd0b3982, type: 3}
+  m_PrefabInstance: {fileID: 5562284790312571042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8189729545936210206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4365948650190215612, guid: e26db33de28d4634aa07717dcd0b3982, type: 3}
   m_PrefabInstance: {fileID: 5562284790312571042}
   m_PrefabAsset: {fileID: 0}

@@ -11,7 +11,7 @@ namespace Signals
         #region Dinamic Stack
 
         public Func<GameObject,GameObject> onGetHostageTarget = delegate(GameObject o) { return default;  };
-        public UnityAction onLastGameObjectRemone = delegate {  };
+        public UnityAction<bool> onLastGameObjectRemove = delegate {  };
         public Func<List<GameObject>> onGetHostageList = delegate { return default;};
 
         #endregion
@@ -21,9 +21,6 @@ namespace Signals
         public UnityAction<GameObject, List<GameObject>> onInteractStackHolder = delegate{  };
         public UnityAction<GameObject> onDecreseStackHolder = delegate {  };
         
-
         #endregion
-
-
     }
 }

@@ -2209,6 +2209,10 @@ PrefabInstance:
       value: -0.001
       objectReference: {fileID: 0}
     - target: {fileID: 3814617866269558807, guid: fc8ef16fd8bc61d4882915a353eb908f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3814617866269558807, guid: fc8ef16fd8bc61d4882915a353eb908f, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -2317,6 +2321,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6039121758895527458, guid: fc8ef16fd8bc61d4882915a353eb908f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097782342243594730, guid: fc8ef16fd8bc61d4882915a353eb908f, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -2460,6 +2468,10 @@ PrefabInstance:
       propertyPath: tmp
       value: 
       objectReference: {fileID: 591352584511087781}
+    - target: {fileID: 8817416516524379527, guid: fc8ef16fd8bc61d4882915a353eb908f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8817416516524379527, guid: fc8ef16fd8bc61d4882915a353eb908f, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
@@ -2637,7 +2649,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.13333334
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 49a23c98a94b749469e076735a439c8e, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 249ad80a80a252a4c99df552b246221a, type: 2}
   m_BuildHeightMesh: 0
 --- !u!208 &5202561727827274841
 NavMeshObstacle:
@@ -2898,7 +2910,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 932166813086102934, guid: 92ca92ba0d2673a419d60084f1eda8c1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 92ca92ba0d2673a419d60084f1eda8c1, type: 3}
 --- !u!4 &8347854602649101933 stripped
 Transform:
