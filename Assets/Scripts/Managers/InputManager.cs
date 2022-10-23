@@ -12,12 +12,6 @@ namespace Managers
     {
         #region Self Variables
 
-        #region Public Variables
-
-       // [Header("Data")] public InputData Data;
-
-        #endregion
-
         #region Serialized Variables
 
         [SerializeField] private bool isReadyForTouch, isFirstTimeTouchTaken;
@@ -128,9 +122,7 @@ namespace Managers
         {
             _moveVector.x = Mathf.Lerp(_inputLerpCache.x,floatingJoystick.Horizontal, 0.4f);
             _moveVector.z = Mathf.Lerp(_inputLerpCache.z,floatingJoystick.Vertical , 0.4f);
-
-            //_moveVector.x = floatingJoystick.Horizontal;
-            //_moveVector.z = floatingJoystick.Vertical;
+            
             InputSignals.Instance.onJoystickDragged?.Invoke(new IdleInputParams()
             {
                 ValueX = _moveVector.x,
@@ -138,8 +130,6 @@ namespace Managers
             });
             _inputLerpCache.x = _moveVector.x;
             _inputLerpCache.z = _moveVector.z;
-
-
         }
     }
 }

@@ -62,6 +62,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: AmmoWorkerArea
       objectReference: {fileID: 0}
+    - target: {fileID: 2446398239894830592, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 92a9b97792442144fa9518ca68b532f9, type: 3}
+    - target: {fileID: 2446398239894830592, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_Color.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446398239894830592, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_Color.b
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446398239894830592, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_Color.g
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446398239894830592, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_Color.r
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 2864254029242326355, guid: a35326da7abc35240acda2768c462a88, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -117,6 +137,14 @@ PrefabInstance:
     - target: {fileID: 2864254029242326355, guid: a35326da7abc35240acda2768c462a88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7671156357461052856, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7671156357461052856, guid: a35326da7abc35240acda2768c462a88, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a35326da7abc35240acda2768c462a88, type: 3}

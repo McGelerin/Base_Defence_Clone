@@ -4,6 +4,7 @@
     {
         MoveToBase,
         MoveToMoneyPosition,
+        MoveToWait,
         MoveToRemoveStackState
     }
 }

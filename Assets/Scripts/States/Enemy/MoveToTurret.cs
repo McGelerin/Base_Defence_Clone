@@ -32,17 +32,17 @@ namespace States.Enemy
         public override void EnterState()
         {
             _agent.speed = _data.MoveSpeed;
-            _manager.AnimTriggerState(EnemyStates.Walk);
+            _manager.AnimTriggerState(EnemyAnimState.Walk);
             _agent.SetDestination(_manager.TurretTarget.transform.position);
         }
 
         public override void UpdateState()
         {
-            _manager.AnimBoolState(EnemyStates.Idle, _data.AttackRange > _agent.remainingDistance);
+            _manager.AnimBoolState(EnemyAnimState.Idle, _data.AttackRange > _agent.remainingDistance);
             
             if (_manager.HealthCheck())
             {
-                _manager.SwitchState(EnemyStates.Death);
+                _manager.SwitchState(EnemyStates.EnemyDeath);
             }
         }
 
@@ -50,8 +50,14 @@ namespace States.Enemy
         {
             if (other.CompareTag("Player"))
             {
-                _manager.PlayerTarget = other.transform.parent.gameObject;
-                _manager.SwitchState(EnemyStates.Chase);
+                _manager.Target = other.transform.parent.gameObject;
+                _manager.SwitchState(EnemyStates.ChaseToPlayer);
+            }
+
+            if (other.CompareTag("Soldier"))
+            {
+                _manager.Target = other.transform.parent.gameObject;
+                _manager.SwitchState(EnemyStates.ChaseToSoldier);
             }
         }
 

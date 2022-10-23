@@ -27,6 +27,11 @@ namespace Controllers
             {
                 enemyBrain.TakeAmmoDamage();
             }
+
+            if (other.CompareTag("SoldierBullet"))
+            {
+                enemyBrain.TakeSoldierDamage();
+            }
         }
     }
 }

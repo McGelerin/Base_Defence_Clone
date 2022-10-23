@@ -119,9 +119,7 @@ namespace Managers
         private void OnLevelSuccessful()
         {
         }
-
- 
-
+        
         private void OnReset()
         {
             CameraStateController = CameraStates.InitializeCam;

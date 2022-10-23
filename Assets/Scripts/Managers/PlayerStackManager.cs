@@ -35,6 +35,7 @@ namespace Managers
         private ItemAddOnStack _objAddOnStack;
         private AddMoneyStackToScore _addMoneyStackToScore;
         private RemoveAmmoStackItems _removeAmmoStackItems;
+        private PlayerDeathClearStack _playerDeathClearStack;
 
         private Transform _warHouseTransform;
         
@@ -44,13 +45,14 @@ namespace Managers
 
         private void Awake()
         {
+            var transformParent = transform.parent.transform;
             _moneyStackData = Resources.Load<CD_PlayerData>("Data/CD_Player").MoneyStackData;
             _ammoStackData = Resources.Load<CD_PlayerData>("Data/CD_Player").AmmoStackData;
             _moneyDynamicStackItemPosition = new DynamicStackItemPosition(ref _stackList,ref _moneyStackData, ref stackHolder);
             _ammoDynamicStackItemPosition = new DynamicStackItemPosition(ref _stackList, ref _ammoStackData, ref stackHolder);
             _objAddOnStack = new ItemAddOnStack(ref _stackList, ref stackHolder, ref _moneyStackData);
             _addMoneyStackToScore = new AddMoneyStackToScore(ref _stackList);
-
+            _playerDeathClearStack = new PlayerDeathClearStack(ref _stackList, ref transformParent);
         }
         
         #region Event Subscription
@@ -65,6 +67,7 @@ namespace Managers
             StackSignals.Instance.onGetHostageTarget += OnGetHostageTarget;
             StackSignals.Instance.onLastGameObjectRemove += OnLastHostageRemove;
             StackSignals.Instance.onGetHostageList += OnGetHostageList;
+            IdleSignals.Instance.onPlayerDeath += OnPlayerDeath;
         }
 
 
@@ -73,6 +76,7 @@ namespace Managers
             StackSignals.Instance.onGetHostageTarget -= OnGetHostageTarget;
             StackSignals.Instance.onLastGameObjectRemove -= OnLastHostageRemove;
             StackSignals.Instance.onGetHostageList -= OnGetHostageList;
+            IdleSignals.Instance.onPlayerDeath -= OnPlayerDeath;
         }
         
         private void OnDisable()
@@ -135,7 +139,7 @@ namespace Managers
             }
         }
 
-        public void AmmoStackChack()
+        public void AmmoStackCheck()
         {
             if (_stackList.Count == 0)
             {
@@ -181,6 +185,12 @@ namespace Managers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void OnPlayerDeath()
+        {
+            _playerDeathClearStack.Execute();
+            _stackType = StackType.None;
         }
     }
 }

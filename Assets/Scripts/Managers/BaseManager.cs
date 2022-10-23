@@ -16,7 +16,6 @@ namespace Managers
 
         #region Public Variables
         
-        [Header("Data")] public BaseData Data;
 
         #endregion
 
@@ -38,6 +37,7 @@ namespace Managers
         [ShowInInspector]private Dictionary<RoomNameEnum,int> _payedRoomDatas;
         [ShowInInspector]private Dictionary<TurretNameEnum,int> _payedTurretDatas;
         [ShowInInspector]private int _baseLevel = 0;
+        public BaseData _data;
         #endregion
         #endregion
 
@@ -106,20 +106,20 @@ namespace Managers
         private void GetReferences()
         {
             _baseLevel = LevelSignals.Instance.onGetLevelID();
-            Data = Resources.Load<CD_Level>("Data/CD_Level").LevelDatas[_baseLevel].BaseData;
+            _data = Resources.Load<CD_Level>("Data/CD_Level").LevelDatas[_baseLevel].BaseData;
             _payedRoomDatas = SaveSignals.Instance.onLoadAreaData().RoomPayedAmound;
             _payedTurretDatas = SaveSignals.Instance.onLoadAreaData().RoomTurretPayedAmound;
             DataTransferSignals.Instance.onGettedBaseData?.Invoke();
             SetBaseLevelText();
         }
 
-        private RoomData OnGetRoomData(RoomNameEnum roomName) =>  Data.BaseRoomDatas.Rooms[(int)roomName];
+        private RoomData OnGetRoomData(RoomNameEnum roomName) =>  _data.BaseRoomDatas.Rooms[(int)roomName];
 
-        private BuyableTurretData OnGetTurretData(TurretNameEnum turret) => Data.BaseRoomDatas.Rooms[(int)turret].buyableTurretData;
+        private BuyableTurretData OnGetTurretData(TurretNameEnum turret) => _data.BaseRoomDatas.Rooms[(int)turret].buyableTurretData;
 
-        private MineAreaData OnGetMineAreaData() => Data.MineAreaData;
+        private MineAreaData OnGetMineAreaData() => _data.MineAreaData;
         
-        private SoldierAreaData OnGetSoldierAreaData() => Data.SoldierAreaData;
+        private SoldierAreaData OnGetSoldierAreaData() => _data.SoldierAreaData;
 
         private int OnGetRoomPayedAmound(RoomNameEnum room)
         {

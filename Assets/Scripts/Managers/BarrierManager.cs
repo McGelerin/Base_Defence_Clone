@@ -47,7 +47,7 @@ namespace Managers.Barrier
             }
             else
             {
-                barrier.transform.DOLocalRotate(Vector3.zero, .5f );
+                barrier.transform.DOLocalRotate(Vector3.zero, .5f ).SetDelay(.2f);
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Abstract;
+using Command.AmmoWorkerCommand;
 using Command.StackCommand;
 using Data.UnityObject;
 using Data.ValueObject;
@@ -43,12 +44,18 @@ namespace AIBrain
 
         #region States
 
+        private AmmoWorkerBaseState _currentState;
         private MoveToWareHouseArea _moveToWareHouse;
         private WaitForFullStack _waitForFullStack;
         private MoveToTurretAmmoArea _moveToTurretAmmoArea;
         private WaitToAmmoArea _waitToAmmoArea;
-        private AmmoWorkerBaseState _currentState;
         private AnyState _anyState;
+
+        #endregion
+
+        #region Commands
+
+        private SwitchStateCommand _switchStateCommand;
 
         #endregion
 
@@ -67,6 +74,8 @@ namespace AIBrain
             _moveToTurretAmmoArea = new MoveToTurretAmmoArea(ref brain, ref agent);
             _waitToAmmoArea = new WaitToAmmoArea(ref brain);
             _anyState = new AnyState(ref brain, ref agent);
+            _switchStateCommand = new SwitchStateCommand(ref _moveToWareHouse, ref _waitForFullStack,
+                ref _moveToTurretAmmoArea, ref _waitToAmmoArea, ref _anyState);
         }
 
         private AmmoWorkerAIData GetTurretData() => Resources.Load<CD_AI>("Data/CD_AI").AmmoWorkerAIData;
@@ -100,21 +109,13 @@ namespace AIBrain
         {
             _currentState.OnTriggerEnterState(other);
         }
-
+        
         public void SwitchState(AmmoWorkerStates state)
         {
-            _currentState = state switch
-            {
-                AmmoWorkerStates.MoveToWareHouse => _moveToWareHouse,
-                AmmoWorkerStates.WaitForFullStack => _waitForFullStack,
-                AmmoWorkerStates.MoveToTurretAmmoArea => _moveToTurretAmmoArea,
-                AmmoWorkerStates.WaitToAmmoArea => _waitToAmmoArea,
-                AmmoWorkerStates.AnyState => _anyState,
-                _ => _currentState
-            };
+            _currentState = _switchStateCommand.Execute(state);
             _currentState.EnterState();
         }
-
+        
         private void TurretAmmoAreaFull(GameObject area)
         {
             if(area != _turretAmmoAreaParentCache) return;

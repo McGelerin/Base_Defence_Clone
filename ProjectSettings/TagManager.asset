@@ -21,6 +21,8 @@ TagManager:
   - SoldierBullet
   - SoldierAttackRadius
   - SoldierBarrack
+  - Soldier
+  - Hostage
   layers:
   - Default
   - TransparentFX
@@ -35,8 +37,8 @@ TagManager:
   - EnemyTakeDamage
   - HostageLayer
   - WeaponsDetectLayer
-  - 
-  - 
+  - SoldierDetectLayer
+  - SoldierTakeDamage
   - 
   - 
   - 

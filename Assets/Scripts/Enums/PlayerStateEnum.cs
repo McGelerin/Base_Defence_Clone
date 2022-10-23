@@ -5,6 +5,7 @@
         Inside,
         Outside,
         LockTarget,
-        Taret////BUrası artabilir :D
+        Taret,
+        Death
     }
 }

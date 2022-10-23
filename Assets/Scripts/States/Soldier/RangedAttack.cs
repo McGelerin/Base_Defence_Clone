@@ -29,6 +29,7 @@ namespace States.Soldier
         
         public override void EnterState()
         {
+            _agent.ResetPath();
             _manager.IsAttack(true);
             _manager.AnimTriggerState(SoldierAnimState.AttackStart);
         }

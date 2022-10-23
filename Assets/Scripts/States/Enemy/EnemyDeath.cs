@@ -30,7 +30,7 @@ namespace States.Enemy
         public override void EnterState()
         {
             _agent.Stop();
-            _manager.AttackStatus(false);
+            _manager.AttackToPlayerStatus(false);
             _manager.IsDeath();
         }
 

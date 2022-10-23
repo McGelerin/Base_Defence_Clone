@@ -47,6 +47,7 @@ namespace AIBrain
         private MoveToBase _moveToBase;
         private MoveToRemoveStack _moveToRemoveStack;
         private MoveToMoneyPosition _moveToMoneyPosition;
+        private MoveToWait _moveToWait;
 
         #endregion
 
@@ -61,6 +62,7 @@ namespace AIBrain
             _addMoneyStackToScore = new AddMoneyStackToScore(ref _stackList);
             _moveToRemoveStack = new MoveToRemoveStack(ref brain, ref agent);
             _moveToMoneyPosition = new MoveToMoneyPosition(ref brain, ref agent);
+            _moveToWait = new MoveToWait(ref brain, ref agent);
             _moveToBase = new MoveToBase(ref brain, ref agent);
         }
         
@@ -109,6 +111,7 @@ namespace AIBrain
             {
                 MoneyWorkerStates.MoveToBase => _moveToBase,
                 MoneyWorkerStates.MoveToMoneyPosition => _moveToMoneyPosition,
+                MoneyWorkerStates.MoveToWait => _moveToWait,
                 MoneyWorkerStates.MoveToRemoveStackState => _moveToRemoveStack,
                 _ => _currentState
             };
@@ -130,7 +133,7 @@ namespace AIBrain
             {
                 Target = WorkerSignals.Instance.onGetMoneyGameObject();
                 SwitchState(Target == null 
-                    ? MoneyWorkerStates.MoveToBase 
+                    ? MoneyWorkerStates.MoveToWait 
                     : MoneyWorkerStates.MoveToMoneyPosition);
             }
         }

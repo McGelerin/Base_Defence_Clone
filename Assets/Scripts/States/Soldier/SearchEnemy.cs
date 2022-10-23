@@ -45,7 +45,7 @@ namespace States.Soldier
 
         private Vector3 RandomPosition()
         {
-            return new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f));
+            return new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-5f, 20f));
         }
     }
 }

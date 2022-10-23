@@ -9,6 +9,8 @@
         PistolAttack,
         AttackEnd,
         PlayerInTurret,
-        PlayerOutTurret
+        PlayerOutTurret,
+        Death,
+        Reborn
     }
 }

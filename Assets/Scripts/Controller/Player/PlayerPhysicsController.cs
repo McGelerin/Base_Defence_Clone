@@ -1,5 +1,4 @@
-﻿using System;
-using Enums;
+﻿using Enums;
 using Managers;
 using Signals;
 using UnityEngine;
@@ -13,7 +12,6 @@ namespace Controllers
         #region SerializeField Variables
 
         [SerializeField] private PlayerManager manager;
-        [SerializeField] private PlayerStackManager stackManager;
         [SerializeField] private RangedAttackManager rangedAttackManager;
 
         #endregion
@@ -23,51 +21,29 @@ namespace Controllers
         {
             if (other.CompareTag("BarrierInSide"))
             {
-                gameObject.layer = LayerMask.NameToLayer("Default");
-                manager.SetPlayerState(PlayerStateEnum.Inside);
-                stackManager.InteractBarrierArea();
-                rangedAttackManager.PlayerInteractBase();
+                BarrierInSide();
                 return;
             }
 
             if (other.CompareTag("BarrierOutSide"))
             {
-                gameObject.layer = LayerMask.NameToLayer("PlayerOutSideLayer");
-                manager.SetPlayerState(PlayerStateEnum.Outside);
-                rangedAttackManager.PlayerInteractOutSide();
-                return;
-            }
-
-            if (other.CompareTag("Money"))
-            {
-                stackManager.InteractMoney(other.gameObject);
-                return;
-            }
-
-            if (other.CompareTag("AmmoReloadArea"))
-            {
-                stackManager.InteractWareHouseArea(other.transform,true);
-                return;
-            }
-
-            if (other.CompareTag("TurretAmmoArea"))
-            {
-                stackManager.InteractTurretAmmoArea(other.gameObject);
+                BarrierOutSide();
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void BarrierOutSide()
         {
-            if (other.CompareTag("AmmoReloadArea"))
-            {
-                stackManager.InteractWareHouseArea(default,false);
-            }
+            gameObject.layer = LayerMask.NameToLayer("PlayerOutSideLayer");
+            manager.SetPlayerState(PlayerStateEnum.Outside);
+            rangedAttackManager.PlayerInteractOutSide();
+        }
 
-            if (other.CompareTag("TurretAmmoArea"))
-            {
-                StackSignals.Instance.onDecreseStackHolder?.Invoke(other.gameObject);
-                stackManager.AmmoStackChack();
-            }
+        private void BarrierInSide()
+        {
+            gameObject.layer = LayerMask.NameToLayer("Default");
+            manager.SetPlayerState(PlayerStateEnum.Inside);
+            
+            rangedAttackManager.OnPlayerInteractBase();
         }
     }
 }

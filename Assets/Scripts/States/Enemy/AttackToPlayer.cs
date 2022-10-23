@@ -1,5 +1,4 @@
-﻿using System;
-using Abstract;
+﻿using Abstract;
 using AIBrain;
 using Data.ValueObject;
 using Enums;
@@ -31,22 +30,20 @@ namespace States.Enemy
         
         public override void EnterState()
         {
-            //_agent.ResetPath();
-            _manager.AttackStatus(true);
-            //_agent.SetDestination(_manager.PlayerTarget.transform.position);
+            _manager.AttackToPlayerStatus(true);
         }
 
         public override void UpdateState()
         {
-            //_agent.SetDestination(_manager.PlayerTarget.transform.position);
-            _agent.destination = _manager.PlayerTarget.transform.position;
+            LookTarget();
+            _agent.destination = _manager.Target.transform.position;
             if (_data.AttackRange < _agent.remainingDistance)
             {
-                _manager.SwitchState(EnemyStates.Chase);
+                _manager.SwitchState(EnemyStates.ChaseToPlayer);
             }
             if (_manager.HealthCheck())
             {
-                _manager.SwitchState(EnemyStates.Death);
+                _manager.SwitchState(EnemyStates.EnemyDeath);
             }
         }
 
@@ -58,9 +55,17 @@ namespace States.Enemy
         {
             if (other.CompareTag("Player"))
             {
-                _manager.AttackStatus(false);
-                _manager.SwitchState(EnemyStates.Walk);
+                _manager.AttackToPlayerStatus(false);
+                _manager.SwitchState(EnemyStates.MoveToTurret);
             }
+        }
+        
+        private void LookTarget()
+        {
+            var direct = _manager.Target.transform.position - _manager.transform.position;
+            var lookRotation = Quaternion.LookRotation(direct,Vector3.up);
+            _manager.transform.rotation = Quaternion.Slerp(_manager.transform.rotation,
+                lookRotation, 0.1f);
         }
     }
 }

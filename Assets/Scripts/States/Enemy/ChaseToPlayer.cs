@@ -30,23 +30,23 @@ namespace States.Enemy
         
         public override void EnterState()
         {
-            _manager.AttackStatus(false);
+            _manager.AttackToPlayerStatus(false);
             _agent.speed = _data.ChaseSpeed;
-            _manager.AnimTriggerState(EnemyStates.Chase);
-            _agent.SetDestination(_manager.PlayerTarget.transform.position);
+            _manager.AnimTriggerState(EnemyAnimState.Chase);
+            _agent.SetDestination(_manager.Target.transform.position);
         }
 
         public override void UpdateState()
         {
             //_agent.SetDestination(_manager.PlayerTarget.transform.position);
-            _agent.destination = _manager.PlayerTarget.transform.position;
+            _agent.destination = _manager.Target.transform.position;
             if (_data.AttackRange > _agent.remainingDistance)
             {
-                _manager.SwitchState(EnemyStates.Attack);
+                _manager.SwitchState(EnemyStates.AttackToPlayer);
             }
             if (_manager.HealthCheck())
             {
-                _manager.SwitchState(EnemyStates.Death);
+                _manager.SwitchState(EnemyStates.EnemyDeath);
             }
         }
 
@@ -58,7 +58,7 @@ namespace States.Enemy
         {
             if (other.CompareTag("Player"))
             {
-                _manager.SwitchState(EnemyStates.Walk);
+                _manager.SwitchState(EnemyStates.MoveToTurret);
             }
         }
     }

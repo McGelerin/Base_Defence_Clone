@@ -109,8 +109,8 @@ namespace Managers
         
         private void TurnOffGameObject(GameObject gameObject)
         {
-            gameObject.transform.localPosition = Vector3.zero;
             gameObject.transform.SetParent(_poolGroup[_listCache].transform);
+            gameObject.transform.localPosition = Vector3.zero;
             gameObject.SetActive(false);
         }
         

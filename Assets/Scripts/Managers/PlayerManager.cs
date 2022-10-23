@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
+using Command.PlayerCommand;
+using Command.StackCommand;
 using Controller;
+using Controller.Player;
 using Controllers;
 using Data.UnityObject;
 using Data.ValueObject;
+using DG.Tweening;
 using Enums;
 using Keys;
 using Signals;
@@ -14,26 +19,28 @@ namespace Managers
     {
         #region Self Variables
 
-        #region Public Variables
-
-        [Header("Data")] public PlayerData Data;
-        
-        #endregion
-
         #region Serialized Variables
 
-        [Space] [SerializeField] private PlayerMovementController movementController;
+        [SerializeField] private PlayerStackPhysicsController stackPhysicsController;
+        [SerializeField] private PlayerMovementController movementController;
         [SerializeField] private PlayerAnimationController animationController;
+        [SerializeField] private PlayerHealthController playerHealthController;
+        [SerializeField] private GameObject playerPhysics;
+        [SerializeField] private GameObject mesh;
 
         #endregion
 
         #region Private Variables
 
+        private PlayerData _data;
+        private Coroutine _death;
         private Transform _currentParent;
         private PlayerStateEnum _playerState;
         private PlayerStateEnum _playerStateCache;
         private PlayerAnimState _weaponAnimStateCache;
         private PlayerAnimState _weaponAttackAnimState;
+        private SetIdleInputValuesCommand _setIdleInputValuesCommand;
+        private SetPlayerStateCommand _setPlayerStateCommand;
 
         #endregion
         
@@ -41,16 +48,20 @@ namespace Managers
         
         private void Awake()
         {
+            var manager = this;
             _currentParent = transform.parent;
-            Data = GetPlayerData();
+            _data = GetPlayerData();
             _playerState = PlayerStateEnum.Inside;
             SendPlayerDataToControllers();
+            _setIdleInputValuesCommand = new SetIdleInputValuesCommand(ref movementController, ref animationController);
+            _setPlayerStateCommand = new SetPlayerStateCommand(ref manager, ref movementController,
+                ref animationController, ref playerHealthController);
         }
         private PlayerData GetPlayerData() => Resources.Load<CD_PlayerData>("Data/CD_Player").Data;
         
         private void SendPlayerDataToControllers()
         {
-            movementController.SetMovementData(Data.MovementData);
+            movementController.SetMovementData(_data.MovementData);
         }
         
         #region Event Subscription
@@ -67,6 +78,7 @@ namespace Managers
             CoreGameSignals.Instance.onPlay += OnPlay;
             CoreGameSignals.Instance.onReset += OnReset;
             AttackSignals.Instance.onPlayerHasTarget += OnPlayerHasTarget;
+            AttackSignals.Instance.onGiveDamageToPlayer += OnTakeDamage;
         }
 
         private void UnsubscribeEvents()
@@ -76,6 +88,7 @@ namespace Managers
             CoreGameSignals.Instance.onPlay -= OnPlay;
             CoreGameSignals.Instance.onReset -= OnReset;
             AttackSignals.Instance.onPlayerHasTarget -= OnPlayerHasTarget;
+            AttackSignals.Instance.onGiveDamageToPlayer -= OnTakeDamage;
         }
 
         private void OnDisable()
@@ -88,56 +101,22 @@ namespace Managers
         private void Start()
         {
             CoreGameSignals.Instance.onSetPlayerPosition?.Invoke(transform);
+            playerHealthController.GetHealth(_data.PlayerHealth);
         }
 
         private void OnSetIdleInputValues(IdleInputParams inputParams)
         {
-            switch (_playerState)
-            {
-                case PlayerStateEnum.Inside:
-                    movementController.UpdateIdleInputValue(inputParams);
-                    animationController.SetSpeedVariable(inputParams);
-                    break;
-                case PlayerStateEnum.Outside:
-                    movementController.UpdateIdleInputValue(inputParams);
-                    animationController.SetSpeedVariable(inputParams);
-                    animationController.SetOutSideAnimState(inputParams,default,false);
-                    break;
-                case PlayerStateEnum.Taret:
-                    movementController.UpdateTurretInputValue(inputParams);
-                    break;
-                case PlayerStateEnum.LockTarget:
-                    var target = AttackSignals.Instance.onPlayerIsTarget();
-                    movementController.UpdateIdleInputValue(inputParams);
-                    animationController.SetSpeedVariable(inputParams);
-                    animationController.SetOutSideAnimState(inputParams,target.transform,true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            _setIdleInputValuesCommand.Execute(inputParams,_playerState);
         }
 
         public void SetPlayerState(PlayerStateEnum state)
         {
             _playerState = state;
-            switch (_playerState)
+            if (state == PlayerStateEnum.Inside || state == PlayerStateEnum.Death)
             {
-                case PlayerStateEnum.Inside:
-                    _weaponAnimStateCache = IdleSignals.Instance.onSelectedWeaponAnimState();
-                    animationController.SetBoolAnimState(PlayerAnimState.BaseState,true);
-                    animationController.SetBoolAnimState(_weaponAnimStateCache,false);
-                    break;
-                case PlayerStateEnum.Outside:
-                    animationController.SetBoolAnimState(PlayerAnimState.BaseState,false);
-                    animationController.SetBoolAnimState(_weaponAnimStateCache,true);
-                    break;
-                case PlayerStateEnum.LockTarget:
-                    break;
-                case PlayerStateEnum.Taret:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                _weaponAnimStateCache = IdleSignals.Instance.onSelectedWeaponAnimState();
             }
+            _setPlayerStateCommand.Execute(state,_weaponAnimStateCache);
         }
         
         private void OnPlayerHasTarget(bool hasTarget)
@@ -166,6 +145,7 @@ namespace Managers
 
         public void PlayerOutTurret()
         {
+            transform.rotation = Quaternion.identity;
             _playerState = PlayerStateEnum.Inside;
             animationController.SetAnimState(PlayerAnimState.PlayerOutTurret);
             movementController.IsReadyToPlay(true);
@@ -183,5 +163,44 @@ namespace Managers
             gameObject.SetActive(true);
             movementController.OnReset();
         }
+
+        private void OnTakeDamage(int damage)
+        {
+            playerHealthController.TakeDamage(damage);
+        }
+
+        public void PlayerDeath()
+        {
+            _death ??= StartCoroutine(Death());
+        }
+
+        private IEnumerator Death()
+        {
+            DeathStart();
+            yield return new WaitForSeconds(3f);
+            DeathEnd();
+            _death = null;
+        }
+
+        private void DeathStart()
+        {
+            playerPhysics.layer = LayerMask.NameToLayer("Default");
+            stackPhysicsController.enabled = false;
+            IdleSignals.Instance.onPlayerDeath?.Invoke();
+            animationController.SetAnimState(PlayerAnimState.Death);
+            mesh.transform.DOLocalMoveY(-0.5f, 0.5f);
+        }
+        
+        private void DeathEnd()
+        {
+            transform.position = WorkerSignals.Instance.onGetBaseCenter().transform.position;
+            stackPhysicsController.enabled = true;
+            animationController.SetAnimState(PlayerAnimState.Reborn);
+            mesh.transform.localPosition = Vector3.zero;
+            movementController.IsReadyToPlay(true);
+            SetPlayerState(PlayerStateEnum.Inside);
+            playerHealthController.GetHealth(_data.PlayerHealth);
+        }
+
     }
 }

@@ -21,6 +21,7 @@ namespace Managers
         #region Private Variables
         
         private GameObject _weapon;
+        private Transform _firePoint;
         private bool _isPlayerOnBase;
         private CD_Weapon _data;
         private WeaponType _selectedWeaponType;
@@ -58,6 +59,7 @@ namespace Managers
             IdleSignals.Instance.onSelectedWeaponAttackAnimState += OnGetWeaponAttackAnimState;
             AttackSignals.Instance.onPlayerIsTarget += OnGetTarget;
             AttackSignals.Instance.onGetBulletDirect += OnGetDirect;
+            IdleSignals.Instance.onPlayerDeath += OnPlayerInteractBase;
         }
 
         private void UnsubscribeEvents()
@@ -67,6 +69,7 @@ namespace Managers
             IdleSignals.Instance.onSelectedWeaponAttackAnimState -= OnGetWeaponAttackAnimState;
             AttackSignals.Instance.onPlayerIsTarget -= OnGetTarget;
             AttackSignals.Instance.onGetBulletDirect -= OnGetDirect;
+            IdleSignals.Instance.onPlayerDeath -= OnPlayerInteractBase;
         }
 
         protected override void OnDisable()
@@ -89,11 +92,12 @@ namespace Managers
             TCollider.enabled = true;
             _weapon = PoolSignals.Instance.onGetPoolObject(_selectedWeaponType.ToString(), weaponHolder.transform);
             _weapon.transform.SetParent(weaponHolder.transform);
-            _weapon.transform.localRotation = Quaternion.Euler(-95, -230, 145);
+            _weapon.transform.localRotation = Quaternion.Euler(270,94.6f , 183.9f);
+            _firePoint = _weapon.transform.GetChild(0);
             _isPlayerOnBase = false;
         }
 
-        public void PlayerInteractBase()
+        public void OnPlayerInteractBase()
         {
             if (_isPlayerOnBase) return;
             PoolSignals.Instance.onReleasePoolObject?.Invoke(_selectedWeaponType.ToString(),_weapon);
@@ -117,7 +121,7 @@ namespace Managers
 
         protected override void RangedAttack()
         {
-            PoolSignals.Instance.onGetPoolObject(PoolType.Bullet.ToString(), _weapon.transform);
+            PoolSignals.Instance.onGetPoolObject(PoolType.Bullet.ToString(), _firePoint);
         }
 
         protected override void AttackEnd()

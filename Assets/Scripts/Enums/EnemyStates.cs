@@ -2,10 +2,11 @@
 {
     public enum EnemyStates
     {
-        Idle,
-        Walk,
-        Chase,
-        Attack,
-        Death
+        AttackToPlayer,
+        AttackToSoldier,
+        ChaseToPlayer,
+        ChaseToSoldier,
+        MoveToTurret,
+        EnemyDeath
     }
 }

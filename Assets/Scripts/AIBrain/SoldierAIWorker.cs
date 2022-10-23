@@ -7,6 +7,7 @@ using Data.ValueObject;
 using DG.Tweening;
 using Enums;
 using Signals;
+using Sirenix.OdinInspector;
 using States.Soldier;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,13 +29,14 @@ namespace AIBrain
         [SerializeField] private NavMeshAgent agent;
         [SerializeField] private Animator animator;
         [SerializeField] private GameObject weapon;
+        [SerializeField] private Transform firePoint;
 
         #endregion
 
         #region Private Variables
 
 
-        private int _health;
+        [ShowInInspector]private int _health;
         private SoldierAIData _data;
         private bool _isAttack;
         private bool _firstAttack;
@@ -77,8 +79,8 @@ namespace AIBrain
 
         protected override void OnEnable()
         {
-            SubscribeEvents();
             base.OnEnable();
+            SubscribeEvents();
             _health = _data.Health;
             _firstAttack = true;
             _currentState = _moveToInitPosition;
@@ -88,15 +90,21 @@ namespace AIBrain
         private void SubscribeEvents()
         {
             WorkerSignals.Instance.onSoldierAttack += MoveToSoldierAttackPosition;
+            AttackSignals.Instance.onGetSoldierDamage += OnGetDamage;
+            AttackSignals.Instance.onGiveDamegeToSoldier += OnTakeDamage;
         }
 
         private void UnsubscribeEvents()
         {            
             WorkerSignals.Instance.onSoldierAttack -= MoveToSoldierAttackPosition;
+            AttackSignals.Instance.onGetSoldierDamage -= OnGetDamage;
+            AttackSignals.Instance.onGiveDamegeToSoldier -= OnTakeDamage;
         }
 
         protected override void OnDisable()
         {
+            AttackSignals.Instance.onSoldierDeath?.Invoke(gameObject);
+            StopAllCoroutines();
             base.OnDisable();
             UnsubscribeEvents();
         }
@@ -132,9 +140,12 @@ namespace AIBrain
             _currentState.EnterState();
         }
 
-        private void OnTakeDamage()
+        private void OnTakeDamage(GameObject target,int damage)
         {
-            
+            if (gameObject == target)
+            {
+                _health -= damage;
+            }
         }
         
         public bool HealthCheck()
@@ -152,11 +163,12 @@ namespace AIBrain
         private IEnumerator Death()
         {
             //geliştirecem
+            WorkerSignals.Instance.onSoldierDeath?.Invoke();
+            AttackSignals.Instance.onSoldierDeath?.Invoke(gameObject);
             WaitForSeconds wait = new WaitForSeconds(1f);
             AnimTriggerState(SoldierAnimState.Death);
             transform.DOLocalMoveY(0f, 0.5f);
             yield return wait;
-            WorkerSignals.Instance.onSoldierDeath?.Invoke();
             PoolSignals.Instance.onReleasePoolObject(PoolType.Soldier.ToString(), gameObject);
         }
         
@@ -170,7 +182,7 @@ namespace AIBrain
         {
             if (_isAttack)
             {
-                var bullet = PoolSignals.Instance.onGetPoolObject(PoolType.SoldierBullet.ToString(), weapon.transform);
+                var bullet = PoolSignals.Instance.onGetPoolObject(PoolType.SoldierBullet.ToString(), firePoint);
                 bullet.GetComponent<SoldierBulletPhysicsController>().SetAddForce(transform.forward * 10);
             }
         }
@@ -200,5 +212,7 @@ namespace AIBrain
         {
             animator.SetFloat("Speed",speed);
         }
+
+        private int OnGetDamage() => _data.Damage;
     }
 }

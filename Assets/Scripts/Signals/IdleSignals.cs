@@ -32,7 +32,7 @@ namespace Signals
         
         #region WeaponArea
 
-        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.M4;};
+        public Func<WeaponType> onSelectedWeapon = delegate { return WeaponType.Pistol;};
         public Func<PlayerAnimState> onSelectedWeaponAnimState = delegate { return 0;};
         public Func<PlayerAnimState> onSelectedWeaponAttackAnimState = delegate { return 0;};
         
@@ -54,5 +54,6 @@ namespace Signals
         
         #endregion
         
+        public UnityAction onPlayerDeath = delegate {  };
     }
 }
