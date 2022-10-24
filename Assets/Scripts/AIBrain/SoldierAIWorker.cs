@@ -81,6 +81,7 @@ namespace AIBrain
         {
             base.OnEnable();
             SubscribeEvents();
+            IsAttack(true);
             _health = _data.Health;
             _firstAttack = true;
             _currentState = _moveToInitPosition;
@@ -163,12 +164,12 @@ namespace AIBrain
         private IEnumerator Death()
         {
             //geliştirecem
-            WorkerSignals.Instance.onSoldierDeath?.Invoke();
-            AttackSignals.Instance.onSoldierDeath?.Invoke(gameObject);
-            WaitForSeconds wait = new WaitForSeconds(1f);
+            WaitForSeconds wait = new WaitForSeconds(2f);
             AnimTriggerState(SoldierAnimState.Death);
             transform.DOLocalMoveY(0f, 0.5f);
             yield return wait;
+            WorkerSignals.Instance.onSoldierDeath?.Invoke();
+            AttackSignals.Instance.onSoldierDeath?.Invoke(gameObject);
             PoolSignals.Instance.onReleasePoolObject(PoolType.Soldier.ToString(), gameObject);
         }
         
@@ -183,7 +184,7 @@ namespace AIBrain
             if (_isAttack)
             {
                 var bullet = PoolSignals.Instance.onGetPoolObject(PoolType.SoldierBullet.ToString(), firePoint);
-                bullet.GetComponent<SoldierBulletPhysicsController>().SetAddForce(transform.forward * 10);
+                bullet.GetComponent<SoldierBulletPhysicsController>().SetAddForce(transform.forward * 20);
             }
         }
 

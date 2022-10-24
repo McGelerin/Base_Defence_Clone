@@ -48,8 +48,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 10
-  m_Center: {x: 0, y: 0, z: 3}
+  m_Radius: 6.5
+  m_Center: {x: 0, y: 0, z: 6.25}
 --- !u!54 &2312090515185304199
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1235,15 +1235,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3251714475229442226, guid: 30b322f885d0bf74183c649b482fef0b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3251714475229442226, guid: 30b322f885d0bf74183c649b482fef0b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3251714475229442226, guid: 30b322f885d0bf74183c649b482fef0b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3251714475229442226, guid: 30b322f885d0bf74183c649b482fef0b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1255,7 +1255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3251714475229442226, guid: 30b322f885d0bf74183c649b482fef0b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.53
+      value: -1.69
       objectReference: {fileID: 0}
     - target: {fileID: 3251714475229442226, guid: 30b322f885d0bf74183c649b482fef0b, type: 3}
       propertyPath: m_LocalRotation.w

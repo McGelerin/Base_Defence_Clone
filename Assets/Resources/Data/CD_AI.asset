@@ -19,22 +19,22 @@ MonoBehaviour:
       - Health: 20
         Damage: 5
         AttackRange: 1.5
-        MoveSpeed: 2
-        ChaseSpeed: 3
+        MoveSpeed: 5
+        ChaseSpeed: 6
         PrizeMoney: 5
       - Health: 50
         Damage: 2
         AttackRange: 1.5
-        MoveSpeed: 1.8
-        ChaseSpeed: 2.8
+        MoveSpeed: 4
+        ChaseSpeed: 5
         PrizeMoney: 10
   AmmoWorkerAIData:
     WorkerStackData:
       Capacity: 12
       InitPosition: {x: 0, y: 0, z: 0}
       StackCountX: 2
-      StackCountY: 3
-      StackOffset: {x: 2, y: 2, z: 2}
+      StackCountY: 4
+      StackOffset: {x: 3, y: 3, z: 3}
   MoneyWorkerData:
     WorkerStackData:
       Capacity: 16

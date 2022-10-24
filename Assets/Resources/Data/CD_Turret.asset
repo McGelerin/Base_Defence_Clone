@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TurretData:
     TurretRange: 0
-    AttackDelay: 0.5
-    RotateDelay: 0.2
+    AttackDelay: 0.3
+    RotateDelay: 0.01
     AmmoCapacity: 10
     AmmoDamage: 5
     TurretStackData:
@@ -23,5 +23,5 @@ MonoBehaviour:
       InitPosition: {x: -0.6, y: 0, z: 0.6}
       StackCountX: 2
       StackCountZ: 2
-      StackOffset: {x: 0.8, y: 0.55, z: 0.8}
-      Delay: 0.5
+      StackOffset: {x: 0.8, y: 0.7, z: 0.8}
+      Delay: 0.2

@@ -27,12 +27,7 @@ namespace States.Hostage
         private void FlowPlayer(HostageAIBrain hostage)
         {
             hostage.Agent.SetDestination(hostage.Target.transform.position);
-            AnimStateCheck(hostage);
-        }
-
-        private void AnimStateCheck(HostageAIBrain hostage)
-        {
-            hostage.AnimBoolState(HostageAnimState.Follow, hostage.Agent.velocity.magnitude > 0.1f);
+            hostage.AnimFloatState(hostage.Agent.velocity.magnitude);
         }
     }
 }

@@ -185,7 +185,7 @@ namespace Managers
         private void DeathStart()
         {
             playerPhysics.layer = LayerMask.NameToLayer("Default");
-            stackPhysicsController.enabled = false;
+            stackPhysicsController.isEnable = false;
             IdleSignals.Instance.onPlayerDeath?.Invoke();
             animationController.SetAnimState(PlayerAnimState.Death);
             mesh.transform.DOLocalMoveY(-0.5f, 0.5f);
@@ -194,7 +194,7 @@ namespace Managers
         private void DeathEnd()
         {
             transform.position = WorkerSignals.Instance.onGetBaseCenter().transform.position;
-            stackPhysicsController.enabled = true;
+            stackPhysicsController.isEnable = true;
             animationController.SetAnimState(PlayerAnimState.Reborn);
             mesh.transform.localPosition = Vector3.zero;
             movementController.IsReadyToPlay(true);

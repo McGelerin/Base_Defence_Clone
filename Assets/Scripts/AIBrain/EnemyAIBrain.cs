@@ -213,7 +213,7 @@ namespace AIBrain
             Vector3 position = transform.position;
             for (int i = 0; i < _data.PrizeMoney; i++)
             {
-                _money = PoolSignals.Instance.onGetPoolObject?.Invoke(PoolType.Money.ToString(), transform);
+                _money = PoolSignals.Instance.onGetPoolObject(PoolType.Money.ToString(), transform);
                 _money.transform.DOLocalJump(
                     new Vector3(position.x + Random.Range(-1f, 1f), 0.5f, position.z + Random.Range(0f, 1f)), 
                     1f, 3, 0.5f);

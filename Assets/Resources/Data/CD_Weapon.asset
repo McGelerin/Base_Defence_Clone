@@ -15,21 +15,21 @@ MonoBehaviour:
   Weapons:
     m_Keys: 000000000100000002000000
     m_Values:
-    - Damage: 5
+    - Damage: 8
       AttackRange: 10
-      AttackDelay: 1
+      AttackDelay: 0.4
       BulletSpeed: 20
       WeaponAnimState: 1
       WeaponAttackAnimState: 4
-    - Damage: 6
+    - Damage: 10
       AttackRange: 10
-      AttackDelay: 0.8
+      AttackDelay: 0.2
       BulletSpeed: 20
       WeaponAnimState: 2
       WeaponAttackAnimState: 3
-    - Damage: 10
+    - Damage: 12
       AttackRange: 10
-      AttackDelay: 0.9
+      AttackDelay: 0.2
       BulletSpeed: 20
       WeaponAnimState: 2
       WeaponAttackAnimState: 3

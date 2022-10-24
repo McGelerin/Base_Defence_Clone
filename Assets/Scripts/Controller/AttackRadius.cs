@@ -36,6 +36,7 @@ namespace Controllers
 
         protected virtual void OnEnable()
         {
+            IsRemoveEnemy = true;
             SubscribeEvents();
         }
 

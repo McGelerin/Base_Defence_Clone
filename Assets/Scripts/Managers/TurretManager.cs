@@ -136,7 +136,7 @@ namespace Managers
         private void Fire()
         {
             _ammoPrefab = PoolSignals.Instance.onGetPoolObject(PoolType.Ammo.ToString(), ammoSpawnPoint.transform);
-            _ammoPrefab.GetComponent<AmmoPhysicsController>().SetAddForce(transform.forward * 10);
+            _ammoPrefab.GetComponent<AmmoPhysicsController>().SetAddForce(transform.forward * 20);
             _ammoPrefab.transform.rotation = transform.rotation;
             _ammoCache++;
             if (_ammoCache != 4) return;

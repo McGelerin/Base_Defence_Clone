@@ -18,7 +18,8 @@ namespace States.Hostage
 
         public override void UpdateState(HostageAIBrain hostage)
         {
-            AnimStateCheck(hostage);
+            //AnimStateCheck(hostage);
+            hostage.AnimFloatState(hostage.Agent.velocity.magnitude);
         }
 
         public override void OnTriggerEnterState(HostageAIBrain hostage, Collider other)
@@ -30,9 +31,9 @@ namespace States.Hostage
             }
         }
         
-        private void AnimStateCheck(HostageAIBrain hostage)
-        {
-            hostage.AnimBoolState(HostageAnimState.Follow, hostage.Agent.velocity.magnitude > 0.1f);
-        }
+        // private void AnimStateCheck(HostageAIBrain hostage)
+        // {
+        //     hostage.AnimBoolState(HostageAnimState.Follow, hostage.Agent.velocity.magnitude > 0.1f);
+        // }
     }
 }

@@ -32,7 +32,7 @@ namespace Managers
                         DataTransferSignals.Instance.onMoneyWorkerAreaBuyedItems?.Invoke(_payedAmount);
                     }
 
-                    var moneyWorker =PoolSignals.Instance.onGetPoolObject(PoolType.MoneyWorker.ToString(), botPosition.transform);
+                    var moneyWorker =PoolSignals.Instance.onGetPoolObject?.Invoke(PoolType.MoneyWorker.ToString(), botPosition.transform);
                     moneyWorker.transform.localRotation = botPosition.transform.localRotation;
                     gameObject.SetActive(false);
                 }

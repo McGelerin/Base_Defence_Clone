@@ -6,6 +6,7 @@
         Walk,
         Chase,
         Attack,
-        Death
+        Death,
+        BaseAttack
     }
 }

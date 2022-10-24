@@ -38,7 +38,7 @@ namespace States.Enemy
 
         public override void UpdateState()
         {
-            _manager.AnimBoolState(EnemyAnimState.Idle, _data.AttackRange > _agent.remainingDistance);
+            _manager.AnimBoolState(EnemyAnimState.BaseAttack, _data.AttackRange > _agent.remainingDistance);
             
             if (_manager.HealthCheck())
             {

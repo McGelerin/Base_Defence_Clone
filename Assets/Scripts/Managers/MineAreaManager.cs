@@ -107,10 +107,11 @@ namespace Managers
 
         private void OnGemHolderAddGem(Transform miner)
         {
+            Debug.Log("mine");
             var position = miner.position;
             position = new Vector3(position.x, position.y + 1, position.z);
             miner.position = position;
-            GameObject gem = PoolSignals.Instance.onGetPoolObject(PoolType.Gem.ToString(), miner);
+            GameObject gem = PoolSignals.Instance.onGetPoolObject?.Invoke(PoolType.Gem.ToString(), miner);
             SetGemPosition(gem);
         }
 

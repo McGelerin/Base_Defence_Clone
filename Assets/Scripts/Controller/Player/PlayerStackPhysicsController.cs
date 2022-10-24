@@ -8,6 +8,11 @@ namespace Controller.Player
     public class PlayerStackPhysicsController : MonoBehaviour
     {
         #region Self Variables
+        #region Public Variables
+
+        public bool isEnable = true;
+        
+        #endregion
 
         #region Serialized Variables
         
@@ -15,10 +20,13 @@ namespace Controller.Player
         
         #endregion
 
+
         #endregion
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!isEnable) return;
+            
             if (other.CompareTag("BarrierInSide"))
             {
                 stackManager.InteractBarrierArea();

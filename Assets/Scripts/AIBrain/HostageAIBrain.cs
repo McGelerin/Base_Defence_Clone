@@ -101,6 +101,11 @@ namespace AIBrain
             animator.SetBool(animState.ToString(),isFollow);
         }
 
+        public void AnimFloatState(float speed)
+        {
+            animator.SetFloat("Speed",speed);
+        }
+
         private void OnPlayerEntrySoldierArea(GameObject hostage)
         {
             if (hostage == gameObject)
