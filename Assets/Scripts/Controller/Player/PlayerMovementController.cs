@@ -1,5 +1,8 @@
 ﻿using Data.ValueObject;
 using Keys;
+using Managers;
+using Signals;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Controller
@@ -9,22 +12,21 @@ namespace Controller
         #region Self Variables
         
         #region Serialized Variables
-
-        //[SerializeField] private PlayerManager manager;
+        
         [SerializeField] private new Rigidbody rigidbody;
+        [SerializeField] private PlayerManager manager;
         
         #endregion
         
         #region Private Variables
         
         private PlayerMovementData _movementData;
-        private bool _isReadyToMove, _isReadyToPlay;
-        //private float _inputValue;
+        private bool _isReadyToMove, _isReadyToPlay,_lockTarget;
         private float _inputValueX;
         private float _inputValueZ;
+        private GameObject _target;
 
         private Vector3 _directCache;
-      //  private Vector2 _clampValues;
         private bool _isIdle = true;
         
         #endregion
@@ -36,25 +38,27 @@ namespace Controller
             _movementData = dataMovementData;
         }
 
-        public void EnableMovement()
-        {
-            _isReadyToMove = true;
-        }
-
-        public void DeactiveMovement()
-        {
-            _isReadyToMove = false;
-        }
-
         public void UpdateIdleInputValue(IdleInputParams inputParams)
         {
             _inputValueX = inputParams.ValueX;
             _inputValueZ = inputParams.ValueZ;
         }
 
-        public void ChangeMovementState()
+        public void UpdateTurretInputValue(IdleInputParams inputParams)
         {
-            _isIdle = false;
+            if (inputParams.ValueZ <= -0.6f)
+            {
+                manager.PlayerOutTurret();
+            }
+        }
+
+        public void IsLockTarget(bool lockTarget)
+        {
+            _lockTarget = lockTarget;
+            if (lockTarget)
+            {
+                _target = AttackSignals.Instance.onPlayerIsTarget();
+            }
         }
 
         public void IsReadyToPlay(bool state)
@@ -64,65 +68,51 @@ namespace Controller
         
         private void FixedUpdate()
         {
-       //     if (_isReadyToPlay)
-          //  {
-           //     if (_isReadyToMove)
-              //  {
-                    Move();
-               // }
-            //     else
-            //     {
-            //         StopPlayer();
-            //     }
-            // }
-            // else
-            //     Stop();
+            if (_isReadyToPlay)
+            {
+                Move();
+            }
+            else
+            {
+                Stop();
+            }
         }
 
         private void Move()
         {
-      //      if (_isIdle)
-       //     {
-                IdleMove();
-       //     }
+            IdleMove();
         }
-
-        // private void StopPlayer()
-        // {
-        //     if (_isIdle)
-        //     {
-        //         StopSideways();
-        //     }
-        //     else
-        //     {
-        //         Stop();
-        //     }
-        // }
         
-
         private void IdleMove()
         {
             var velocity = rigidbody.velocity;
             velocity = new Vector3(_inputValueX * _movementData.PlayerJoystickSpeed, velocity.y,
                 _inputValueZ*_movementData.PlayerJoystickSpeed);
             rigidbody.velocity = velocity;
-            _directCache = new Vector3(velocity.x, 0, velocity.z);
-            if (_directCache == Vector3.zero) return;
-            //Burasi target geldigi zaman if kosuluna baglanacak
-            Rotate();
+            if (!_lockTarget)
+            {
+                _directCache = new Vector3(velocity.x, 0, velocity.z);
+                if (_directCache == Vector3.zero) return;
+                Rotate();
+            }
+            else
+            {
+                LockTarget();
+            }
         }
 
         private void Rotate()
         {
-            
             var direct = Quaternion.LookRotation(_directCache);
             transform.GetChild(0).transform.rotation = direct;
         }
 
-        // private void StopSideways()
-        // {
-        //     rigidbody.velocity = new Vector3(0, rigidbody.velocity.y, _movementData.PlayerJoystickSpeed);
-        // }
+        private void LockTarget()
+        {
+            var direct = _target.transform.position - transform.GetChild(0).transform.position;
+            transform.GetChild(0).transform.rotation = Quaternion.Slerp(transform.GetChild(0).transform.rotation,
+                Quaternion.LookRotation(direct), 0.2f);
+        }
 
         private void Stop()
         {

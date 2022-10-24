@@ -12,12 +12,6 @@ namespace Managers
     {
         #region Self Variables
 
-        #region Public Variables
-
-       // [Header("Data")] public InputData Data;
-
-        #endregion
-
         #region Serialized Variables
 
         [SerializeField] private bool isReadyForTouch, isFirstTimeTouchTaken;
@@ -29,8 +23,8 @@ namespace Managers
 
         private bool _isTouching;
         private float _currentVelocity; //ref type
-        private Vector2? _mousePosition; //ref type
         private Vector3 _moveVector; //ref type
+        private Vector3 _inputLerpCache = Vector3.zero; //ref type
         private GameStates _inputStates = GameStates.Idle;
         #endregion
         
@@ -126,14 +120,16 @@ namespace Managers
 
         private void JoystickInput()
         {
-            _moveVector.x = floatingJoystick.Horizontal;
-            _moveVector.z = floatingJoystick.Vertical;
-                        
+            _moveVector.x = Mathf.Lerp(_inputLerpCache.x,floatingJoystick.Horizontal, 0.4f);
+            _moveVector.z = Mathf.Lerp(_inputLerpCache.z,floatingJoystick.Vertical , 0.4f);
+            
             InputSignals.Instance.onJoystickDragged?.Invoke(new IdleInputParams()
             {
                 ValueX = _moveVector.x,
                 ValueZ = _moveVector.z
             });
+            _inputLerpCache.x = _moveVector.x;
+            _inputLerpCache.z = _moveVector.z;
         }
     }
 }

@@ -20,18 +20,19 @@ namespace States.Miner
         {
             if (other.CompareTag("GemHolder"))
             {
-                Waiter(miner);
+                //Waiter(miner);
+                miner.GemHolderWaiter();
             }
         }
         
-        private async void Waiter(MinerAIBrain miner)
-        {
-            miner.Agent.isStopped = true;
-            miner.DiamondController(false);
-            IdleSignals.Instance.onGemHolderAddGem?.Invoke(miner.transform);
-            await Task.Delay(300);
-            miner.Agent.isStopped = false;
-            miner.SwichState(miner.MoveToMine);
-        }
+        // private async void Waiter(MinerAIBrain miner)
+        // {
+        //     miner.Agent.isStopped = true;
+        //     miner.DiamondController(false);
+        //     IdleSignals.Instance.onGemHolderAddGem?.Invoke(miner.transform);
+        //     await Task.Delay(300);
+        //     miner.Agent.isStopped = false;
+        //     miner.SwichState(miner.MoveToMine);
+        // }
     }
 }

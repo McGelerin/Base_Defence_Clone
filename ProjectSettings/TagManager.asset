@@ -7,6 +7,22 @@ TagManager:
   - BuyArea
   - GemHolder
   - Mine
+  - BarrierInSide
+  - BarrierOutSide
+  - Money
+  - AmmoReloadArea
+  - Bullet
+  - Enemy
+  - WeaponAttackRadius
+  - TurretAmmo
+  - TurretAmmoArea
+  - TurretAttackRadius
+  - MoneyWorker
+  - SoldierBullet
+  - SoldierAttackRadius
+  - SoldierBarrack
+  - Soldier
+  - Hostage
   layers:
   - Default
   - TransparentFX
@@ -14,15 +30,15 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - BarrierLayer
+  - EnemyDetectLayer
+  - PlayerOutSideLayer
+  - BuletLayer
+  - EnemyTakeDamage
+  - HostageLayer
+  - WeaponsDetectLayer
+  - SoldierDetectLayer
+  - SoldierTakeDamage
   - 
   - 
   - 

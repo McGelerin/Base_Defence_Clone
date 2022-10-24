@@ -1,143 +1,203 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using Command;
+using Command.StackCommand;
+using Controllers;
+using Data.UnityObject;
 using Data.ValueObject;
+using DG.Tweening;
 using Enums;
 using Keys;
 using Signals;
-using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 
 namespace Managers
 {
-    public class TurretManager : MonoBehaviour
+    public class TurretManager : AttackRadius
     {
         #region Self Variables
 
         #region Public Variables
-        
-        public int PayedAmound
-        {
-            get => _payedAmound;
-            set
-            {
-                _payedAmound = value;
-                _remainingAmound = _turretData.Cost - _payedAmound;
-                if (_remainingAmound ==0)
-                {
-                    _textParentGameObject.SetActive(false);
-                }
-                else
-                {
-                    SetText(_remainingAmound);
-                }
-            }
-        }
+
+        public StaticStackItemPosition ItemPosition;
+        public StaticItemAddOnStack AddOnStack;
+        [HideInInspector]public GameObject Target;
+        [HideInInspector]public List<GameObject> EnemysCache;
 
         #endregion
 
-        #region SerializeField Variables
-
-        [SerializeField] private TurretNameEnum turretName;
-        [SerializeField] private TextMeshPro tmp;
+        #region Serialized Variables
+        
+        [SerializeField] private GameObject ammoSpawnPoint;
+        [SerializeField] private GameObject turretOperator;
+        [SerializeField] private GameObject ammoHolder;
+        [SerializeField] private TurretMovementController movementController;
+        [SerializeField] private TurretAmmoAreaController turretAmmoAreaController;
 
         #endregion
-        
+
         #region Private Variables
 
-        private TurretData _turretData;
-        private int _payedAmound;
-        private int _remainingAmound;
-        private ScoreDataParams _scoreCache;
-        private GameObject _textParentGameObject;
+        private List<GameObject> _ammoStack = new List<GameObject>();
+        private TurretStateEnum _turretState;
+        private GameObject _ammoPrefab;
+        private TurretData _data;
+        private int _ammoCache;
 
         #endregion
 
         #endregion
 
-        private void Awake()
+        protected override void Awake()
         {
-            _textParentGameObject = tmp.transform.parent.gameObject;
+            _ammoCache = 0;
+            EnemysCache = Enemys;
+            _data = GetTurretData();
+            ItemPosition = new StaticStackItemPosition(ref _ammoStack,ref _data.TurretStackData, ref ammoHolder);
+            AddOnStack = new StaticItemAddOnStack(ref _ammoStack, ref _data.TurretStackData, ref ammoHolder);
+            AttackDelay = _data.AttackDelay;
+            turretAmmoAreaController.SetData(_data.TurretStackData,_ammoStack);
+            movementController.SetRotateDelay(_data.RotateDelay);
+            base.Awake();
         }
+
+        private TurretData GetTurretData() => Resources.Load<CD_Turret>("Data/CD_Turret").TurretData;
+
         #region Event Subscription
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            //SubscribeEvents();
-            OnSetData();
+            SubscribeEvents();
+            base.OnEnable();
         }
 
         private void SubscribeEvents()
         {
-            IdleSignals.Instance.onGettedBaseData += OnSetData;
+            AttackSignals.Instance.onGetAmmoDamage += OnGetAmmoDamage;
+            StackSignals.Instance.onInteractStackHolder += OnInteractPlayerWithAmmoArea;
+            StackSignals.Instance.onDecreseStackHolder += OnUnInteractPlayerWithAmmoArea;
+            InputSignals.Instance.onJoystickDragged += OnSetInputValue;
         }
 
         private void UnsubscribeEvents()
         {
-            IdleSignals.Instance.onGettedBaseData -= OnSetData;
+            AttackSignals.Instance.onGetAmmoDamage -= OnGetAmmoDamage;
+            StackSignals.Instance.onInteractStackHolder -= OnInteractPlayerWithAmmoArea;
+            StackSignals.Instance.onDecreseStackHolder -= OnUnInteractPlayerWithAmmoArea;
+            InputSignals.Instance.onJoystickDragged -= OnSetInputValue;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
-            //UnsubscribeEvents();
+            UnsubscribeEvents();
+            base.OnDisable();
         }
-        
+
         #endregion
-        private void OnSetData()
+        
+        private void OnInteractPlayerWithAmmoArea(GameObject holder , List<GameObject> ammoStack)
         {
-            _turretData = IdleSignals.Instance.onTurretData(turretName);
-            PayedAmound = IdleSignals.Instance.onPayedTurretData(turretName);
-            BuyAreaImageChange();
+            if (holder != ammoHolder) return;
+            turretAmmoAreaController.AmmoAddToStack(ammoStack);
+        }
+
+        private void OnUnInteractPlayerWithAmmoArea(GameObject holder)
+        {
+            if (holder != ammoHolder) return;
+            turretAmmoAreaController.PlayerUnInteractAmmoArea();
         }
         
-        public void BuyAreaEnter()
+        public void HasSolder()
         {
-            _scoreCache = ScoreSignals.Instance.onScoreData();
-            switch (_turretData.PayType)
+            turretOperator.SetActive(true);
+            _turretState = TurretStateEnum.WithBot;
+            if (Enemys.Count <= 0) return;
+            AttackCoroutine ??= StartCoroutine(Attack());
+        }
+
+        protected override void RangedAttack()
+        {
+            switch (_turretState)
             {
-                case PayTypeEnum.Money:
-                    if (_scoreCache.MoneyScore > _remainingAmound)
-                    {
-                        StartCoroutine(Buy());
-                    }
+                case TurretStateEnum.None:
+                    return;                
+                case TurretStateEnum.WithBot:
+                    movementController.LockTarget(_ammoStack.Count != 0);
                     break;
-                case PayTypeEnum.Gem :
-                    if (_scoreCache.GemScore > _remainingAmound)
-                    {
-                        StartCoroutine(Buy());
-                    }
+                case TurretStateEnum.WithPlayer:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            if (_ammoStack.Count == 0) return;
+            Fire();
+        }
+        
+        private void Fire()
+        {
+            _ammoPrefab = PoolSignals.Instance.onGetPoolObject(PoolType.Ammo.ToString(), ammoSpawnPoint.transform);
+            _ammoPrefab.GetComponent<AmmoPhysicsController>().SetAddForce(transform.forward * 20);
+            _ammoPrefab.transform.rotation = transform.rotation;
+            _ammoCache++;
+            if (_ammoCache != 4) return;
+            turretAmmoAreaController.DecreaseStackList();
+            _ammoCache = 0;
+        }
+        
+        protected override void HasTarget()
+        {
+            Target = TargetEnemy;
         }
 
-        public void BuyAreaExit()
+        protected override void AttackEnd()
         {
-            StopAllCoroutines();
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+            movementController.LockTarget(false);
         }
-
-        private IEnumerator Buy()
+        private int OnGetAmmoDamage() => _data.AmmoDamage;
+        
+        protected override bool TriggerEnter(Collider other)
         {
-            var waitForSecond = new WaitForSeconds(0.02f);
-            while (_remainingAmound > 0)
+            if (_turretState != TurretStateEnum.None) return false;
+            if (other.CompareTag("Enemy"))
             {
-                PayedAmound += 10;
-                ScoreSignals.Instance.onSetScore?.Invoke(_turretData.PayType, -10);
-                yield return waitForSecond;
+                Enemys.Add(other.gameObject);
             }
-            IdleSignals.Instance.onTurretAreaBuyedItem?.Invoke(turretName,_payedAmound);
+            return true;
         }
 
-        private void SetText(int remainingAmound)
+        protected override bool TriggerExit(Collider other)
         {
-            tmp.text = remainingAmound.ToString();
+            if (_turretState != TurretStateEnum.None) return false;
+            if (other.CompareTag("Enemy"))
+            {
+                Enemys.Remove(other.gameObject);
+            }
+            return true;
         }
 
-        private void BuyAreaImageChange()
+        private void OnSetInputValue(IdleInputParams input)
         {
-            _textParentGameObject.transform.GetChild(((int)_turretData.PayType) + 1).gameObject.SetActive(false);
+            if (_turretState != TurretStateEnum.WithPlayer) return;
+            movementController.SetTurnValue(input);
+        }
+        
+        public void InteractPlayerWithTurret(GameObject player)
+        {
+            if (_turretState == TurretStateEnum.WithBot) return;
+            _turretState = TurretStateEnum.WithPlayer;
+            player.transform.SetParent(transform);
+            player.transform.DOLocalMove(turretOperator.transform.localPosition, 0.1f).OnComplete(() =>
+            {
+                player.transform.GetChild(0).rotation = transform.rotation;
+                IdleSignals.Instance.onInteractPlayerWithTurret?.Invoke();
+            });
+            AttackCoroutine ??= StartCoroutine(Attack());
+        }
+
+        public void UnInteractPlayerWithTurret()
+        {
+            if (_turretState != TurretStateEnum.WithPlayer) return;
+            _turretState = TurretStateEnum.None;
         }
     }
 }

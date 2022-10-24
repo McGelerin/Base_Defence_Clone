@@ -1,11 +1,10 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Data.UnityObject;
 using Enums;
 using ObjectPool;
 using Signals;
 using Sirenix.OdinInspector;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Managers
@@ -17,9 +16,10 @@ namespace Managers
         #region Private Variables
 
         private Transform _objTransformCache;
-        [ShowInInspector]private CD_Pool _poolData;
-        private int _listCache;
-        private List<GameObject> _poolGroup = new List<GameObject>();
+        private CD_Pool _poolData;
+        private string _objTypeCache;
+        private PoolType _listCache;
+        [ShowInInspector]private Dictionary<PoolType,GameObject> _poolGroup =new Dictionary<PoolType, GameObject>();
 
         #endregion
 
@@ -27,6 +27,7 @@ namespace Managers
 
         private void Awake()
         {
+            _objTypeCache = null;
             _poolData = Resources.Load<CD_Pool>("Data/CD_Pool");
             CreatGameObjectGroup();
             InitPool();
@@ -34,16 +35,17 @@ namespace Managers
 
         private void CreatGameObjectGroup()
         {
-            foreach (var gameObjectCache in _poolData.PoolValueDatas.Select(VARIABLE => new GameObject
-                     {
-                         name = VARIABLE.ObjectType.ToString(),
-                         transform =
-                         {
-                             parent = transform
-                         }
-                     }))
+            foreach (var VARIABLE in _poolData.PoolValueDatas)
             {
-                _poolGroup.Add(gameObjectCache);
+                var gameObjectCache = new GameObject
+                {
+                    name = VARIABLE.Key.ToString(),
+                    transform =
+                    {
+                        parent = transform
+                    }
+                };
+                _poolGroup.Add(VARIABLE.Key,gameObjectCache);
             }
         }
         #region Event Subscription
@@ -72,29 +74,30 @@ namespace Managers
 
         #endregion
 
-        private GameObject OnGetPoolObject(PoolType poolType,Transform objTransform)
+        private GameObject OnGetPoolObject(string poolType,Transform objTransform)
         {
-            _listCache = (int)poolType;
             _objTransformCache = objTransform;
-            var obj = ObjectPoolManager.Instance.GetObject<GameObject>(poolType.ToString());
+            _objTypeCache = poolType;
+            var obj = ObjectPoolManager.Instance.GetObject<GameObject>(poolType);
             return obj;
         }
 
-        private void OnReleasePoolObject(PoolType poolType, GameObject obj)
+        private void OnReleasePoolObject(string poolType, GameObject obj)
         {
-            _listCache = (int)poolType;
-            ObjectPoolManager.Instance.ReturnObject(obj,poolType.ToString());
+            _objTypeCache = poolType;
+            _listCache = (PoolType)Enum.Parse(typeof(PoolType), _objTypeCache);
+            ObjectPoolManager.Instance.ReturnObject(obj,poolType);
         }
         
         #region Pool Initialization
         
         private void InitPool()
         {
-            for (int i = 0; i < _poolData.PoolValueDatas.Count; i++)
+            foreach (var VARIABLE in _poolData.PoolValueDatas)
             {
-                _listCache = i;
+                _listCache = VARIABLE.Key;
                 ObjectPoolManager.Instance.AddObjectPool<GameObject>(FabricateGameObject, TurnOnGameObject, TurnOffGameObject,
-                    _poolData.PoolValueDatas[i].ObjectType.ToString(), _poolData.PoolValueDatas[i].ObjectLimit, true);
+                    VARIABLE.Key.ToString(), VARIABLE.Value.ObjectLimit, true);
             }
         }
         
@@ -106,13 +109,14 @@ namespace Managers
         
         private void TurnOffGameObject(GameObject gameObject)
         {
-            gameObject.transform.localPosition = Vector3.zero;
             gameObject.transform.SetParent(_poolGroup[_listCache].transform);
+            gameObject.transform.localPosition = Vector3.zero;
             gameObject.SetActive(false);
         }
         
         private GameObject FabricateGameObject()
         {
+            if (_objTypeCache != null){_listCache = (PoolType)Enum.Parse(typeof(PoolType), _objTypeCache);}
             return Instantiate(_poolData.PoolValueDatas[_listCache].PooledObject,Vector3.zero,
                 _poolData.PoolValueDatas[_listCache].PooledObject.transform.rotation,_poolGroup[_listCache].transform);
         }

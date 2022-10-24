@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading;
 using Abstract;
 using Enums;
@@ -68,6 +69,38 @@ namespace AIBrain
             _currentState = state;
             _currentState.EnterState(this);
         }
+
+        public void GemHolderWaiter()
+        {
+            StartCoroutine(GemHoldeWait());
+        }
+        
+        public void DigWaiter()
+        {
+            StartCoroutine(DigWait());
+        }
+
+        private IEnumerator GemHoldeWait()
+        {
+            Agent.isStopped = true;
+            DiamondController(false);
+            IdleSignals.Instance.onGemHolderAddGem?.Invoke(transform);
+            yield return new WaitForSeconds(0.3f);
+            Agent.isStopped = false;
+            SwichState(MoveToMine);
+        }
+
+        private IEnumerator DigWait()
+        {
+            AnimState(MinerAnimState.Dig);
+            yield return new WaitForSeconds(5f);
+            PickaxeController(false);
+            Obstacle.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            Agent.enabled = true;
+            SwichState(MoveToGemHolder);
+        }
+        
 
         public void PickaxeController(bool isOn)
         {

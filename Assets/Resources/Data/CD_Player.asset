@@ -13,11 +13,24 @@ MonoBehaviour:
   m_Name: CD_Player
   m_EditorClassIdentifier: 
   Data:
+    PlayerHealth: 50
+    AttackRange: 0
     MovementData:
-      PlayerJoystickSpeed: 5
-      PlayerRotateSpeed: 1
+      PlayerJoystickSpeed: 7
     StackData:
       StackLimit: 10
       StackoffsetY: 10
       StackoffsetZ: 10
       AnimationDurition: 1
+  MoneyStackData:
+    Capacity: 50
+    InitPosition: {x: 0, y: 0, z: 0}
+    StackCountX: 1
+    StackCountY: 10
+    StackOffset: {x: 1, y: 5, z: 4}
+  AmmoStackData:
+    Capacity: 30
+    InitPosition: {x: -0.25, y: 0, z: 0}
+    StackCountX: 2
+    StackCountY: 5
+    StackOffset: {x: 3, y: 2, z: 2}

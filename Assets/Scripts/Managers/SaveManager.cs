@@ -15,6 +15,8 @@ namespace Managers
         private int _levelCache;
         private ScoreDataParams _scoreDataCache;
         private AreaDataParams _areaDataCache;
+        private Dictionary<OutSideStateLevels, int> _outsideDataCache;
+        private SupporterBuyableDataParams _supporterBuyableDataCache;
         
         #endregion
 
@@ -32,9 +34,13 @@ namespace Managers
             SaveSignals.Instance.onLevelSave += OnLevelSave;
             SaveSignals.Instance.onScoreSave += OnScoreSave;
             SaveSignals.Instance.onAreaDataSave += OnAreaDataSave;
+            SaveSignals.Instance.onOutSideDataSave += OnOutsideStageDataSave;
             SaveSignals.Instance.onLoadCurrentLevel += OnLevelLoad;
             SaveSignals.Instance.onLoadScoreData += OnLoadScoreData;
             SaveSignals.Instance.onLoadAreaData += OnLoadAreaData;
+            SaveSignals.Instance.onLoadOutsideData += OnLoadOutsideStageData;
+            SaveSignals.Instance.onSupporterDataSave += OnSupporterDataSave;
+            SaveSignals.Instance.onLoadSupporterData += OnLoadSupporterData;
         }
 
 
@@ -43,9 +49,13 @@ namespace Managers
             SaveSignals.Instance.onLevelSave -= OnLevelSave;
             SaveSignals.Instance.onScoreSave -= OnScoreSave;
             SaveSignals.Instance.onAreaDataSave -= OnAreaDataSave;
+            SaveSignals.Instance.onOutSideDataSave -= OnOutsideStageDataSave;
             SaveSignals.Instance.onLoadCurrentLevel -= OnLevelLoad;
             SaveSignals.Instance.onLoadScoreData -= OnLoadScoreData;
             SaveSignals.Instance.onLoadAreaData -= OnLoadAreaData;
+            SaveSignals.Instance.onLoadOutsideData -= OnLoadOutsideStageData;
+            SaveSignals.Instance.onSupporterDataSave -= OnSupporterDataSave;
+            SaveSignals.Instance.onLoadSupporterData -= OnLoadSupporterData;
         }
 
         private void OnDisable()
@@ -85,11 +95,30 @@ namespace Managers
                 _areaDataCache.RoomTurretPayedAmound,"AreaData.es3");
         }
 
+        private void OnSupporterDataSave()
+        {
+            _supporterBuyableDataCache = new SupporterBuyableDataParams()
+            {
+                AmmoWorkerPayedAmount = SaveSignals.Instance.onSaveSupporterData().AmmoWorkerPayedAmount,
+                MoneyWorkerPayedAmount = SaveSignals.Instance.onSaveSupporterData().MoneyWorkerPayedAmount
+            };
+            if (_supporterBuyableDataCache.AmmoWorkerPayedAmount != 0)ES3.Save("AmmoWorkerPayedAmount",
+                _supporterBuyableDataCache.AmmoWorkerPayedAmount,"SupporterData.es3");
+            if (_supporterBuyableDataCache.MoneyWorkerPayedAmount != 0)ES3.Save("MoneyWorkerPayedAmount",
+                _supporterBuyableDataCache.MoneyWorkerPayedAmount,"SupporterData.es3");
+        }
+
+        private void OnOutsideStageDataSave()
+        {
+            _outsideDataCache = SaveSignals.Instance.onSaveOutsideData();
+            if (_outsideDataCache != null) ES3.Save("OutsidePayedAmount", _outsideDataCache,"OutsideData.es3");
+        }
+
         private int OnLevelLoad()
         {
             return ES3.KeyExists("Level", "Level.es3") 
                 ? ES3.Load<int>("Level", "Level.es3") 
-                : 0;
+                : 1;
         }
 
         private ScoreDataParams OnLoadScoreData()
@@ -98,7 +127,7 @@ namespace Managers
             {
                 MoneyScore = ES3.KeyExists("MoneyScore", "ScoreData.es3")
                     ? ES3.Load<int>("MoneyScore", "ScoreData.es3")
-                    : 1000,
+                    : 5000,
                 GemScore = ES3.KeyExists("GemScore", "ScoreData.es3")
                     ? ES3.Load<int>("GemScore", "ScoreData.es3")
                     : 1000
@@ -115,6 +144,26 @@ namespace Managers
                 RoomTurretPayedAmound = ES3.KeyExists("RoomTurretPayedAmound", "AreaData.es3")
                     ? ES3.Load < Dictionary<TurretNameEnum, int>>("RoomTurretPayedAmound", "AreaData.es3")
                     : new Dictionary<TurretNameEnum, int>()
+            };
+        }
+
+        private Dictionary<OutSideStateLevels, int> OnLoadOutsideStageData()
+        {
+            return ES3.KeyExists("OutsidePayedAmount", "OutsideData.es3")
+                ? ES3.Load<Dictionary<OutSideStateLevels, int>>("OutsidePayedAmount", "OutsideData.es3")
+                : new Dictionary<OutSideStateLevels, int>();
+        }
+
+        private SupporterBuyableDataParams OnLoadSupporterData()
+        {
+            return new SupporterBuyableDataParams()
+            {
+                AmmoWorkerPayedAmount = ES3.KeyExists("AmmoWorkerPayedAmount", "SupporterData.es3")
+                    ? ES3.Load<int>("AmmoWorkerPayedAmount", "SupporterData.es3")
+                    : 0,
+                MoneyWorkerPayedAmount = ES3.KeyExists("MoneyWorkerPayedAmount", "SupporterData.es3")
+                    ? ES3.Load<int>("MoneyWorkerPayedAmount", "SupporterData.es3")
+                    :0
             };
         }
     }

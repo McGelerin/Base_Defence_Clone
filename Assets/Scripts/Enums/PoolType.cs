@@ -6,6 +6,18 @@
         Enemy,
         Miner,
         Hostage,
-        Ammo
+        Ammo,
+        Common,
+        Tank,
+        Money,
+        Pistol,
+        M4,
+        Ak47,
+        Bullet,
+        AmmoBox,
+        AmmoWorker,
+        MoneyWorker,
+        Soldier,
+        SoldierBullet
     }
 }

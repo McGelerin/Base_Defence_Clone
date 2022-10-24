@@ -7,5 +7,7 @@ namespace Data.UnityObject
     public class CD_PlayerData : ScriptableObject
     {
         public PlayerData Data;
+        public StackData MoneyStackData;
+        public StackData AmmoStackData;
     }
 }

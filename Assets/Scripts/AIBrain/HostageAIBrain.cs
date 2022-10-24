@@ -1,6 +1,7 @@
 ﻿using System;
 using Abstract;
 using Enums;
+using Signals;
 using States.Hostage;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,7 +16,8 @@ namespace AIBrain
 
         public NavMeshAgent Agent;
         public HostageTerrifiedState HostageTerrifiedState;
-        public HostageFlowState HostageFlowState;
+        public HostageFollowState HostageFollowState;
+        public MoveToBarrack MoveToBarrackState;
         public GameObject Target;
 
         #endregion
@@ -23,7 +25,7 @@ namespace AIBrain
         #region SerializField Variables
 
         [SerializeField] private Animator animator;
-        [SerializeField] private float chackTimer;
+        [SerializeField] private float checkTimer;
 
         #endregion
 
@@ -38,15 +40,37 @@ namespace AIBrain
         private void Awake()
         {
             HostageTerrifiedState = new HostageTerrifiedState();
-            HostageFlowState = new HostageFlowState();
+            HostageFollowState = new HostageFollowState();
+            MoveToBarrackState = new MoveToBarrack();
             Agent = GetComponent<NavMeshAgent>();
         }
 
+        #region Event Subscription
+        
         private void OnEnable()
         {
             _currentState = HostageTerrifiedState;
             _currentState.EnterState(this);
+            SubscribeEvents();
         }
+
+        private void SubscribeEvents()
+        {
+            IdleSignals.Instance.onPlayerEntrySoldierArea += OnPlayerEntrySoldierArea;
+        }
+
+        private void UnsubscribeEvents()
+        {
+            IdleSignals.Instance.onPlayerEntrySoldierArea -= OnPlayerEntrySoldierArea;
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeEvents();
+        }
+
+        #endregion
+
         
         private void Update()
         {
@@ -61,7 +85,7 @@ namespace AIBrain
             _currentState.OnTriggerEnterState(this,other);
         }
         
-        public void SwichState(HostageBaseStates state)//get set ile yapılabilir
+        public void SwitchState(HostageBaseStates state)
         {
             _currentState = state;
             _currentState.EnterState(this);
@@ -75,6 +99,19 @@ namespace AIBrain
         public void AnimBoolState(HostageAnimState animState,bool isFollow)
         {
             animator.SetBool(animState.ToString(),isFollow);
+        }
+
+        public void AnimFloatState(float speed)
+        {
+            animator.SetFloat("Speed",speed);
+        }
+
+        private void OnPlayerEntrySoldierArea(GameObject hostage)
+        {
+            if (hostage == gameObject)
+            {
+                SwitchState(MoveToBarrackState);
+            }
         }
     }
 }

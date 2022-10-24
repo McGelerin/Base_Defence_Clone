@@ -13,15 +13,37 @@ MonoBehaviour:
   m_Name: CD_Pool
   m_EditorClassIdentifier: 
   PoolValueDatas:
-  - ObjectType: 0
-    ObjectLimit: 80
-    PooledObject: {fileID: 379725593890370474, guid: 5af2ad45c65c392438653a29acef5c06, type: 3}
-  - ObjectType: 1
-    ObjectLimit: 20
-    PooledObject: {fileID: 3620818392626601495, guid: 717c6d6e9d08dc64a9b2f849d9b6d507, type: 3}
-  - ObjectType: 2
-    ObjectLimit: 10
-    PooledObject: {fileID: 2118468669246769685, guid: ef9f5ffdb39ae2a4db3102b598f7f91f, type: 3}
-  - ObjectType: 3
-    ObjectLimit: 10
-    PooledObject: {fileID: 2118468669246769685, guid: a418b1e40b668f54890faff7f5e34ea1, type: 3}
+    m_Keys: 0000000002000000030000000500000006000000070000000c00000008000000090000000a0000000b000000040000000d0000000e0000000f00000010000000
+    m_Values:
+    - ObjectLimit: 40
+      PooledObject: {fileID: 2980977172278769893, guid: 5af2ad45c65c392438653a29acef5c06, type: 3}
+    - ObjectLimit: 15
+      PooledObject: {fileID: 2118468669246769685, guid: ef9f5ffdb39ae2a4db3102b598f7f91f, type: 3}
+    - ObjectLimit: 10
+      PooledObject: {fileID: 2118468669246769685, guid: a418b1e40b668f54890faff7f5e34ea1, type: 3}
+    - ObjectLimit: 30
+      PooledObject: {fileID: 2118468669246769685, guid: 23dcc25b4eed6c749ac230fbcb2530ec, type: 3}
+    - ObjectLimit: 30
+      PooledObject: {fileID: 2118468669246769685, guid: f44d0fea0810cac4a8f241bbdf24139f, type: 3}
+    - ObjectLimit: 200
+      PooledObject: {fileID: 5868225309094695828, guid: 806ef5c7c5338b944b1c7b0952dbf1a2, type: 3}
+    - ObjectLimit: 130
+      PooledObject: {fileID: 5495938375531215040, guid: 45775c9401a6a2244aa8711639ad2dd9, type: 3}
+    - ObjectLimit: 1
+      PooledObject: {fileID: 6961536481439579286, guid: 69fcdde3bfed52a499d2a8e89372be28, type: 3}
+    - ObjectLimit: 1
+      PooledObject: {fileID: 673654647813120193, guid: 3e05d35f7f6f9e649a6ae5de02ef65f9, type: 3}
+    - ObjectLimit: 1
+      PooledObject: {fileID: 470253144125235929, guid: 1f0dfdddbc114554aace75c0a301aae8, type: 3}
+    - ObjectLimit: 20
+      PooledObject: {fileID: 7057543215104956144, guid: 3a2c398d4b488de4a81841e84a796c71, type: 3}
+    - ObjectLimit: 20
+      PooledObject: {fileID: 5135668884997208679, guid: e68fbe9e8c452a345856174fae009bcd, type: 3}
+    - ObjectLimit: 1
+      PooledObject: {fileID: 2118468669246769685, guid: fd7561c5d87ba6b48acc4f671f232303, type: 3}
+    - ObjectLimit: 1
+      PooledObject: {fileID: 2118468669246769685, guid: 20c8015140d4b2246869e7f0fd955fdc, type: 3}
+    - ObjectLimit: 5
+      PooledObject: {fileID: 2390034795183758345, guid: 0629b434699c68e4e812a59d23a96d7a, type: 3}
+    - ObjectLimit: 30
+      PooledObject: {fileID: 5135668884997208679, guid: fd74dba11c0957b42b9dd4d5459f1457, type: 3}

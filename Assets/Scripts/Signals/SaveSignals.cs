@@ -18,11 +18,19 @@ namespace Signals
         
         public UnityAction onAreaDataSave = delegate {  };
         public Func<AreaDataParams> onSaveAreaData = delegate { return default;};
+        
+        public UnityAction onOutSideDataSave = delegate {  };
+        public Func<Dictionary<OutSideStateLevels,int>> onSaveOutsideData = delegate { return default;};
+        
+        public UnityAction onSupporterDataSave = delegate {  };
+        public Func<SupporterBuyableDataParams> onSaveSupporterData = delegate { return default;};
 
         //load
         public Func<int> onLoadCurrentLevel = delegate { return 0;};
         public Func<ScoreDataParams> onLoadScoreData = delegate { return default;};
         public Func<AreaDataParams> onLoadAreaData = delegate { return default;};
+        public Func<Dictionary<OutSideStateLevels,int>> onLoadOutsideData = delegate { return default;};
+        public Func<SupporterBuyableDataParams> onLoadSupporterData = delegate { return default;};
         //public Func<Dictionary<RoomNameEnum,AreaDataParams>> onLoadAreaData = delegate { return default;};
     }
 }

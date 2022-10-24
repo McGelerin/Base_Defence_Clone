@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c3a1d47cb54b7ea611795f71c85781, type: 3}
+  m_Name: CD_Turret
+  m_EditorClassIdentifier: 
+  TurretData:
+    TurretRange: 0
+    AttackDelay: 0.3
+    RotateDelay: 0.01
+    AmmoCapacity: 10
+    AmmoDamage: 5
+    TurretStackData:
+      Capacity: 10
+      InitPosition: {x: -0.6, y: 0, z: 0.6}
+      StackCountX: 2
+      StackCountZ: 2
+      StackOffset: {x: 0.8, y: 0.7, z: 0.8}
+      Delay: 0.2

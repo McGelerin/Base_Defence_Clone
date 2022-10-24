@@ -15,6 +15,6 @@ namespace Data.ValueObject
         {
         }
         
-        public TurretData TurretData;
+        public BuyableTurretData buyableTurretData;
     }
 }

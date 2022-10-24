@@ -10,12 +10,6 @@ namespace Managers
     {
         #region Self Variables
 
-        #region Public Variables
-
-        [Header("Data")] public int Data;
-
-        #endregion
-
         #region Serialized Variables
 
         [SerializeField] private GameObject levelHolder;
@@ -23,10 +17,11 @@ namespace Managers
         #endregion
 
         #region Private Variables
-
+        
+        public int _data;
         private LevelLoaderCommand _levelLoader;
         private ClearActiveLevelCommand _levelClearer;
-        [ShowInInspector] private int _levelID;
+        [ShowInInspector] private int _levelID = 0;
 
         #endregion
 
@@ -47,20 +42,20 @@ namespace Managers
 
         private void SubscribeEvents()
         {
+            LevelSignals.Instance.onGetLevelID += OnGetLevelID;
             LevelSignals.Instance.onLevelInitialize += OnInitializeLevel;
             LevelSignals.Instance.onClearActiveLevel += OnClearActiveLevel;
             LevelSignals.Instance.onNextLevel += OnNextLevel;
             LevelSignals.Instance.onRestartLevel += OnRestartLevel;
-            LevelSignals.Instance.onGetLevelID += OnGetLevelID;
         }
 
         private void UnsubscribeEvents()
         {
+            LevelSignals.Instance.onGetLevelID -= OnGetLevelID;
             LevelSignals.Instance.onLevelInitialize -= OnInitializeLevel;
             LevelSignals.Instance.onClearActiveLevel -= OnClearActiveLevel;
             LevelSignals.Instance.onNextLevel -= OnNextLevel;
             LevelSignals.Instance.onRestartLevel -= OnRestartLevel;
-            LevelSignals.Instance.onGetLevelID -= OnGetLevelID;
         }
 
         private void OnDisable()
